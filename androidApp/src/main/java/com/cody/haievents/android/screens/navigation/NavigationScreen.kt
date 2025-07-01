@@ -5,32 +5,48 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.cody.haievents.android.common.componets.AppBottomNavigationBar
 import com.cody.haievents.android.common.componets.AppHeader
 import com.cody.haievents.android.screens.HomeScreen
+import com.cody.haievents.android.screens.movies.MovieScreen
 
+import com.cody.haievents.android.screens.profile.ProfileScreen
 
 private val screenBackgroundColor = Color(0xFF000000)
 
 @Composable
-fun  NavigationScreen() {
+fun NavigationScreen(
+    navToMovieScreen: () -> Unit,
+    navToCreateEventScreen: () -> Unit ={}
+) {
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(screenBackgroundColor)
+    var selectedIndex by remember { mutableStateOf(0) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(screenBackgroundColor)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            // Your main content
             AppHeader()
-            // Add Spacer to push bottom nav to bottom
+
             Box(modifier = Modifier.weight(1f)) {
-                HomeScreen() // Replace with your main content composable
+                when (selectedIndex) {
+                    0 -> HomeScreen()
+                    1 -> MovieScreen(navigateToMovieDetails = { navToMovieScreen()})
+//                    2 -> LiveEventsScreen()
+                    3 -> ProfileScreen(navigateToCreateEvent = navToCreateEventScreen)
+                }
             }
-            AppBottomNavigationBar() // This will stay at the bottom
+
+            AppBottomNavigationBar(
+                selectedIndex = selectedIndex,
+                onItemSelected = { selectedIndex = it }
+            )
         }
     }
 }
@@ -39,13 +55,6 @@ fun  NavigationScreen() {
 @Composable
 fun NavigationScreenPreview() {
     MaterialTheme {
-        Box(
-            Modifier
-                .fillMaxSize()
-                .background(screenBackgroundColor)
-        ) {
-            NavigationScreen()
-        }
+        NavigationScreen(navToMovieScreen = {})
     }
 }
-

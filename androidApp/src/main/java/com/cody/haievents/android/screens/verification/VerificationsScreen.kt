@@ -43,14 +43,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.theming.MyRed
 import kotlinx.coroutines.delay
 
 // Main Composable for the Verification Screen
 @Composable
 fun VerificationScreen( clickOnVerify: () -> Unit) {
     // Define colors from the image
-    val darkHeader = Color(0xFF1C203A)
-    val primaryOrange = Color(0xFFF77A34)
     val lightGrayBackground = Color(0xFFF2F3F7)
     val otpBoxColor = Color(0xFFF2F3F7)
     val textGray = Color(0xFF8A8A8D)
@@ -65,9 +64,9 @@ fun VerificationScreen( clickOnVerify: () -> Unit) {
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            VerificationHeader(darkHeader)
+            VerificationHeader(MyRed)
             VerificationBody(
-                primaryOrange = primaryOrange,
+                primaryOrange = MyRed,
                 otpBoxColor = otpBoxColor,
                 textGray = textGray,
                 otpCode = otpCode,

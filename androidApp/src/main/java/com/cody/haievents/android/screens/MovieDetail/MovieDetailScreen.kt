@@ -1,4 +1,4 @@
-package com.cody.haievents.android.screens
+package com.cody.haievents.android.screens.MovieDetail
 
 
 
@@ -41,11 +41,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.theming.MyBackgroundColor
+import com.cody.haievents.android.common.theming.MyTextColor
 
 @Composable
 fun MovieDetailScreen() {
     // Define colors from the image
-    val darkBackground = Color(0xFF2E2E2E)
     val buttonRed = Color(0xFFE53935)
     val textWhite = Color.White
     val textGray = Color.LightGray
@@ -63,7 +64,7 @@ fun MovieDetailScreen() {
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = darkBackground
+        color =  MyBackgroundColor
     ) {
         Column(Modifier.fillMaxSize()) {
             // Main content area that is scrollable
@@ -72,7 +73,7 @@ fun MovieDetailScreen() {
                     // "Movie Details" Header Text
                     Text(
                         text = "Movie Details",
-                        color = textWhite,
+                        color = MyTextColor,
                         fontSize = 22.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.padding(16.dp)
@@ -100,7 +101,7 @@ fun MovieDetailScreen() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(darkBackground) // To overlay correctly on scroll
+                    .background(MyBackgroundColor) // To overlay correctly on scroll
                     .padding(16.dp)
             ) {
                 Button(
@@ -231,7 +232,7 @@ fun MovieDetailsContent(
                 // Replicating typo from the image
                 Text(
                     text = "HORHOR 2D.3D.4DX",
-                    color = textGray,
+                    color = MyTextColor,
                     fontSize = 14.sp
                 )
             }
@@ -263,9 +264,9 @@ fun MovieDetailsContent(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            InfoItem(title = "Censor Rating", value = "A", textGray, textWhite)
-            InfoItem(title = "Duration", value = "1hr:38min", textGray, textWhite)
-            InfoItem(title = "Release date", value = "21 April 2023", textGray, textWhite)
+            InfoItem(title = "Censor Rating", value = "A", MyTextColor, textWhite)
+            InfoItem(title = "Duration", value = "1hr:38min", MyTextColor, textWhite)
+            InfoItem(title = "Release date", value = "21 April 2023", MyTextColor, textWhite)
         }
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -287,7 +288,7 @@ fun MovieDetailsContent(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "Evil Dead is a 2013 American supernatural horror film directed by Fede Álvarez who co-wrote the screenplay with Rodo Sayagues. Dubbed a \"re-imagining\" of",
-            color = textGray,
+            color = MyTextColor,
             fontSize = 14.sp,
             lineHeight = 20.sp
         )
@@ -320,7 +321,7 @@ fun MovieDetailsContent(
 @Composable
 fun InfoItem(title: String, value: String, titleColor: Color, valueColor: Color) {
     Column {
-        Text(text = title, color = titleColor, fontSize = 14.sp)
+        Text(text = title, color = MyTextColor, fontSize = 14.sp)
         Spacer(modifier = Modifier.height(4.dp))
         Text(text = value, color = valueColor, fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
     }

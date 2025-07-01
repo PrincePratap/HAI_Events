@@ -16,23 +16,24 @@ import androidx.compose.ui.unit.dp
 import com.cody.haievents.android.common.componets.recommendedMoviesList
 import com.cody.haievents.android.common.componets.MovieCard
 import androidx.compose.foundation.lazy.grid.items
-private val screenBackgroundColor = Color(0xFF000000)
 
 
 
 
 
 @Composable
-fun MoviesScreen() {
+fun MovieScreen(navigateToMovieDetails : () -> Unit ){
     LazyVerticalGrid(
         columns = GridCells.Fixed(2), // 2 columns
         contentPadding = PaddingValues(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize().background(color = Color.White)
     ) {
         items(recommendedMoviesList) { movie ->
-            MovieCard(movie = movie)
+            MovieCard(movie = movie, clickOnMovie = {
+                navigateToMovieDetails()
+            })
         }
     }
 }
@@ -46,9 +47,11 @@ fun MoviesScreenPreview() {
         Box(
             Modifier
                 .fillMaxSize()
-                .background(screenBackgroundColor)
+                .background(Color.White)
         ) {
-            MoviesScreen()
+            MovieScreen(navigateToMovieDetails = {
+
+            })
         }
     }
 }

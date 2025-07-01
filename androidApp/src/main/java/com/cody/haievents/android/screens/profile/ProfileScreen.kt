@@ -4,16 +4,20 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.CreditCard
+import androidx.compose.material.icons.outlined.Event
 import androidx.compose.material.icons.outlined.Fastfood
 import androidx.compose.material.icons.outlined.HelpOutline
 import androidx.compose.material.icons.outlined.LocalOffer
+import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Receipt
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.StarBorder
@@ -31,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 // --- Color Definitions ---
-    private val screenBackgroundColor = Color(0xFF000000)
+private val screenBackgroundColor = Color(0xFF000000)
 private val contentBackgroundColor = Color.White
 private val iconButtonBackgroundColor = Color(0xFFF0F0F0)
 private val avatarBackgroundColor = Color(0xFFFDE8E8)
@@ -40,78 +44,45 @@ private val secondaryTextColor = Color.Gray
 private val highlightColor = Color(0xFF007AFF)
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    navigateToEventDetails: (String) -> Unit = {},
+    navigateToOrderDetails: (String) -> Unit = {},
+    navigateToStreamLibrary: () -> Unit = {},
+    navigateToPlayCreditCard: () -> Unit = {},
+    navigateToHelpCentre: () -> Unit = {},
+    navigateToAccountSettings: () -> Unit = {},
+    navigateToRewards: () -> Unit = {},
+    navigateToOffers: () -> Unit = {},
+    navigateToFoodAndBeverages: () -> Unit = {},
+    navigateToCreateEvent: () -> Unit = {}
+){
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .clip(RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp))
+            .verticalScroll(scrollState)
             .background(contentBackgroundColor),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         // Mock Status Bar for Preview
         // Top Bar with back, title, and edit
-        ProfileTopBar()
         Spacer(modifier = Modifier.height(20.dp))
         // Profile Header with avatar, name, and email
         ProfileHeader()
         Spacer(modifier = Modifier.height(28.dp))
         // Stats Section
-        StatsSection()
         Spacer(modifier = Modifier.height(28.dp))
         // Menu List
-        ProfileMenuList()
+        ProfileMenuList(navigateToCreateEvent)
         // Spacer to push home indicator to the bottom
         Spacer(modifier = Modifier.weight(1f))
         // Mock Home Indicator for Preview
-        MockHomeIndicator()
-    }
-}
-
-
-@Composable
-private fun ProfileTopBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        IconButton(
-            onClick = { /* Handle back press */ },
-            modifier = Modifier.background(iconButtonBackgroundColor, CircleShape)
-        ) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back", tint = primaryTextColor)
-        }
-        Text("Profile", fontSize = 20.sp, fontWeight = FontWeight.Bold, color = primaryTextColor)
-        IconButton(
-            onClick = { /* Handle edit profile */ },
-            modifier = Modifier.background(iconButtonBackgroundColor, CircleShape)
-        ) {
-            Icon(Icons.Default.Edit, contentDescription = "Edit Profile", tint = highlightColor)
-        }
     }
 }
 
 @Composable
 private fun ProfileHeader() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(110.dp)
-                .clip(CircleShape)
-                .background(avatarBackgroundColor)
-        ) {
-            // In a real app, load the image using Coil or Glide.
-            // This is a placeholder that simulates the original avatar.
-            Image(
-                painter = // Using an icon to represent the illustration
-                androidx.compose.ui.res.painterResource(id = android.R.drawable.ic_menu_gallery),
-                contentDescription = "Avatar",
-                modifier = Modifier.size(90.dp)
-            )
-        }
         Spacer(modifier = Modifier.height(16.dp))
         Text("Leonardo", fontSize = 26.sp, fontWeight = FontWeight.Bold, color = primaryTextColor)
         Spacer(modifier = Modifier.height(4.dp))
@@ -119,31 +90,7 @@ private fun ProfileHeader() {
     }
 }
 
-@Composable
-private fun StatsSection() {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            StatItem(label = "Reward Points", value = "360")
-            VerticalDivider()
-            StatItem(label = "Travel Trips", value = "238")
-            VerticalDivider()
-            StatItem(label = "Bucket List", value = "473")
-        }
-    }
-}
+
 
 @Composable
 private fun StatItem(label: String, value: String) {
@@ -154,18 +101,10 @@ private fun StatItem(label: String, value: String) {
     }
 }
 
-@Composable
-private fun VerticalDivider() {
-    Box(
-        modifier = Modifier
-            .height(40.dp)
-            .width(1.dp)
-            .background(Color.LightGray.copy(alpha = 0.5f))
-    )
-}
+
 
 @Composable
-private fun ProfileMenuList() {
+private fun ProfileMenuList(createEvent : () -> Unit){
     Column(modifier = Modifier.padding(horizontal = 24.dp)) {
         ProfileMenuItem(icon = Icons.Outlined.Receipt, text = "Your Orders")
         Divider(color = Color.LightGray.copy(alpha = 0.3f), thickness = 1.dp)
@@ -189,15 +128,19 @@ private fun ProfileMenuList() {
         Divider(color = Color.LightGray.copy(alpha = 0.3f), thickness = 1.dp)
 
         ProfileMenuItem(icon = Icons.Outlined.Fastfood, text = "Food & Beverages")
+        ProfileMenuItem(icon = Icons.Outlined.Event, text = "Create Event" , onClick = createEvent)
+        Divider(color = Color.LightGray.copy(alpha = 0.3f), thickness = 1.dp)
+
+        ProfileMenuItem(icon = Icons.Outlined.Logout, text = "Logout")
     }
 }
 
 @Composable
-private fun ProfileMenuItem(icon: ImageVector, text: String) {
+private fun ProfileMenuItem(icon: ImageVector, text: String , onClick: () -> Unit = {}){
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* Handle item click */ }
+            .clickable { onClick() }
             .padding(vertical = 18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -208,16 +151,7 @@ private fun ProfileMenuItem(icon: ImageVector, text: String) {
     }
 }
 
-@Composable
-private fun MockHomeIndicator() {
-    Box(
-        modifier = Modifier
-            .padding(vertical = 16.dp)
-            .width(134.dp)
-            .height(5.dp)
-            .background(Color.Black, shape = CircleShape)
-    )
-}
+
 
 @Preview(showBackground = true, device = "id:pixel_6")
 @Composable
@@ -228,7 +162,18 @@ fun ProfileScreenPreview() {
                 .fillMaxSize()
                 .background(screenBackgroundColor)
         ) {
-            ProfileScreen()
+            ProfileScreen(
+                navigateToEventDetails = {},
+                navigateToOrderDetails = {},
+                navigateToStreamLibrary = {},
+                navigateToPlayCreditCard = {},
+                navigateToHelpCentre = {},
+                navigateToAccountSettings = {},
+                navigateToRewards = {},
+                navigateToOffers = {},
+                navigateToFoodAndBeverages = {},
+                navigateToCreateEvent = {}
+            )
         }
     }
 }

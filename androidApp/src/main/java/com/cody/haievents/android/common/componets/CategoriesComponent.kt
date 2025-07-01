@@ -25,6 +25,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.theming.LargeTextSize
+import com.cody.haievents.android.common.theming.MediumTextSize
+import com.cody.haievents.android.common.theming.SmallTextSize
 
 // Data model for a category
 data class Category(
@@ -53,7 +56,7 @@ fun CategoriesComponent() {
             text = "Categories",
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold,
-                fontSize = 32.sp
+                fontSize = LargeTextSize
             ),
             modifier = Modifier.padding(start = 20.dp, top = 16.dp, bottom = 4.dp)
         )
@@ -70,39 +73,34 @@ fun CategoriesComponent() {
     }
 }
 
-/**
- * A component for a single category item, including the circular
- * icon and the text label below it.
- *
- * @param category The category data to display.
- */
+
 @Composable
 private fun CategoryItem(category: Category) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // --- Icon with Circular Background and Shadow ---
+        // Smaller Circular Icon
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .size(72.dp)
-                .shadow(elevation = 8.dp, shape = CircleShape, spotColor = Color.Gray.copy(alpha = 0.4f))
+                .size(56.dp) // reduced from 72.dp
+                .shadow(elevation = 4.dp, shape = CircleShape, spotColor = Color.Gray.copy(alpha = 0.3f))
                 .background(Color(0xFFF5F5F5), CircleShape)
         ) {
             Text(
                 text = category.emoji,
-                fontSize = 36.sp
+                fontSize = 24.sp // reduced from 36.sp
             )
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp)) // reduced from 12.dp
 
-        // --- Label ---
+        // Smaller Label
         Text(
             text = category.name,
             color = Color.Black,
-            fontSize = 14.sp
+            fontSize = 12.sp // or you can still use SmallTextSize if it’s appropriate
         )
     }
 }

@@ -8,27 +8,25 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.*
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.delay
+import com.cody.haievents.android.common.theming.MyRed
+
 
 @Composable
 fun SplashScreen() {
 
-
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.primary
+        color = MyRed
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(
                 text = "Hai Events",
                 style = MaterialTheme.typography.headlineLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = Color.White
                 )
             )
         }
@@ -42,3 +40,4 @@ fun SplashScreenPreview() {
         SplashScreen()
     }
 }
+

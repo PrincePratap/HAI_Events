@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.cody.haievents.android.common.theming.MyRed
 
 // Data class to represent each item in the bottom navigation bar
 data class BottomNavItem(
@@ -53,13 +54,13 @@ fun AppBottomNavigationBar(
         BottomNavItem("Profile", Icons.Default.Person)
     )
 
-    val selectedColor = Color(0xFFD32F2F)
+    val selectedColor = MyRed
     val unselectedColor = Color.Gray
 
     Surface(shadowElevation = 4.dp, modifier = modifier.fillMaxWidth()) {
         Column {
             Divider(color = Color.LightGray.copy(alpha = 0.5f), thickness = 1.dp)
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
+            NavigationBar(containerColor = Color.White) {
                 navItems.forEachIndexed { index, item ->
                     NavigationBarItem(
                         selected = selectedIndex == index,

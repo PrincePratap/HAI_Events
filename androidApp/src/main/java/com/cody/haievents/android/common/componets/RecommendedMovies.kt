@@ -1,6 +1,7 @@
 package com.cody.haievents.android.common.componets
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,6 +33,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.theming.LargeTextSize
+import com.cody.haievents.android.common.theming.SmallTextSize
 
 // Data class to represent a movie
 data class Movie(
@@ -77,7 +80,8 @@ fun RecommendedMovies() {
             Text(
                 text = "Recommended Movies",
                 style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                fontSize =  LargeTextSize
             )
             TextButton(onClick = { /* Handle See All click */ }) {
                 Text(
@@ -96,7 +100,7 @@ fun RecommendedMovies() {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(recommendedMoviesList) { movie ->
-                MovieCard(movie = movie)
+                MovieCard(movie = movie,clickOnMovie = { /* Handle movie click */ })
             }
         }
     }
@@ -106,21 +110,24 @@ fun RecommendedMovies() {
 @Composable
 fun MovieCard(
     movie: Movie,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    clickOnMovie: () -> Unit
 ) {
     Column(
-        modifier = modifier.then(Modifier.width(140.dp)) // Default width if not overridden
+        modifier = modifier
+            .width(110.dp)
+            .clickable { clickOnMovie() }
     ) {
         // Poster with a "PROMOTED" tag overlay
         Box(
             modifier = Modifier
-                .height(210.dp)
+                .height(160.dp)
                 .fillMaxWidth()
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(12.dp))
+                    .clip(RoundedCornerShape(10.dp))
                     .background(movie.placeholderColor)
             )
 
@@ -128,52 +135,51 @@ fun MovieCard(
                 Text(
                     text = "PROMOTED",
                     color = Color.White,
-                    fontSize = 10.sp,
+                    fontSize = 10.sp, // Smaller tag text
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
-                        .padding(top = 8.dp, end = 8.dp)
+                        .padding(top = 6.dp, end = 6.dp)
                         .background(
                             color = Color(0xFFE53935),
                             shape = RoundedCornerShape(4.dp)
                         )
-                        .padding(horizontal = 8.dp, vertical = 3.dp)
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(6.dp))
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalArrangement = Arrangement.spacedBy(3.dp)
         ) {
             Icon(
                 imageVector = Icons.Filled.Star,
                 contentDescription = "Rating",
                 tint = Color(0xFFE53935),
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(14.dp)
             )
             Text(
                 text = movie.rating.toString(),
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp
+                fontSize = 12.sp
             )
             Text(
                 text = "${movie.voteCount} votes",
                 color = Color.Gray,
-                fontSize = 12.sp
+                fontSize = 10.sp
             )
         }
 
-        Spacer(modifier = Modifier.height(6.dp))
+        Spacer(modifier = Modifier.height(4.dp))
 
         Text(
             text = movie.title,
-            style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 20.sp,
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
             maxLines = 2
         )
     }

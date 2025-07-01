@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.theming.LargeTextSize
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,16 +55,11 @@ fun AppHeader() {
             Column(
                 modifier = Modifier.weight(1f)
             ) {
+
                 Text(
-                    text = "It All Starts Here!",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Text(
-                    text = "Delhi >",
+                    text = "Hai Events ",
                     color = locationTextColor,
-                    fontSize = 14.sp,
+                    fontSize = LargeTextSize,
                     fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.clickable { /* Handle location change */ }
                 )
@@ -103,14 +99,14 @@ fun AppHeader() {
                     }
                 }
 
-                // QR Scanner Icon
-                IconButton(onClick = { /* Handle QR scanner click */ }) {
-                    Icon(
-                        imageVector = Icons.Outlined.QrCodeScanner,
-                        contentDescription = "Scan QR Code",
-                        tint = iconColor
-                    )
-                }
+//                // QR Scanner Icon
+//                IconButton(onClick = { /* Handle QR scanner click */ }) {
+//                    Icon(
+//                        imageVector = Icons.Outlined.QrCodeScanner,
+//                        contentDescription = "Scan QR Code",
+//                        tint = iconColor
+//                    )
+//                }
             }
         }
     }
