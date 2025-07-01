@@ -41,43 +41,30 @@ data class BottomNavItem(
  * A composable that displays the app's bottom navigation bar.
  */
 @Composable
-fun AppBottomNavigationBar(modifier: Modifier = Modifier) {
-    // State to keep track of the selected item's index. Initialized to 0 for "Home".
-    var selectedItemIndex by remember { mutableStateOf(0) }
-
-    // List of navigation items. Using standard icons that resemble the ones in the image.
+fun AppBottomNavigationBar(
+    selectedIndex: Int,
+    onItemSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val navItems = listOf(
-        BottomNavItem("Home", Icons.Default.LocalActivity), // A ticket icon for the custom "my" logo
+        BottomNavItem("Home", Icons.Default.LocalActivity),
         BottomNavItem("Movies", Icons.Default.Videocam),
         BottomNavItem("Live Events", Icons.Default.ConfirmationNumber),
         BottomNavItem("Profile", Icons.Default.Person)
     )
 
-    // Colors derived from the image
     val selectedColor = Color(0xFFD32F2F)
     val unselectedColor = Color.Gray
 
-    Surface(
-        // The shadow is very subtle in the original, so we use a low elevation.
-        shadowElevation = 4.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
+    Surface(shadowElevation = 4.dp, modifier = modifier.fillMaxWidth()) {
         Column {
-            // The thin divider line at the top of the navigation bar
             Divider(color = Color.LightGray.copy(alpha = 0.5f), thickness = 1.dp)
-
-            NavigationBar(
-                containerColor = MaterialTheme.colorScheme.surface,
-            ) {
+            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
                 navItems.forEachIndexed { index, item ->
-                    val isSelected = selectedItemIndex == index
-
                     NavigationBarItem(
-                        selected = isSelected,
-                        onClick = { selectedItemIndex = index },
-                        label = {
-                            Text(text = item.label)
-                        },
+                        selected = selectedIndex == index,
+                        onClick = { onItemSelected(index) },
+                        label = { Text(text = item.label) },
                         icon = {
                             Icon(
                                 imageVector = item.icon,
@@ -85,13 +72,11 @@ fun AppBottomNavigationBar(modifier: Modifier = Modifier) {
                                 modifier = Modifier.size(24.dp)
                             )
                         },
-                        // Customize colors to match the screenshot
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = selectedColor,
                             selectedTextColor = selectedColor,
                             unselectedIconColor = unselectedColor,
                             unselectedTextColor = unselectedColor,
-                            // Hide the default indicator to match the original UI
                             indicatorColor = MaterialTheme.colorScheme.surface
                         )
                     )
@@ -109,7 +94,12 @@ fun AppBottomNavigationBarPreview() {
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.BottomCenter
         ) {
-            AppBottomNavigationBar()
+            AppBottomNavigationBar(
+                selectedIndex = 0,
+                onItemSelected = {
+
+                }
+            )
         }
     }
 }

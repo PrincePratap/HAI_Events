@@ -31,10 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-/**
- * A Composable that replicates the app header from the image.
- * It includes a title, location, and action icons for search, notifications (with a badge), and QR scanning.
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppHeader() {

@@ -1,4 +1,4 @@
-package com.cody.haievents.android.screens
+package com.cody.haievents.android.screens.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.cody.haievents.android.common.componets.AppBottomNavigationBar
 import com.cody.haievents.android.common.componets.AppHeader
+import com.cody.haievents.android.screens.HomeScreen
 
 
 private val screenBackgroundColor = Color(0xFF000000)
