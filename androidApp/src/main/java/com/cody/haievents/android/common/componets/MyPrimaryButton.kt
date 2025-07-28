@@ -51,7 +51,9 @@ fun PrimaryButtonPreview() {
     MaterialTheme {
         MyPrimaryButton(
             text = "CONTINUE",
-            onClick = { /* Preview Click */ }
+            onClick = {
+
+            }
         )
     }
 }

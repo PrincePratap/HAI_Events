@@ -6,4 +6,6 @@ import androidx.compose.ui.graphics.Color
  val MyBackgroundColor = Color.White
  val MyTextColor = Color.Black
 val MyRed = Color(0xFFD23030)
+val GoldenYellow = Color(0xFFD6AD41)
+
 
