@@ -9,9 +9,5 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Destination
 @Composable
 fun Login(navigator: DestinationsNavigator) {
-//    LoginScreen(clickOnLogin = {
-//        navigator.navigate(VerificationDestination.route)
-//    }, navigateSignUp = {
-//        navigator.navigate(SignUpDestination.route)
-//    })
+    LoginScreen()
 }
