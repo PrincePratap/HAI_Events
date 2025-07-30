@@ -11,8 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.cody.haievents.android.common.componets.AppBottomNavigationBar
-import com.cody.haievents.android.common.componets.AppHeader
+
 import com.cody.haievents.android.common.componets.BestEventsSection
 import com.cody.haievents.android.common.componets.CategoriesComponent
 import com.cody.haievents.android.common.componets.RecommendedMovies

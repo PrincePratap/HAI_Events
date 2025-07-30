@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.cody.haievents.android.common.componets.AppBottomNavigationBar
-import com.cody.haievents.android.common.componets.AppHeader
 import com.cody.haievents.android.screens.HomeScreen
 import com.cody.haievents.android.screens.movies.MovieScreen
 
@@ -32,7 +31,7 @@ fun NavigationScreen(
             .background(screenBackgroundColor)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
-            AppHeader()
+//            AppHeader()
 
             Box(modifier = Modifier.weight(1f)) {
                 when (selectedIndex) {
