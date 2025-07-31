@@ -44,6 +44,8 @@ kotlin {
 
             implementation("androidx.datastore:datastore-preferences-core:$datastoreVersion")
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
+            implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -166,13 +166,12 @@ fun HomeScreenPreview() {
 
 
 @Composable
-fun TheatreShowsScreen() {
+fun TheatreShowsScreen(){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
-        Row {
-            // Main content area
+        Row(modifier = Modifier.fillMaxWidth()) {
             Column(
                 modifier = Modifier
                     .weight(1f) // Takes up available space
@@ -188,12 +187,11 @@ fun TheatreShowsScreen() {
                 }
             }
             // Dark vertical bar on the right side as seen in the original image
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(100.dp)
-                    .background(Color(0xFF303030))
-            )
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                   .background(Color(0xFF303030))
+//            )
         }
     }
 }
@@ -205,7 +203,7 @@ fun TheatreShowsHeader() {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = "THEATRE SHOWS",
                 color = Color.Black,

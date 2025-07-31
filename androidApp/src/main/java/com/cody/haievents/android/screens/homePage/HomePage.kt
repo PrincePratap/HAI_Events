@@ -12,14 +12,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 @Composable
 fun HomePage() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        HomeScreenHeader()
-        EventCategoriesItems()
-    }
+
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomePagePreview() {
-    HomePage()
-}
+

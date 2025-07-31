@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.cody.haievents.android.common.componets.AppBottomNavigationBar
-import com.cody.haievents.android.screens.HomeScreen
 import com.cody.haievents.android.screens.movies.MovieScreen
 
 import com.cody.haievents.android.screens.profile.ProfileScreen
@@ -35,7 +34,7 @@ fun NavigationScreen(
 
             Box(modifier = Modifier.weight(1f)) {
                 when (selectedIndex) {
-                    0 -> HomeScreen()
+//                    0 -> HomeScreen()
                     1 -> MovieScreen(navigateToMovieDetails = { navToMovieScreen()})
 //                    2 -> LiveEventsScreen()
                     3 -> ProfileScreen(navigateToCreateEvent = navToCreateEventScreen)

@@ -2,6 +2,9 @@ package com.cody.haievents.common.remote
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logger
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.headers
 import io.ktor.http.ContentType
@@ -11,13 +14,30 @@ import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-private const val BASE_URL = "http://192.168.0.103:8081/"
+private const val BASE_URL = "https://haievents.com"
 
 internal abstract class KtorApi {
 
+
+
     val client = HttpClient {
-        install(ContentNegotiation){
+        // 1️⃣ Install Logging first so we can see the raw bytes
+        install(Logging) {
+            logger = object : Logger {
+                override fun log(message: String) {
+                    println("📡 Ktor ▶ $message")
+                }
+            }
+            level                   = LogLevel.ALL
+//            alwaysLogRequestBody    = true
+//            alwaysLogResponseBody   = true
+        }
+
+        // 2️⃣ Then install ContentNegotiation
+        install(ContentNegotiation) {
             json(Json {
+                prettyPrint       = true
+                isLenient         = true
                 ignoreUnknownKeys = true
                 useAlternativeNames = false
             })
@@ -38,7 +58,7 @@ internal abstract class KtorApi {
         }
     }
 
-    fun HttpRequestBuilder.setupMultipartRequest(){
+    fun HttpRequestBuilder.setupMultipartRequest() {
         contentType(ContentType.MultiPart.FormData)
     }
 }
