@@ -10,7 +10,7 @@ import com.cody.haievents.android.common.componets.EventCategoriesItems
 
 @Composable
 fun  HomePageScreen() {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier.fillMaxSize()){
         HomeScreenHeader()
         EventCategoriesItems()
     }

@@ -1,35 +1,23 @@
 package com.cody.haievents.auth.domain.repository
 
+import com.cody.haievents.auth.data.ChangePasswordRequest
+import com.cody.haievents.auth.data.ChangePasswordResponse
+import com.cody.haievents.auth.data.LoginRequest
+import com.cody.haievents.auth.data.LoginResponse
+import com.cody.haievents.auth.data.OTPSuccessResponse
+import com.cody.haievents.auth.data.OtpVerificationRequest
+import com.cody.haievents.auth.data.RegisterRequest
+import com.cody.haievents.auth.data.RegisterResponse
+import com.cody.haievents.common.util.Result
+
 
 internal interface AuthRepository {
 
-    suspend fun signUp(name: String, email: String, phone : String, password: String): Result<SignupResponse>
+    suspend fun registerUser(registerRequest: RegisterRequest): Result<RegisterResponse>
+    suspend fun otpVerification(otpRequest: OtpVerificationRequest): Result<OTPSuccessResponse>
+    suspend fun loginUser(loginRequest: LoginRequest): Result<LoginResponse>
 
-
-
-
-
-//    suspend fun signIn(email: String, password: String): Result<AuthResultData>
-//
-//    suspend fun signInWithPhone(phone: String, password: String): Result<AuthResultData>
-//
-//    suspend fun forgetPassword(identifier: String): Result<ForgetPasswordResponse>
-//
-//    suspend fun verifyOtp(userId: String, otp: String): Result<AuthResultData>
-//
-//    suspend fun getProfile(): Result<UserDetailsProfileResponse>
-//
-//    suspend fun updateProfile(request : UpdateProfileRequest): Result<UpdateProfileResponse>
-//
-//    suspend fun getExploreItems(): Result<List<Pdf>>
-//
-//    suspend fun getHomeData(): Result<HomeResponse>
-//
-//    suspend fun resendOtp(userId: String): Result<ResendOtpResponse>
-//
-//    suspend fun logout(): Result<LogoutResponse>
-
-
+    suspend fun changePassword(request: ChangePasswordRequest): Result<ChangePasswordResponse>
 
 
 
