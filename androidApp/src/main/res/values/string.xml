@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HaiEvents</string>
+
+    <!-- Content Descriptions for Accessibility -->
+    <string name="content_desc_app_logo">Application Logo</string>
+
+    <!-- Auth Screen -->
+    <string name="create_your_account">Create Your Account</string>
+    <string name="auth_top_bar_subtitle">Join the community and start booking your\nfavorite events today!</string>
+
+
+    <!-- Authentication & Registration Screen -->
+    <string name="full_name">Full Name</string>
+    <string name="email_address">Email Address</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="login_now">Login</string>
+
+    <!-- Terms and Conditions (for TermsAndConditionsText Composable) -->
+    <!-- This text is often split to allow for a clickable link -->
+    <string name="i_agree_to_the">I agree to the</string>
+    <string name="terms_and_conditions">Terms &amp; Conditions</string> <!-- Use & for the ampersand character -->
+    <string name="and">and</string>
+    <string name="privacy_policy">Privacy Policy</string>
+
+</resources>

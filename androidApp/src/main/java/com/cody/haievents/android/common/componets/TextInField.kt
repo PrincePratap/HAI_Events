@@ -28,7 +28,7 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     placeholder: String = "",
     modifier: Modifier = Modifier,
-    keyboardType: KeyboardType = KeyboardType.Text // Default to text
+    keyboardOptions: KeyboardType = KeyboardType.Text // Default to text
 ) {
     val borderColor = Color(0xFFD6AD41) // Golden color
 
@@ -49,7 +49,7 @@ fun CustomTextField(
                 spotColor = Color.Gray.copy(alpha = 0.1f)
             ),
         shape = RoundedCornerShape(12.dp),
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        keyboardOptions = KeyboardOptions(keyboardType = keyboardOptions),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.White,
             unfocusedContainerColor = Color.White,
@@ -69,6 +69,7 @@ fun PasswordTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    placeholder : String = "",
 ) {
     val borderColor = Color(0xFFD6AD41)
     var passwordVisible by remember { mutableStateOf(false) }
