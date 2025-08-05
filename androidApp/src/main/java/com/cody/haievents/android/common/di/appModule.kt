@@ -1,6 +1,7 @@
 package com.cody.haievents.android.common.di
 
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
+import com.cody.haievents.android.screens.auth.otp.OTPViewModel
 import com.cody.haievents.android.screens.auth.register.RegisterViewModel
 import com.cody.haievents.android.screens.splash.SplashScreenViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -14,6 +15,7 @@ val appModule = module {
     viewModel { SplashScreenViewModel() }
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
+    viewModel {OTPViewModel(get())}
 //    viewModel { MainActivityViewModel() }
 //    viewModel { PostDetailViewModel(get(), get(), get(), get(), get())}
 //    viewModel { ProfileViewModel(get(), get(), get(), get()) }

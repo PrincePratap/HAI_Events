@@ -56,5 +56,16 @@ internal class AuthRepositoryImpl(
         }
     }
 
+    override suspend fun homePage(): Result<HomepageResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = authService.homePage()
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to send OTP: ${e.message}")
+            }
+        }
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.cody.haievents.auth.data
 
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
@@ -27,5 +28,11 @@ internal class AuthService: KtorApi() {
         endPoint(path = "/api/change-password")
         setBody(request)
     }.body()
+
+    suspend fun homePage(): HomepageResponse = client.get {
+        endPoint(path = "/api/homepage")
+    }.body()
+
+
 
 }

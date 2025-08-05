@@ -141,127 +141,229 @@ data class ChangePasswordResponse(
     val message: String
 )
 
-// Home Page
+/**
+ * Root response object for the homepage API.
+ */
 @Serializable
-data class Root(
+data class HomepageResponse(
+    @SerialName("status")
     val status: Boolean,
+
+    @SerialName("message")
     val message: String,
+
+    @SerialName("categories")
     val categories: List<Category>,
-    val featured: List<Featured>,
+
+    @SerialName("featured")
+    val featured: List<FeaturedItem>,
+
+    @SerialName("tours")
     val tours: List<Tour>,
-    val banners: List<Banner>,
+
+    @SerialName("banners")
+    val banners: List<Banner>
 )
 
 @Serializable
 data class Category(
-    val id: Long,
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("name")
     val name: String,
+
     @SerialName("image_path")
     val imagePath: String,
+
     @SerialName("created_at")
-    val createdAt: String?,
+    val createdAt: String? = null,
+
     @SerialName("updated_at")
-    val updatedAt: String?,
+    val updatedAt: String? = null
 )
 
 @Serializable
-data class Featured(
-    val id: Long,
+data class FeaturedItem(
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("name")
     val name: String,
+
     @SerialName("image_path")
     val imagePath: String,
-    @SerialName("created_at")
-    val createdAt: String?,
-    @SerialName("updated_at")
-    val updatedAt: String?,
+
+    @SerialName("movies")
     val movies: List<Movie>,
+
     @SerialName("user_events")
     val userEvents: List<UserEvent>,
+
+    @SerialName("created_at")
+    val createdAt: String? = null,
+
+    @SerialName("updated_at")
+    val updatedAt: String? = null
 )
 
 @Serializable
 data class Movie(
-    val id: Long,
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("title")
     val title: String,
+
+    @SerialName("slug")
     val slug: String,
+
+    @SerialName("language")
     val language: String,
+
     @SerialName("image_path")
     val imagePath: String,
-    val rating: Long,
-    val votes: Long? = null,
+
+    @SerialName("rating")
+    val rating: Int,
+
+    // Note: 'votes' is sometimes a number and sometimes a very long string.
+    // Parsing as a String is the safest approach to avoid deserialization errors.
+    @SerialName("votes")
+    val votes: String,
+
     @SerialName("release_date")
     val releaseDate: String,
+
     @SerialName("category_id")
-    val categoryId: Long,
+    val categoryId: Int,
+
     @SerialName("created_at")
-    val createdAt: String,
+    val createdAt: String? = null,
+
     @SerialName("updated_at")
-    val updatedAt: String,
+    val updatedAt: String? = null
 )
 
 @Serializable
 data class UserEvent(
-    val id: Long,
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("title")
     val title: String,
+
+    @SerialName("slug")
     val slug: String,
+
+    @SerialName("description")
     val description: String,
+
     @SerialName("category_id")
-    val categoryId: Long,
+    val categoryId: Int,
+
     @SerialName("user_id")
-    val userId: Long,
+    val userId: Int,
+
     @SerialName("image_path")
     val imagePath: String?,
+
     @SerialName("organizer_name")
     val organizerName: String,
+
+    @SerialName("email")
     val email: String,
+
+    @SerialName("location")
     val location: String,
+
+    @SerialName("date")
     val date: String,
+
+    @SerialName("time")
     val time: String,
+
     @SerialName("account_holder")
     val accountHolder: String,
+
     @SerialName("bank_name")
     val bankName: String,
+
     @SerialName("ifsc_code")
     val ifscCode: String,
+
     @SerialName("account_number")
     val accountNumber: String,
+
     @SerialName("bank_phone_number")
     val bankPhoneNumber: String,
+
+    // Price fields are nullable in the JSON
+    @SerialName("price")
+    val price: String? = null,
+
+    @SerialName("performer_price")
+    val performerPrice: String? = null,
+
+    @SerialName("attendee_price")
+    val attendeePrice: String? = null,
+
+    // is_approved is 0 or 1, which maps well to Int
     @SerialName("is_approved")
-    val isApproved: Long,
+    val isApproved: Int,
+
     @SerialName("created_at")
     val createdAt: String,
+
     @SerialName("updated_at")
-    val updatedAt: String,
+    val updatedAt: String
 )
 
 @Serializable
 data class Tour(
-    val id: Long,
+    @SerialName("id")
+    val id: Int,
+
     @SerialName("artist_id")
-    val artistId: Long,
+    val artistId: Int,
+
+    @SerialName("title")
     val title: String,
+
+    @SerialName("image")
     val image: String,
+
+    @SerialName("description")
     val description: String,
+
     @SerialName("start_date")
     val startDate: String,
+
     @SerialName("end_date")
     val endDate: String,
+
     @SerialName("created_at")
     val createdAt: String,
+
     @SerialName("updated_at")
-    val updatedAt: String,
+    val updatedAt: String
 )
 
 @Serializable
 data class Banner(
-    val id: Long,
+    @SerialName("id")
+    val id: Int,
+
+    @SerialName("type")
     val type: String,
+
     @SerialName("file_path")
     val filePath: String,
+
     @SerialName("created_at")
-    val createdAt: String?,
+    val createdAt: String? = null,
+
     @SerialName("updated_at")
-    val updatedAt: String?,
+    val updatedAt: String? = null
 )
 

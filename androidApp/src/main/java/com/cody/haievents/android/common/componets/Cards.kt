@@ -32,17 +32,7 @@ private object R {
     }
 }
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            // Assuming you have a Material3 theme set up
-            // YourTheme {
-            ScreenPreview()
-            // }
-        }
-    }
-}
+
 
 @Composable
 fun EventCard() {
@@ -136,31 +126,30 @@ fun EventCard() {
 @Preview(showBackground = true)
 @Composable
 fun ScreenPreview() {
-    MaterialTheme {
-        // Use a Box to center the content and set a background color similar to the original image
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFF9F9F9)),
-            contentAlignment = Alignment.Center
+    // Use a Box to center the content and set a background color similar to the original image
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFF9F9F9)),
+        contentAlignment = Alignment.Center
+    ) {
+        // This Row simulates the main card and the orange element peeking from the side
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // This Row simulates the main card and the orange element peeking from the side
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                EventCard()
-                Spacer(modifier = Modifier.width(4.dp))
-                // A Box to represent the orange UI element on the right
-                Box(
-                    modifier = Modifier
-                        .width(25.dp)
-                        .height(350.dp)
-                        .background(
-                            color = Color(0xFFF5A623), // An orange color
-                            shape = RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp)
-                        )
-                )
-            }
+            EventCard()
+            Spacer(modifier = Modifier.width(4.dp))
+            // A Box to represent the orange UI element on the right
+            Box(
+                modifier = Modifier
+                    .width(25.dp)
+                    .height(350.dp)
+                    .background(
+                        color = Color(0xFFF5A623), // An orange color
+                        shape = RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp)
+                    )
+            )
         }
     }
+
 }

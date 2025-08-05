@@ -13,9 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cody.haievents.android.common.componets.recommendedMoviesList
-import com.cody.haievents.android.common.componets.MovieCard
-import androidx.compose.foundation.lazy.grid.items
 
 
 
@@ -30,11 +27,11 @@ fun MovieScreen(navigateToMovieDetails : () -> Unit ){
         verticalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize().background(color = Color.White)
     ) {
-        items(recommendedMoviesList) { movie ->
-            MovieCard(movie = movie, clickOnMovie = {
-                navigateToMovieDetails()
-            })
-        }
+//        items(recommendedMoviesList) { movie ->
+//            MovieCard(movie = movie, clickOnMovie = {
+//                navigateToMovieDetails()
+//            })
+//        }
     }
 }
 

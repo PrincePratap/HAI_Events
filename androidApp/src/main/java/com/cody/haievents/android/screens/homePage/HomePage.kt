@@ -1,18 +1,55 @@
 package com.cody.haievents.android.screens.homePage
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.cody.haievents.android.common.components.HomeScreenHeader
-import com.cody.haievents.android.common.componets.EventCategoriesItems
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import org.koin.androidx.compose.koinViewModel
 
-@Destination
+// Use a specific and consistent TAG for this route
+private const val TAG = "HomePageRoute"
+
+@Destination() // Assuming this is the starting screen of your app
 @Composable
-fun HomePage() {
-    HomePageScreen()
+fun HomePage(
+    navigator: DestinationsNavigator,
+) {
+    // Corrected log message
+    Log.d(TAG, "HomePage Composable entered composition.")
+
+    val viewModel: HomePageViewModel = koinViewModel()
+    val uiState = viewModel.uiState
+    val context = LocalContext.current
+
+    // The ViewModel's init block already fetches the data, so no LaunchedEffect is needed here.
+    // This keeps the UI logic clean.
+
+    DisposableEffect(Unit) {
+        onDispose {
+            Log.d(TAG, "HomePage Composable left composition.")
+        }
+    }
+
+    // Pass the state and event handlers down to the stateless screen composable.
+    HomePageScreen(
+        uiState = uiState,
+        onRetry = {
+            Log.d(TAG, "UI Event: onRetry clicked. Delegating to ViewModel.")
+            viewModel.fetchHomePageData()
+        }
+    )
+
+    // Handle one-time side effects like showing an error message
+    LaunchedEffect(key1 = uiState.errorMessage) {
+        uiState.errorMessage?.let { error ->
+            Log.e(TAG, "Side Effect: Error state observed. Showing Toast for message: '$error'")
+            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+            // Inform the ViewModel that the error has been shown to prevent re-showing
+            viewModel.onErrorMessageShown()
+        }
+    }
 }
-
-
