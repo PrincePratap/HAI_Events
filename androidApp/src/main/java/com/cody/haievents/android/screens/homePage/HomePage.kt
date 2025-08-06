@@ -25,14 +25,12 @@ fun HomePage(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    // The ViewModel's init block already fetches the data, so no LaunchedEffect is needed here.
-    // This keeps the UI logic clean.
 
-    DisposableEffect(Unit) {
-        onDispose {
-            Log.d(TAG, "HomePage Composable left composition.")
-        }
+    LaunchedEffect(Unit) {
+        Log.d(TAG, "Starting fetchHomePage()")
+        viewModel.fetchHomePageData()
     }
+
 
     // Pass the state and event handlers down to the stateless screen composable.
     HomePageScreen(

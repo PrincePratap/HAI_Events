@@ -4,6 +4,7 @@ import com.cody.haievents.auth.data.LoginRequest
 import com.cody.haievents.auth.data.LoginResponse
 import com.cody.haievents.auth.data.RegisterRequest
 import com.cody.haievents.auth.data.RegisterResponse
+import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.domain.repository.AuthRepository
 import com.cody.haievents.common.util.Result
 import org.koin.core.component.KoinComponent
@@ -16,7 +17,7 @@ class LogInUseCase : KoinComponent {
     suspend operator fun invoke(
         emailOrPhone: String,
         password: String,
-    ): Result<LoginResponse> {
+    ): Result<AuthResultData> {
 
         val trimmedInput = emailOrPhone.trim()
         val trimmedPassword = password.trim()

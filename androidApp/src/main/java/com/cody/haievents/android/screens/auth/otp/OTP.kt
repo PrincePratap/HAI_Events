@@ -7,7 +7,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import com.cody.haievents.android.screens.destinations.HomePageDestination
-import com.cody.haievents.android.screens.destinations.OTPDestination
+
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.popUpTo
@@ -57,9 +57,7 @@ fun OTP(
     LaunchedEffect(key1 = uiState.succeed, key2 = uiState.errorMessage) {
         if (uiState.succeed) {
             Log.i(TAG, "Side Effect: Success state observed. Navigating to home screen and clearing back stack.")
-            navController.navigate(HomePageDestination) { // Changed to a more logical destination
-                popUpTo(OTPDestination) { inclusive = true } // Clears the OTP screen from the back stack
-            }
+            navController.navigate(HomePageDestination.route)
             // Inform the ViewModel that the navigation has been handled to prevent re-triggering
             viewModel.onNavigationHandled()
             Log.d(TAG, "Side Effect: Navigation event consumed by calling onNavigationHandled().")

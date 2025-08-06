@@ -21,12 +21,7 @@ class HomePageViewModel(
     var uiState by mutableStateOf(HomepageUiState())
         private set
 
-    // 2. Lifecycle Logging and Initial Data Fetch
-    init {
-        Log.d(TAG, "ViewModel initialized. Triggering initial data fetch.")
-        // Fetch data as soon as the ViewModel is created
-        fetchHomePageData()
-    }
+
 
     /**
      * Fetches all necessary data for the homepage from the use case.

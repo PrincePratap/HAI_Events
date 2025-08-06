@@ -4,6 +4,7 @@ import com.cody.haievents.auth.data.OTPSuccessResponse
 
 
 import com.cody.haievents.auth.data.OtpVerificationRequest
+import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.domain.repository.AuthRepository
 import com.cody.haievents.common.util.Result
 import org.koin.core.component.KoinComponent
@@ -16,7 +17,7 @@ class OtpVerificationUseCase : KoinComponent {
     suspend operator fun invoke(
         otp: String,
         token: String
-    ): Result<OTPSuccessResponse> {
+    ): Result<AuthResultData> {
 
         if (otp.length != 6 || !otp.all { it.isDigit() }) {
             return Result.Error(message = "Invalid OTP format")

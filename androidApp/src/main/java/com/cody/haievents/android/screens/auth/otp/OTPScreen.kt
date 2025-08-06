@@ -101,7 +101,7 @@ fun OTPScreen(
 
                 // Continue Button
                 Button(
-                    onClick = { /* Handle continue action */ },
+                    onClick =  onContinueClicked,
                     enabled = uiState.otp.length == 6, // Enable only when OTP is fully entered
                     modifier = Modifier
                         .fillMaxWidth()
