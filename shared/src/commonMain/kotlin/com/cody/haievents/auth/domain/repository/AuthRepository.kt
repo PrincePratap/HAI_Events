@@ -14,18 +14,9 @@ import com.cody.haievents.common.util.Result
 
 
 internal interface AuthRepository {
-
     suspend fun registerUser(registerRequest: RegisterRequest): Result<RegisterResponse>
     suspend fun otpVerification(otpRequest: OtpVerificationRequest): Result<AuthResultData>
     suspend fun loginUser(loginRequest: LoginRequest): Result<AuthResultData>
     suspend fun changePassword(request: ChangePasswordRequest): Result<ChangePasswordResponse>
     suspend fun homePage(): Result<HomepageResponse>
-
-
-
-
-
-
-
-
 }
