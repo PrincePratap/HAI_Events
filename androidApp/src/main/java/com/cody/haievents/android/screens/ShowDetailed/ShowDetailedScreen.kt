@@ -44,11 +44,13 @@ private val goldColor = Color(0xFFD1A34F)
 @Preview(showBackground = true, widthDp = 411, heightDp = 891)
 @Composable
 fun DetailedPagePreview() {
-        ShowDetailedScreen()
+        ShowDetailedScreen(uiState = ShowDetailedUiState())
 }
 
 @Composable
-fun ShowDetailedScreen() {
+fun ShowDetailedScreen(
+    uiState: ShowDetailedUiState
+) {
     Scaffold(
         topBar = {
             Column {

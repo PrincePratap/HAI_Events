@@ -32,7 +32,7 @@ import com.cody.haievents.auth.data.Movie
 
 
 @Composable
-fun TheatreShowsCard(item: FeaturedItem? = null) {
+fun TheatreShowsCard(item: FeaturedItem? = null, onItemClick: (Movie) -> Unit = {}){
 
     Column(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun TheatreShowsCard(item: FeaturedItem? = null) {
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(item!!.movies) { show ->
-                TheatreShowCard(show = show)
+                TheatreShowCard(show = show, onItemClick = {onItemClick(it)})
             }
         }
     }
@@ -88,9 +88,10 @@ fun TheatreShowsHeader(headerText: String = "THEATRE SHOWS"){
 }
 
 @Composable
-fun TheatreShowCard(show: Movie) {
+fun TheatreShowCard(show: Movie , onItemClick: (Movie) -> Unit) {
     Card(
-        modifier = Modifier.width(320.dp),
+        modifier =
+        Modifier.width(320.dp).clickable{onItemClick(show)}  ,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface

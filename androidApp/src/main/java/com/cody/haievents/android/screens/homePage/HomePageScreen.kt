@@ -12,11 +12,13 @@ import androidx.compose.ui.unit.dp
 import com.cody.haievents.android.common.components.HomeScreenHeader
 import com.cody.haievents.android.common.componets.EventCategoriesItems
 import com.cody.haievents.android.common.componets.TheatreShowsCard
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
 fun HomePageScreen(
     uiState: HomepageUiState,
-    onRetry: () -> Unit // onRetry is still here, you can use it for an error state
+    onRetry: () -> Unit,
+    navigateToShowDetails: (Int) -> Unit
 ) {
     // LazyColumn is used for displaying scrollable lists of items efficiently.
     LazyColumn(
@@ -27,7 +29,10 @@ fun HomePageScreen(
         item { HomeScreenHeader() }
         item { EventCategoriesItems() }
         uiState.homePageData?.featured?.firstOrNull()?.let { featuredShow ->
-            item { TheatreShowsCard(featuredShow) }
+            item { TheatreShowsCard(item = featuredShow ,
+                onItemClick = {
+                    navigateToShowDetails(it.id)
+            }) }
         }
 
 

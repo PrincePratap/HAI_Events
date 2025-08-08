@@ -6,11 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import com.cody.haievents.android.screens.destinations.ShowDetailedDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
 
-// Use a specific and consistent TAG for this route
 private const val TAG = "HomePageRoute"
 
 @Destination() // Assuming this is the starting screen of your app
@@ -38,6 +38,9 @@ fun HomePage(
         onRetry = {
             Log.d(TAG, "UI Event: onRetry clicked. Delegating to ViewModel.")
             viewModel.fetchHomePageData()
+        },
+        navigateToShowDetails = {
+            navigator.navigate(ShowDetailedDestination(it))
         }
     )
 

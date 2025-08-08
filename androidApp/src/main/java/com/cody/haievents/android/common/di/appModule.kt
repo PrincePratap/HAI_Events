@@ -1,5 +1,6 @@
 package com.cody.haievents.android.common.di
 
+import com.cody.haievents.android.screens.ShowDetailed.ShowDetailedViewModel
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
 import com.cody.haievents.android.screens.auth.otp.OTPViewModel
 import com.cody.haievents.android.screens.auth.register.RegisterViewModel
@@ -14,5 +15,6 @@ val appModule = module {
     viewModel { RegisterViewModel(get()) }
     viewModel {OTPViewModel(get())}
     viewModel {HomePageViewModel(get())}
+    viewModel {ShowDetailedViewModel(get())}
 
 }
