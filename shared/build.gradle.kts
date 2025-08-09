@@ -56,6 +56,8 @@ kotlin {
             api("io.insert-koin:koin-android:$koinVersion")
             implementation("io.ktor:ktor-client-android:$ktorVersion")
             api("androidx.datastore:datastore-preferences:$datastoreVersion")
+//            implementation("com.razorpay:checkout:1.6.40")
+
         }
 
     }
@@ -71,4 +73,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+}
+dependencies {
+    implementation(libs.androidx.runtime.android)
+    implementation(libs.checkout)
+    implementation(libs.androidx.foundation.layout.android)
 }

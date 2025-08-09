@@ -25,5 +25,10 @@ internal class ShowService: KtorApi() {
         parameter("api_token", userToken)
     }.body()
 
+    suspend fun getTicketPrice(showId: Int,): getShowTicketResponse = client.get {
+        endPoint(path = "/api/movie")
+        parameter("id", showId)
+    }.body()
+
 
 }

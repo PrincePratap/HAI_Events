@@ -37,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.componets.BookingBottomBar
 
 // Define the primary color from the image for reusability
 private val goldColor = Color(0xFFD1A34F)
@@ -49,7 +50,9 @@ fun DetailedPagePreview() {
 
 @Composable
 fun ShowDetailedScreen(
-    uiState: ShowDetailedUiState
+    uiState: ShowDetailedUiState,
+    navigationBack: () -> Unit = {},
+    navigateToTicketList: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -58,6 +61,11 @@ fun ShowDetailedScreen(
                 // Custom app bar
                 AppBar()
             }
+        },
+        bottomBar = {
+            BookingBottomBar(
+                onBookClick = navigateToTicketList
+            )
         },
         containerColor = Color.White
     ) { paddingValues ->

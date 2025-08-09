@@ -16,6 +16,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+//        buildConfigField("String", "RAZORPAY_API_KEY", "\"${localProperties.getProperty("RAZORPAY_API_KEY")}\"")
+
     }
     buildFeatures {
         compose = true
@@ -46,6 +48,7 @@ dependencies {
 //    implementation(libs.compose.material3)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3.android)
+    implementation(libs.billing)
     debugImplementation(libs.compose.ui.tooling)
 
     implementation ("androidx.compose.material:material-icons-extended:1.7.8")
@@ -63,4 +66,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation("com.razorpay:checkout:1.6.33")
+
 }

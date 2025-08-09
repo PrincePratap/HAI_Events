@@ -25,5 +25,16 @@ internal class ShowRepositoryImpl(
         }
     }
 
+    override suspend fun ticketPrice(showId: Int): Result<getShowTicketResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.getTicketPrice(showId)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to send OTP: ${e.message}")
+            }
+        }
+    }
+
 
 }

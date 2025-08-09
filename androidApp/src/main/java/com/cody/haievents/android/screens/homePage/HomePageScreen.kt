@@ -18,7 +18,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun HomePageScreen(
     uiState: HomepageUiState,
     onRetry: () -> Unit,
-    navigateToShowDetails: (Int) -> Unit
+    navigateToShowDetails: (Int) -> Unit,
+    paymentWithRazorPay : () -> Unit
 ) {
     // LazyColumn is used for displaying scrollable lists of items efficiently.
     LazyColumn(
@@ -31,6 +32,7 @@ fun HomePageScreen(
         uiState.homePageData?.featured?.firstOrNull()?.let { featuredShow ->
             item { TheatreShowsCard(item = featuredShow ,
                 onItemClick = {
+//                    paymentWithRazorPay()
                     navigateToShowDetails(it.id)
             }) }
         }
