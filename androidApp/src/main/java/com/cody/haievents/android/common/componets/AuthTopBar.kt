@@ -82,18 +82,16 @@ fun AuthTopBar(
 // --- PREVIEWS ---
 
 @Preview(name = "Light Mode", showBackground = true)
-@Preview(name = "Dark Mode", showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 private fun AuthTopBarPreview() {
     // It's a best practice to wrap previews in your app's theme
-        // Surface provides a background color from the theme
-        Surface {
-            AuthTopBar(
-                modifier = Modifier.padding(16.dp),
-                title = stringResource(id = R.string.create_your_account),
-                subtitle = stringResource(id = R.string.auth_top_bar_subtitle)
-            )
-        }
+    // Surface provides a background color from the theme
+    AuthTopBar(
+        modifier = Modifier.padding(16.dp),
+        title = stringResource(id = R.string.create_your_account),
+        subtitle = stringResource(id = R.string.auth_top_bar_subtitle)
+    )
+
 
 }
 

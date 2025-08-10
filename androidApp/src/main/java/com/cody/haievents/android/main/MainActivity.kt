@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.*
 import androidx.compose.ui.Modifier
 
-import com.cody.haievents.android.MyApplicationTheme
+import com.cody.haievents.android.common.theming.MyApplicationTheme
 import com.cody.haievents.payment.PaymentResult
 import com.cody.haievents.payment.PaymentResultHandler
 import com.razorpay.Checkout
@@ -33,8 +33,7 @@ class MainActivity : ComponentActivity() , PaymentResultListener {
     }
 
     override fun onPaymentSuccess(razorpayPaymentId: String?) {
-        // The payment was successful!
-        // Pass the result back to the UI/ViewModel.
+
         PaymentResultHandler.onPaymentResult?.invoke(
             PaymentResult.Success(razorpayPaymentId ?: "N/A")
         )

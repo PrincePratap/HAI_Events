@@ -68,6 +68,7 @@ data class TicketType(
     val createdAt: String,
     @SerialName("updated_at")
     val updatedAt: String
+
 )
 
 // The nested 'detail' object

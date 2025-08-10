@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cody.haievents.Show.data.ShowEventResponse
+import com.cody.haievents.Show.data.TicketType
 import com.cody.haievents.Show.data.getShowTicketResponse
 import com.cody.haievents.Show.domain.usecase.ShowDetailUseCase
 import com.cody.haievents.Show.domain.usecase.TicketListUseCase
@@ -32,8 +33,8 @@ class TicketViewModel(
         Log.d(TAG, "ViewModel initialized")
     }
 
-    fun getTicketList(showId: Int) {
-        Log.d(TicketViewModel.TAG, "getShowDetail called for showId: $showId")
+        fun getTicketList(showId: Int) {
+        Log.d(TAG, "getShowDetail called for showId: $showId")
 
         viewModelScope.launch {
             // Set loading state
@@ -60,7 +61,7 @@ class TicketViewModel(
                     uiState.copy(
                         isLoading = false,
                         succeed = true,
-                        ticketList = showResultData.data
+                        ticketList = showResultData.data?.ticketTypes ?: emptyList()
                     )
                 }
             }
@@ -79,5 +80,5 @@ data class TicketUiState(
     var isLoading: Boolean = false,
     var errorMessage: String? = null,
     var succeed: Boolean = false,
-    var ticketList: getShowTicketResponse? = null
+    var ticketList: List<TicketType> = emptyList()
 )

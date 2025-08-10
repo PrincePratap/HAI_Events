@@ -23,7 +23,9 @@ fun ShowDetailed(
     ShowDetailedScreen(
         uiState = uiState,
         navigationBack = { navigator.navigateUp() },
-        navigateToTicketList = {  }
+        navigateToTicketList = {
+            navigator.navigate(TicketDestination(showId))
+        }
     )
 
 
