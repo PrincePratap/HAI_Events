@@ -29,6 +29,9 @@ import com.cody.haievents.auth.data.FeaturedItem
 import com.cody.haievents.auth.data.Movie
 
 
+
+
+
 @Composable
 fun TheatreShowsCard(item: FeaturedItem? = null, onItemClick: (Movie) -> Unit = {}){
 
@@ -54,7 +57,7 @@ fun TheatreShowsCard(item: FeaturedItem? = null, onItemClick: (Movie) -> Unit = 
 }
 
 @Composable
-fun TheatreShowsHeader(headerText: String = "THEATRE SHOWS"){
+fun TheatreShowsHeader(headerText: String = ""){
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -62,7 +65,7 @@ fun TheatreShowsHeader(headerText: String = "THEATRE SHOWS"){
     ) {
         Column {
             Text(
-                text = "THEATRE SHOWS",
+                text = headerText,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.ExtraBold
             )

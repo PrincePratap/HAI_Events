@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.WatchLater
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Devices
 
 
 @Composable
@@ -126,7 +127,7 @@ fun HeaderSection() {
             Text(
                 text = "Find events that match your vibe",
                 color = Color.White,
-                fontSize = 28.sp,
+                fontSize = 15.sp,
                 fontWeight = FontWeight.Bold,
                 lineHeight = 36.sp
             )
@@ -135,7 +136,7 @@ fun HeaderSection() {
                 Text(
                     text = "Delhi",
                     color = Color.White,
-                    fontSize = 18.sp
+                    fontSize = 15.sp
                 )
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
@@ -156,7 +157,8 @@ fun HeaderSection() {
 }
 
 
-@Preview(showBackground = true)
+@Preview(name = "Small Phone", device = Devices.PIXEL_3A, showBackground = true)
+@Preview(name = "Large Phone", device = Devices.PIXEL_7_PRO, showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     // A Surface is good practice for the top-level container.

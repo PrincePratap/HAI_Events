@@ -59,7 +59,9 @@ fun CustomTextField(
             disabledIndicatorColor = Color.Transparent,
             cursorColor = Color.Black,
         ),
-        singleLine = true
+        singleLine = true,
+        placeholder = { Text(text = placeholder) }
+
     )
 }
 
@@ -111,7 +113,8 @@ fun PasswordTextField(
             disabledIndicatorColor = Color.Transparent,
             cursorColor = Color.Black,
         ),
-        singleLine = true
+        singleLine = true,
+        placeholder = { Text(text = placeholder) }
     )
 }
 
@@ -120,8 +123,9 @@ fun PasswordTextField(
 @Composable
 fun CustomTextFieldPreview() {
     CustomTextField(
-        value = "John Doe",
+        value = "",
         onValueChange = {},
+        placeholder = "Enter your name"
     )
 }
 

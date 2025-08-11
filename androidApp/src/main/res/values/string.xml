@@ -11,6 +11,15 @@
     <string name="auth_top_bar_subtitle">Join the community and start booking your\nfavorite events today!</string>
 
 
+
+    <string name="ps_full_name">Enter full Name</string>
+    <string name="ps_email_address">Enter email Address</string>
+    <string name="ps_phone_number">Enter your phone Number</string>
+    <string name="ps_password">Enter your password</string>
+    <string name="ps_confirm_password">Enter your confirm Password</string>
+
+
+
     <!-- Authentication & Registration Screen -->
     <string name="full_name">Full Name</string>
     <string name="email_address">Email Address</string>

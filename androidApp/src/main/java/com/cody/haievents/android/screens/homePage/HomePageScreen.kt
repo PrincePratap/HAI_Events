@@ -19,23 +19,29 @@ fun HomePageScreen(
     uiState: HomepageUiState,
     onRetry: () -> Unit,
     navigateToShowDetails: (Int) -> Unit,
-    paymentWithRazorPay : () -> Unit
+    paymentWithRazorPay : () -> Unit ={}
 ) {
     // LazyColumn is used for displaying scrollable lists of items efficiently.
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
-        contentPadding = PaddingValues(vertical = 24.dp)
     ) {
         item { HomeScreenHeader() }
         item { EventCategoriesItems() }
-        uiState.homePageData?.featured?.firstOrNull()?.let { featuredShow ->
-            item { TheatreShowsCard(item = featuredShow ,
-                onItemClick = {
-//                    paymentWithRazorPay()
-                    navigateToShowDetails(it.id)
-            }) }
+
+        uiState.homePageData?.featured?.let { featuredList ->
+            items(items = featuredList, key = { it.id }) { featuredShow ->
+                // This will now create a card for "Open Mic", "Theatre Shows", "Concert", etc.
+                TheatreShowsCard(
+                    item = featuredShow,
+                    onItemClick = { movie ->
+                        // The onItemClick lambda in TheatreShowsCard passes the specific movie that was clicked.
+                        navigateToShowDetails(movie.id)
+                    }
+                )
+            }
         }
+
 
 
     }

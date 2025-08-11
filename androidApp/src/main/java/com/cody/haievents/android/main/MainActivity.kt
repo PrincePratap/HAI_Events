@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() , PaymentResultListener {
 
         Checkout.preload(applicationContext)
 
-
         setContent {
             MyApplicationTheme {
                 Surface(

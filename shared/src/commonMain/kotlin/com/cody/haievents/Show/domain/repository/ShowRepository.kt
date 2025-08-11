@@ -2,6 +2,7 @@ package com.cody.haievents.Show.domain.repository
 
 import com.cody.haievents.Show.data.ShowEventResponse
 import com.cody.haievents.Show.data.getShowTicketResponse
+import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.auth.data.ChangePasswordRequest
 import com.cody.haievents.auth.data.ChangePasswordResponse
 import com.cody.haievents.auth.data.HomepageResponse
@@ -17,5 +18,6 @@ import com.cody.haievents.common.util.Result
 internal interface ShowRepository {
     suspend fun showDetails(showId: Int): Result<ShowEventResponse>
     suspend fun ticketPrice(showId: Int): Result<getShowTicketResponse>
+    suspend fun searchShow(search: String): Result<SearchShowResponse>
 }
 

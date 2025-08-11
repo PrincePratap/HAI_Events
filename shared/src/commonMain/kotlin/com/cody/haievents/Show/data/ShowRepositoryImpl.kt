@@ -1,5 +1,6 @@
 package com.cody.haievents.Show.data
 
+import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.Show.domain.repository.ShowRepository
 import com.cody.haievents.auth.data.AuthService
 import com.cody.haievents.auth.domain.repository.AuthRepository
@@ -29,6 +30,17 @@ internal class ShowRepositoryImpl(
         return withContext(dispatcher.io) {
             try {
                 val response = showService.getTicketPrice(showId)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to send OTP: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun searchShow(search: String): Result<SearchShowResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.searchShow(search)
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to send OTP: ${e.message}")

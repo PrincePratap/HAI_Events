@@ -1,5 +1,6 @@
 package com.cody.haievents.Show.data
 
+import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.auth.data.ChangePasswordRequest
 import com.cody.haievents.auth.data.ChangePasswordResponse
 import com.cody.haievents.auth.data.HomepageResponse
@@ -29,6 +30,13 @@ internal class ShowService: KtorApi() {
         endPoint(path = "/api/movie")
         parameter("id", showId)
     }.body()
+
+    suspend fun searchShow(query : String): SearchShowResponse = client.get {
+        endPoint(path = "/api/search")
+        parameter("query", query)
+    }.body()
+
+
 
 
 }

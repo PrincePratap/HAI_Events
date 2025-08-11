@@ -6,11 +6,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import com.cody.haievents.android.R
+import com.cody.haievents.android.common.theming.GoldenYellow
 
 
 @Composable
@@ -57,5 +60,35 @@ fun LoginRedirect(highlightColor: Color, modifier: Modifier = Modifier) {
                     Log.d("SignUpScreen", "Navigate to ${it.item}")
                 }
         }
+    )
+}
+
+@Composable
+ fun LoginNavigationText(onLoginClick: () -> Unit) {
+    val annotatedString = buildAnnotatedString {
+        append(stringResource(R.string.already_have_account))
+        append(" ")
+        pushStringAnnotation(tag = "LOGIN", annotation = "LOGIN")
+        withStyle(
+            style = SpanStyle(
+                color = GoldenYellow,
+                fontWeight = FontWeight.Bold
+            )
+        ) {
+            append(stringResource(R.string.login_now))
+        }
+        pop()
+    }
+
+    ClickableText(
+        text = annotatedString,
+        onClick = { offset ->
+            annotatedString.getStringAnnotations(tag = "LOGIN", start = offset, end = offset)
+                .firstOrNull()?.let {
+//                    Log.d(TAG, "Login navigation text clicked.")
+                    onLoginClick()
+                }
+        },
+        style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center)
     )
 }

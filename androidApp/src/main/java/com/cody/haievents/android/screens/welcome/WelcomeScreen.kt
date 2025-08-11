@@ -24,15 +24,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cody.haievents.android.R
-
-
-
+import com.cody.haievents.android.common.componets.AuthTopBar
+import com.cody.haievents.android.common.componets.CommonButton
 
 
 // --- Colors and Styles ---
@@ -73,47 +73,25 @@ fun WelcomeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
+
+                    AuthTopBar(
+                        title = "Every Event, One App",
+                        subtitle = "From comedy to concerts, explore and book all your favorite live events in one place."
+                    )
+
                     // Logo Placeholder
-                    Image(
-                        painter = painterResource(id = R.drawable.img_small_logo),
-                        contentDescription = "HAI Events Logo",
-                        modifier = Modifier.height(55.dp)
+
+                    CommonButton(
+                        onClick =  clickLogin,
+                        text = "Log In",
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
 
-                    // Headline
-                    Text(
-                        text = "Every Event, One App",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
 
-                    Spacer(modifier = Modifier.height(12.dp))
 
-                    // Sub-headline
-                    Text(
-                        text = "From comedy to concerts, explore and book all your favorite live events in one place.",
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                        color = Color.Gray,
-                        lineHeight = 20.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(32.dp))
 
                     // Log In Button
-                    Button(
-                        onClick = clickLogin,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                        shape = RoundedCornerShape(10.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = goldColor)
-                    ) {
-                        Text(text = "Log In", color = Color.White, fontSize = 16.sp)
-                    }
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 

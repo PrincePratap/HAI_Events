@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -23,9 +24,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.R
+import com.cody.haievents.android.common.componets.AuthTopBar
+import com.cody.haievents.android.common.componets.CommonButton
 
 val Gold = Color(0xFFD4A645)
 val LightGold = Color(0xFFF5D06C)
@@ -41,7 +46,6 @@ fun LoginScreen(
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
-    val goldGradient = Brush.horizontalGradient(colors = listOf(LightGold, Gold))
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -53,44 +57,16 @@ fun LoginScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(80.dp))
 
-            // Logo Text
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(
-                    text = "HAI",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 52.sp,
-                    letterSpacing = 4.sp,
-                    color = Gold
-                )
-                Text(
-                    text = "EVENTS.COM",
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 12.sp,
-                    letterSpacing = 1.sp,
-                    color = Gold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(48.dp))
-
-            Text(
-                text = "Welcome to HAI Events",
-                style = MaterialTheme.typography.headlineSmall,
-                color = DarkGreyText,
-                fontWeight = FontWeight.Bold
+            AuthTopBar(
+                title = "Welcome to HAI Events",
+                subtitle = "Log in to book your next unforgettable experience"
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
 
-            Text(
-                text = "Log in to book your next unforgettable experience",
-                style = MaterialTheme.typography.bodyMedium,
-                color = LightGreyText
-            )
 
-            Spacer(modifier = Modifier.height(32.dp))
+
+
 
             // Phone or Email Field
             OutlinedTextField(
@@ -151,24 +127,17 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             // Log In Button
-            Button(
+            CommonButton(
                 onClick = onLoginClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Gold)
-            ) {
-                if (uiState.isLoading) {
+                text = (if (uiState.isLoading) {
                     CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp, modifier = Modifier.size(20.dp))
                 } else {
-                    Text(
-                        text = "Log In",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+                   "Log In "
+                }).toString()
+            )
 
             Spacer(modifier = Modifier.weight(1f))
 
@@ -196,7 +165,8 @@ fun LoginScreen(
         }
     }
 }
-@Preview(showBackground = true, backgroundColor = 0xFFF5F5F5)
+@Preview(name = "Small Phone", device = Devices.PIXEL_3A, showBackground = true)
+@Preview(name = "Large Phone", device = Devices.PIXEL_7_PRO, showBackground = true)
 @Composable
 fun LoginScreenPreview() {
     val dummyState = LoginUiState(

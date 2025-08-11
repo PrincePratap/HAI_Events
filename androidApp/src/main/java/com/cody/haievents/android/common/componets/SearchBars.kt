@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ManageSearch
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -30,6 +31,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cody.haievents.android.R
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.filled.Clear
+
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.text.TextStyle
+
 
 val mutedBrown = Color(0xFF8D6E63)
 val lightText = Color(0xFF676767)
@@ -84,13 +93,21 @@ fun SearchBarCommonPreview() {
     )
 }
 
+
+
 @Composable
-fun ShowsSearchBar() {
+fun ShowsSearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    placeholderText: String = "Search for shows..."
+) {
     val goldColor = Color(0xFFDDB95E)
     val cornerRadius = 16.dp
+    val mutedTextColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
 
     Surface(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(60.dp)
             .border(
@@ -99,32 +116,80 @@ fun ShowsSearchBar() {
                 shape = RoundedCornerShape(cornerRadius)
             ),
         shape = RoundedCornerShape(cornerRadius),
-        color = MaterialTheme.colorScheme.surface // Typically white in a light theme
+        color = MaterialTheme.colorScheme.surface
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.onSurface // Typically black in a light theme
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = "Shows",
+        // We use BasicTextField for full control over styling, removing Material's default decorations
+        BasicTextField(
+            value = query,
+            onValueChange = onQueryChange,
+            modifier = Modifier.fillMaxSize(),
+            singleLine = true,
+            // Set the text color and style for the input
+            textStyle = TextStyle(
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = 22.sp
-            )
-        }
+                fontSize = 18.sp
+            ),
+            // Use a SolidColor brush for the cursor
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+            decorationBox = { innerTextField ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    // Search Icon
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_search), // Ensure you have this drawable
+                        contentDescription = "Search Icon",
+                        tint = mutedTextColor
+                    )
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    // This box handles the placeholder and the actual text input
+                    Box(modifier = Modifier.weight(1f)) {
+                        if (query.isEmpty()) {
+                            Text(
+                                text = placeholderText,
+                                color = mutedTextColor,
+                                fontSize = 18.sp
+                            )
+                        }
+                        // This is where the user's typed text will be rendered
+                        innerTextField()
+                    }
+
+                    // Show a clear button only if the query is not empty
+                    if (query.isNotEmpty()) {
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Icon(
+                            imageVector = Icons.Default.Clear,
+                            contentDescription = "Clear Search",
+                            tint = mutedTextColor,
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable { onQueryChange("") } // Clears the text
+                        )
+                    }
+                }
+            }
+        )
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFFFFFFF)
+@Preview(showBackground = true)
 @Composable
 fun ShowsSearchBarPreview() {
-    ShowsSearchBar()
-
+    // Use a mutable state for the preview to test interactions
+    var query by remember { mutableStateOf("") }
+    ShowsSearchBar(query = query, onQueryChange = { query = it })
 }
+
+@Preview(showBackground = true)
+@Composable
+fun ShowsSearchBarWithTextPreview() {
+    var query by remember { mutableStateOf("The Office") }
+    ShowsSearchBar(query = query, onQueryChange = { query = it })
+}
+

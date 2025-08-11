@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -28,6 +29,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.cody.haievents.android.R
+import com.cody.haievents.android.common.componets.AuthTopBar
+import com.cody.haievents.android.common.componets.ResendTimeFun
 
 // We can define the colors used in the app for consistency.
 val goldColor = Color(0xFFC9A43B)
@@ -41,7 +45,7 @@ fun OTPScreen(
     onResendClicked: () -> Unit = {},
 ) {
 
-    val isResendEnabled  = false
+    val isResendEnabled = false
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -62,6 +66,13 @@ fun OTPScreen(
                 )
             }
 
+            AuthTopBar(
+                title = "Verify OTP",
+                subtitle = "Enter the 6-digit code sent to +91-8709879077",
+                withSpacer = false
+            )
+
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)
@@ -70,27 +81,16 @@ fun OTPScreen(
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
 
-                Text(
-                    text = "Enter the OTP",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "Enter the 6-digit code sent to +91-8709879077",
-                    color = Color.Gray,
-                    textAlign = TextAlign.Center,
-                    fontSize = 14.sp,
-                    lineHeight = 20.sp
-                )
-                Spacer(modifier = Modifier.height(32.dp))
 
-                // OTP Input Boxes (Now fully functional!)
+
+
                 OtpInputFields(
                     otpValue = uiState.otp,
                     onOtpValueChanged = onOTpValueChanged
                 )
+                Spacer(modifier = Modifier.height(10.dp))
+
+                ResendTimeFun()
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -101,7 +101,7 @@ fun OTPScreen(
 
                 // Continue Button
                 Button(
-                    onClick =  onContinueClicked,
+                    onClick = onContinueClicked,
                     enabled = uiState.otp.length == 6, // Enable only when OTP is fully entered
                     modifier = Modifier
                         .fillMaxWidth()

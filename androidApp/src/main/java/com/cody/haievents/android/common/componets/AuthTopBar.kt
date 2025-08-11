@@ -18,6 +18,7 @@ import com.cody.haievents.android.R
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.cody.haievents.android.common.theming.MyApplicationTheme
 
 
 /**
@@ -43,12 +45,16 @@ fun AuthTopBar(
     modifier: Modifier = Modifier,
     title: String,
     subtitle: String,
+    withSpacer: Boolean = true
 ) {
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp) // Adds space between all items
     ) {
+        if(withSpacer){
+            Spacer(modifier = Modifier.height(80.dp))
+        }
         // 1. Logo
         Image(
             painter = painterResource(id = R.drawable.img_small_logo),
@@ -75,6 +81,9 @@ fun AuthTopBar(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
     }
 }
 
@@ -84,13 +93,14 @@ fun AuthTopBar(
 @Preview(name = "Light Mode", showBackground = true)
 @Composable
 private fun AuthTopBarPreview() {
-    // It's a best practice to wrap previews in your app's theme
-    // Surface provides a background color from the theme
-    AuthTopBar(
-        modifier = Modifier.padding(16.dp),
-        title = stringResource(id = R.string.create_your_account),
-        subtitle = stringResource(id = R.string.auth_top_bar_subtitle)
-    )
+
+    MyApplicationTheme {
+        AuthTopBar(
+            title = stringResource(id = R.string.create_your_account),
+            subtitle = stringResource(id = R.string.auth_top_bar_subtitle)
+        )
+    }
+
 
 
 }
