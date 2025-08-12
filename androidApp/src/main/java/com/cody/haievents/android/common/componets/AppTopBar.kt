@@ -93,7 +93,9 @@ fun CommonTopBarPreview() {
 
 
 @Composable
-fun HomeScreenHeader() {
+fun HomeScreenHeader(
+    clickOnSearch : () -> Unit = {},
+) {
     Column(
         modifier = Modifier
             .wrapContentHeight()
@@ -107,7 +109,7 @@ fun HomeScreenHeader() {
 
         SearchBarCommonNonClickable(
             value = "Search for Shows, events, artists...",
-            onClick = {}
+            onClick = clickOnSearch
         )
 
 

@@ -19,14 +19,17 @@ fun HomePageScreen(
     uiState: HomepageUiState,
     onRetry: () -> Unit,
     navigateToShowDetails: (Int) -> Unit,
-    paymentWithRazorPay : () -> Unit ={}
+    paymentWithRazorPay : () -> Unit ={},
+    navigateToSearchScreen : () -> Unit = {},
 ) {
     // LazyColumn is used for displaying scrollable lists of items efficiently.
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        item { HomeScreenHeader() }
+        item { HomeScreenHeader(clickOnSearch =
+            navigateToSearchScreen
+        ) }
         item { EventCategoriesItems() }
 
         uiState.homePageData?.featured?.let { featuredList ->

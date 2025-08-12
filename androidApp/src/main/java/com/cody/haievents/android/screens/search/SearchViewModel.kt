@@ -30,7 +30,7 @@ class SearchViewModel(
     /**
      * Fetches all necessary data for the homepage from the use case.
      */
-    fun searchShow(text: String) {
+    private fun searchShow(text: String) {
         // 3. Descriptive Action Logging
         Log.d(TAG, "fetchHomePageData: Starting to fetch homepage data...")
 
@@ -71,6 +71,7 @@ class SearchViewModel(
     fun updateQuery(input: String) {
         Log.d("LoginViewModel", "Password updated")
         uiState = uiState.copy(query = input)
+        searchShow(input)
     }
 
     /**

@@ -39,7 +39,8 @@ fun SearchEventCard(
     title: String = "Courtroom Chaos — Theatre Play",
     location: String = "Rangshala, Bangalore",
     dateTime: String = "21 Aug | 6:00 PM",
-    imageURL : String = ""
+    imageURL : String = "",
+    onClickCard: () -> Unit = {}
 ) {
     Surface(
         color = MaterialTheme.colorScheme.surface,
@@ -55,7 +56,8 @@ fun SearchEventCard(
             Card(
                 modifier = Modifier.size(90.dp),
                 shape = RoundedCornerShape(16.dp),
-                elevation = CardDefaults.cardElevation(0.dp) // No shadow
+                elevation = CardDefaults.cardElevation(0.dp),
+                onClick = onClickCard
             ) {
                 // Use Coil's AsyncImage to load the image from the URL
                 AsyncImage(

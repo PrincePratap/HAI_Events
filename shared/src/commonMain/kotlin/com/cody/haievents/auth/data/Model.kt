@@ -266,7 +266,7 @@ data class UserEvent(
     val userId: Int,
 
     @SerialName("image_path")
-    val imagePath: String?,
+    val imagePath: String? = null,
 
     @SerialName("organizer_name")
     val organizerName: String,

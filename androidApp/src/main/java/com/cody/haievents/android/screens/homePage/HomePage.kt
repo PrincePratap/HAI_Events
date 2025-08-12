@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import com.cody.haievents.android.screens.destinations.SearchDestination
 import com.cody.haievents.android.screens.destinations.ShowDetailedDestination
 import com.cody.haievents.payment.PaymentGateway
 import com.cody.haievents.payment.PaymentResult
@@ -62,6 +63,9 @@ fun HomePage(
         },
         navigateToShowDetails = {
             navigator.navigate(ShowDetailedDestination(it))
+        },
+        navigateToSearchScreen = {
+            navigator.navigate(SearchDestination.route)
         },
         paymentWithRazorPay = {
             Log.d(TAG, "UI Event: paymentWithRazorPay clicked.")
