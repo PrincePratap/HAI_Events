@@ -3,7 +3,7 @@ package com.cody.haievents.android.screens.ticket
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items // You can use items or itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -18,23 +18,11 @@ import androidx.compose.ui.unit.sp
 import com.cody.haievents.android.common.componets.card.AddButton
 import com.cody.haievents.android.common.componets.card.QuantitySelector
 import com.cody.haievents.android.common.componets.card.TicketCard
-
-// --- Data classes (Assumed based on usage for a complete example) ---
-
-
-data class TicketItem(
-    val id: String,
-    val name: String,
-    val price: Int,
-    val features: List<String>,
-    var quantity: Int = 0
-)
-
-// Define colors (ideally in a Theme.kt file)
-private val goldColor = Color(0xFFC9A24C)
-private val lightGoldColor = Color(0xFFE6C47C)
-private val screenBackground = Color(0xFFF7F7F7)
-private val primaryTextColor = Color(0xFF333333)
+import com.cody.haievents.android.common.theming.goldColor
+import com.cody.haievents.android.common.theming.lightGoldColor
+import com.cody.haievents.android.common.theming.primaryTextColor
+import com.cody.haievents.android.common.theming.screenBackground
+import com.cody.haievents.Show.data.TicketType
 
 @Composable
 fun TicketScreen(
@@ -42,20 +30,15 @@ fun TicketScreen(
     onQuantityChange: (ticketId: String, newQuantity: Int) -> Unit,
     onGetTicketClick: () -> Unit,
 ) {
-    // --- CORRECT: Calculate totals based on the provided uiState. ---
-//    val totalTickets = uiState.ticketList.sumOf { it.quantity }
-//    val totalPrice = uiState.ticketList.sumOf { it.quantity * it.price }
-
     Scaffold(
         bottomBar = {
-            // --- CORRECT: Conditionally show the bottom bar ---
-//            if (totalTickets > 0) {
-//                BottomCheckoutBar(
-//                    totalPrice = totalPrice,
-//                    ticketCount = totalTickets,
-//                    onGetTicketClick = onGetTicketClick
-//                )
-//            }
+            if (uiState.totalTickets > 0) {
+                BottomCheckoutBar(
+                    totalPrice = uiState.totalPrice,
+                    ticketCount = uiState.totalTickets,
+                    onGetTicketClick = onGetTicketClick
+                )
+            }
         },
         containerColor = screenBackground
     ) { paddingValues ->
@@ -63,40 +46,32 @@ fun TicketScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
-            contentPadding = PaddingValues(horizontal = 16.dp), // Add horizontal padding for all items
-            verticalArrangement = Arrangement.spacedBy(16.dp) // Add space between items
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
-                // Spacer for top padding
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+            item { Spacer(Modifier.height(8.dp)) }
 
-            // --- IMPROVEMENT: Added a stable key for performance and state correctness ---
             items(items = uiState.ticketList, key = { it.id }) { ticket ->
-                // The TicketCard itself will handle its own surface and styling.
-                // No need for an extra Surface wrapper here if TicketCard is well-designed.
+                val selectedQty = uiState.selectedQuantities[ticket.id] ?: 0
+
                 TicketCard(
                     title = ticket.name,
-                    price = "₹${ticket.price}",
-                    // --- BUG FIX: Use features from the data model, not hardcoded values ---
+                    price = "₹${ticket.price}", // Display price as received
                     features = listOf(
-                    "Backstage meet & greet with artists",
-                    "Exclusive merchandise (if available)",
-                    "Dedicated support / help desk"
-                ),
+                        "Backstage meet & greet with artists",
+                        "Exclusive merchandise (if available)",
+                        "Dedicated support / help desk"
+                    ),
                     buttonContent = {
-                        // --- CORRECT: Logic is now active ---
-                        if (ticket.quantity == 0) {
+                        if (selectedQty == 0) {
                             AddButton {
-                                // --- EMIT EVENT ON CLICK ---
                                 onQuantityChange(ticket.id.toString(), 1)
                             }
                         } else {
                             QuantitySelector(
-                                quantity = ticket.quantity,
+                                quantity = selectedQty,
                                 onQuantityChange = { newQuantity ->
-                                    // --- EMIT EVENT ON QUANTITY CHANGE ---
-                                    onQuantityChange(ticket.id.toString(), newQuantity)
+                                    onQuantityChange(ticket.id.toString(), newQuantity.coerceAtLeast(0))
                                 }
                             )
                         }
@@ -104,18 +79,14 @@ fun TicketScreen(
                 )
             }
 
-            item {
-                // Spacer for bottom padding
-                Spacer(modifier = Modifier.height(8.dp))
-            }
+            item { Spacer(Modifier.height(8.dp)) }
         }
     }
 }
 
-
 @Composable
 fun BottomCheckoutBar(
-    totalPrice: Int,
+    totalPrice: Int,   // in ₹ (whole rupees)
     ticketCount: Int,
     onGetTicketClick: () -> Unit
 ) {
@@ -133,13 +104,12 @@ fun BottomCheckoutBar(
         ) {
             Column {
                 Text(
-                    text = "₹$totalPrice", // Use string template for cleaner code
+                    text = "₹$totalPrice",
                     fontWeight = FontWeight.Bold,
                     fontSize = 22.sp,
                     color = primaryTextColor
                 )
                 Text(
-                    // This logic is good. For i18n, you'd use Plurals.
                     text = if (ticketCount == 1) "1 Ticket" else "$ticketCount Tickets",
                     fontSize = 14.sp,
                     color = Color.Gray
@@ -151,8 +121,6 @@ fun BottomCheckoutBar(
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier
                     .height(50.dp)
-                    // The gradient background should be applied to a container, not the button itself
-                    // but this works because the button's container color is transparent.
                     .background(
                         brush = Brush.horizontalGradient(
                             colors = listOf(lightGoldColor, goldColor)
@@ -162,28 +130,29 @@ fun BottomCheckoutBar(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
                 contentPadding = PaddingValues(horizontal = 32.dp)
             ) {
-                Text(
-                    "Get Ticket",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
+                Text("Get Ticket", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
             }
         }
     }
 }
 
-// --- CORRECT: A good preview uses realistic, uncommented sample data ---
 @Preview(showBackground = true)
 @Composable
 fun TicketPurchaseScreenPreview() {
+//    val sampleTickets = listOf(
+//        TicketType(id = 101, event_id = 1, event_source = "movie", role_type = "performer", name = "Performer 1", price = "1.00", quantity = 10, created_at = "", updated_at = ""),
+//        TicketType(id = 102, event_id = 1, event_source = "movie", role_type = "performer", name = "Performer 2", price = "200.00", quantity = 10, created_at = "", updated_at = "")
+//    )
+//    val state = TicketUiState(
+//        ticketList = sampleTickets,
+//        selectedQuantities = mapOf(101 to 0, 102 to 2),
+//        totalTickets = 2,
+//        totalPrice = 400
+//    )
 
-
-    // A fake theme wrapper can help ensure your preview looks closer to the real app
-//        TicketScreen(
-//            uiState = sampleState,
-//            onQuantityChange = { id, qty -> println("Quantity changed for $id to $qty") },
-//            onGetTicketClick = { println("Get Ticket Clicked!") }
-//        )
-
+//    TicketScreen(
+//        uiState = state,
+//        onQuantityChange = { _, _ -> },
+//        onGetTicketClick = {}
+//    )
 }

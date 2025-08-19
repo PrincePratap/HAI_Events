@@ -7,11 +7,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cody.haievents.Show.data.model.Movie
-import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.Show.domain.usecase.SearchTextUseCase
-import com.cody.haievents.android.screens.homePage.HomepageUiState
-import com.cody.haievents.auth.data.HomepageResponse
-import com.cody.haievents.auth.domain.usecase.HomePageUseCase
+
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch
 

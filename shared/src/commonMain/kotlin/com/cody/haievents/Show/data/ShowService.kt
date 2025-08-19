@@ -1,15 +1,11 @@
 package com.cody.haievents.Show.data
 
+import com.cody.haievents.Show.data.model.BlogsListResponse
+import com.cody.haievents.Show.data.model.OrderRequest
+import com.cody.haievents.Show.data.model.OrderResponse
 import com.cody.haievents.Show.data.model.SearchShowResponse
-import com.cody.haievents.auth.data.ChangePasswordRequest
-import com.cody.haievents.auth.data.ChangePasswordResponse
-import com.cody.haievents.auth.data.HomepageResponse
-import com.cody.haievents.auth.data.LoginRequest
-import com.cody.haievents.auth.data.LoginResponse
-import com.cody.haievents.auth.data.OTPSuccessResponse
-import com.cody.haievents.auth.data.OtpVerificationRequest
-import com.cody.haievents.auth.data.RegisterRequest
-import com.cody.haievents.auth.data.RegisterResponse
+import com.cody.haievents.Show.data.model.ShowDetailPageResponse
+
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -20,7 +16,7 @@ import io.ktor.client.request.setBody
 
 internal class ShowService: KtorApi() {
 
-    suspend fun getShowDetail(showId: Int, userToken: String): ShowEventResponse = client.get {
+    suspend fun getShowDetail(showId: Int, userToken: String): ShowDetailPageResponse = client.get {
         endPoint(path = "/api/event-detail")
         parameter("id", showId)
         parameter("api_token", userToken)
@@ -36,6 +32,14 @@ internal class ShowService: KtorApi() {
         parameter("query", query)
     }.body()
 
+    suspend fun getBlogsList(): BlogsListResponse = client.get {
+        endPoint(path = "/api/blogs")
+    }.body()
+
+    suspend fun createOrder(request:OrderRequest): OrderResponse = client.post {
+        endPoint(path = "/api/create-order")
+        setBody(request)
+    }.body()
 
 
 

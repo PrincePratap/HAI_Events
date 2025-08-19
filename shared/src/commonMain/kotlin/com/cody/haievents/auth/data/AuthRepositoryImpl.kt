@@ -1,5 +1,6 @@
 package com.cody.haievents.auth.data
 
+import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.domain.repository.AuthRepository
 import com.cody.haievents.common.data.local.UserPreferences
@@ -75,13 +76,13 @@ internal class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun homePage(): Result<HomepageResponse> {
+    override suspend fun homePage(): Result<HomePageResponse> {
         return withContext(dispatcher.io) {
             try {
                 val response = authService.homePage()
                 Result.Success(response)
             } catch (e: Exception) {
-                Result.Error(message = "Failed to send OTP: ${e.message}")
+                Result.Error(message = "Failed to get homepage: ${e.message}")
             }
         }
     }

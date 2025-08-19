@@ -28,27 +28,7 @@ fun HomePage(
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
-    // Set up the listener to handle the result when it comes back from the Activity
-    DisposableEffect(Unit) {
-        PaymentResultHandler.onPaymentResult = { result ->
-            when (result) {
-                is PaymentResult.Success -> {
-                    Log.d(TAG, "Payment Success: ID = ${result.paymentId}")
-                    Toast.makeText(context, "Payment Success!", Toast.LENGTH_SHORT).show()
-                    // Here you would typically navigate to a success screen or update the ViewModel
-                }
-                is PaymentResult.Error -> {
-                    Log.e(TAG, "Payment Error: Code=${result.errorCode}, Desc=${result.description}")
-                    Toast.makeText(context, "Payment Failed: ${result.description}", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
 
-        // Cleanup the listener when the Composable leaves the screen
-        onDispose {
-            PaymentResultHandler.onPaymentResult = null
-        }
-    }
 
     LaunchedEffect(Unit) {
         Log.d(TAG, "Starting fetchHomePage()")
@@ -59,7 +39,7 @@ fun HomePage(
         uiState = uiState,
         onRetry = {
             Log.d(TAG, "UI Event: onRetry clicked.")
-            viewModel.fetchHomePageData()
+//            viewModel.fetchHomePageData()
         },
         navigateToShowDetails = {
             navigator.navigate(ShowDetailedDestination(it))
@@ -67,11 +47,7 @@ fun HomePage(
         navigateToSearchScreen = {
             navigator.navigate(SearchDestination.route)
         },
-        paymentWithRazorPay = {
-            Log.d(TAG, "UI Event: paymentWithRazorPay clicked.")
-            // Pass the context to the constructor so it can find the Activity
-            PaymentGateway(context).startPayment(amount = 1.0)
-        }
+
     )
 
     LaunchedEffect(key1 = uiState.errorMessage) {

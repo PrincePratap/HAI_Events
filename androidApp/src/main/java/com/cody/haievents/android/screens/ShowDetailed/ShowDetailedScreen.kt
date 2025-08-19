@@ -63,9 +63,12 @@ fun ShowDetailedScreen(
             }
         },
         bottomBar = {
-            BookingBottomBar(
-                onBookClick = navigateToTicketList
-            )
+            uiState.startPrice?.let {
+                BookingBottomBar(
+                    amount = it,
+                    onBookClick = navigateToTicketList
+                )
+            }
         },
         containerColor = Color.White
     ) { paddingValues ->

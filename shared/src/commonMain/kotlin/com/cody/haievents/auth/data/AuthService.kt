@@ -1,5 +1,6 @@
 package com.cody.haievents.auth.data
 
+import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -29,7 +30,7 @@ internal class AuthService: KtorApi() {
         setBody(request)
     }.body()
 
-    suspend fun homePage(): HomepageResponse = client.get {
+    suspend fun homePage(): HomePageResponse = client.get {
         endPoint(path = "/api/homepage")
     }.body()
 

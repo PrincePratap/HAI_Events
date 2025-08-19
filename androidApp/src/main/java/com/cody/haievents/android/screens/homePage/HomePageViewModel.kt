@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cody.haievents.auth.data.HomepageResponse
+import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.usecase.HomePageUseCase
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch
@@ -92,5 +92,5 @@ data class HomepageUiState(
     var isLoading: Boolean = false,
     var errorMessage: String? = null,
     var succeed: Boolean = false,
-    var homePageData: HomepageResponse? = null
+    var homePageData: HomePageResponse? = null
 )

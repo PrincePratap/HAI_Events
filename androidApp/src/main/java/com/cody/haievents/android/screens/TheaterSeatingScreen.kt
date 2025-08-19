@@ -64,8 +64,7 @@ fun TheaterSeatingScreen() {
                 modifier = Modifier
                     .verticalScroll(verticalScrollState)
             ) {
-                // Inner container enables horizontal scrolling
-                // It's placed inside a Box to allow centering when content is smaller than the screen
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

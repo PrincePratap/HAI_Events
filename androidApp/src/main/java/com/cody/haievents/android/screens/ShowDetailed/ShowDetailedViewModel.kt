@@ -6,7 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cody.haievents.Show.data.ShowEventResponse
+import com.cody.haievents.Show.data.model.ShowDetailPageResponse
+import com.cody.haievents.Show.data.model.TicketType
 import com.cody.haievents.Show.domain.usecase.ShowDetailUseCase
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch
@@ -54,11 +55,18 @@ class ShowDetailedViewModel(
                     uiState.copy(
                         isLoading = false,
                         succeed = true,
-                        showDetail = showResultData.data
+                        showDetail = showResultData.data,
+                        startPrice = showResultData.data?.event?.ticketTypes?.lowestPrice()
                     )
                 }
             }
         }
+    }
+
+    private fun List<TicketType>.lowestPrice(): String? {
+        return this.minByOrNull { ticket ->
+            ticket.price.toDoubleOrNull() ?: Double.MAX_VALUE
+        }?.price
     }
 
     // Log when the ViewModel is about to be destroyed
@@ -73,5 +81,6 @@ data class ShowDetailedUiState(
     var isLoading: Boolean = false,
     var errorMessage: String? = null,
     var succeed: Boolean = false,
-    var showDetail: ShowEventResponse? = null
+    var showDetail: ShowDetailPageResponse? = null,
+    var startPrice: String? = null
 )

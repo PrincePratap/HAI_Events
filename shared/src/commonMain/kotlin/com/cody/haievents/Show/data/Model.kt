@@ -9,11 +9,7 @@ data class ShowEventRequest(
     val userToken: String
 )
 
-@Serializable
-data class ShowEventResponse(
-    val status: Boolean,
-    val event: Event
-)
+
 
 @Serializable
 data class Event(

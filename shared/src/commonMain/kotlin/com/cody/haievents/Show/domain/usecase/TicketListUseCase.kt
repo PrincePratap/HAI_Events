@@ -1,6 +1,5 @@
 package com.cody.haievents.Show.domain.usecase
 
-import com.cody.haievents.Show.data.ShowEventResponse
 import com.cody.haievents.Show.data.getShowTicketResponse
 import com.cody.haievents.Show.domain.repository.ShowRepository
 import com.cody.haievents.common.util.Result

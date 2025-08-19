@@ -7,6 +7,7 @@ expect class PaymentGateway {
     // We remove parameters that are platform-specific, like the Activity.
     // The amount can be passed in.
     fun startPayment(amount: Double)
+    fun startPayment(amount: Double, razorpayKey: String)
 }
 
 // The result class is fine.

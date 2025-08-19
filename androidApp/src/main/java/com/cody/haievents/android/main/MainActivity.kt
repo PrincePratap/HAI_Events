@@ -39,8 +39,7 @@ class MainActivity : ComponentActivity() , PaymentResultListener {
     }
 
     override fun onPaymentError(code: Int, description: String?) {
-        // The payment failed.
-        // Pass the result back to the UI/ViewModel.
+
         PaymentResultHandler.onPaymentResult?.invoke(
             PaymentResult.Error(code, description ?: "Unknown error")
         )

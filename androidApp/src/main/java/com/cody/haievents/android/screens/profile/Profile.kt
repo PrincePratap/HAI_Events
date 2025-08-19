@@ -8,18 +8,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun  Profile(navigator: DestinationsNavigator) {
     ProfileScreen(
-        navigateToEventDetails = {},
-        navigateToOrderDetails = {},
-        navigateToStreamLibrary = {},
-        navigateToPlayCreditCard = {},
-        navigateToHelpCentre = {},
-        navigateToAccountSettings = {},
-        navigateToRewards = {},
-        navigateToOffers = {},
-        navigateToFoodAndBeverages = {},
-        navigateToCreateEvent = {
-//            navigator.navigate(CreateEventDestination.route)
 
-        }
     )
 }

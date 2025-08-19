@@ -42,8 +42,6 @@ fun EventCategoriesItems() {
             modifier = Modifier.fillMaxWidth()
         ) {
 
-
-            // Row containing the four category items
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

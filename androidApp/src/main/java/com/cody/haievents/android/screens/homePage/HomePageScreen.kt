@@ -19,7 +19,6 @@ fun HomePageScreen(
     uiState: HomepageUiState,
     onRetry: () -> Unit,
     navigateToShowDetails: (Int) -> Unit,
-    paymentWithRazorPay : () -> Unit ={},
     navigateToSearchScreen : () -> Unit = {},
 ) {
     // LazyColumn is used for displaying scrollable lists of items efficiently.
@@ -39,7 +38,7 @@ fun HomePageScreen(
                     item = featuredShow,
                     onItemClick = { movie ->
                         // The onItemClick lambda in TheatreShowsCard passes the specific movie that was clicked.
-                        navigateToShowDetails(movie.id)
+                        navigateToShowDetails(movie)
                     }
                 )
             }

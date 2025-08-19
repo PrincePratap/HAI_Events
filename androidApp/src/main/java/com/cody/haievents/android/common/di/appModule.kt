@@ -18,7 +18,7 @@ val appModule = module {
     viewModel {OTPViewModel(get())}
     viewModel {HomePageViewModel(get())}
     viewModel {ShowDetailedViewModel(get())}
-    viewModel { TicketViewModel(get()) }
+    viewModel { TicketViewModel(get(),get()) }
     viewModel { SearchViewModel(get()) }
 
 }

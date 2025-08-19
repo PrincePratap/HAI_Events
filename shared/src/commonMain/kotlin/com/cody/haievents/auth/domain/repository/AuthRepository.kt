@@ -2,13 +2,13 @@ package com.cody.haievents.auth.domain.repository
 
 import com.cody.haievents.auth.data.ChangePasswordRequest
 import com.cody.haievents.auth.data.ChangePasswordResponse
-import com.cody.haievents.auth.data.HomepageResponse
 import com.cody.haievents.auth.data.LoginRequest
 import com.cody.haievents.auth.data.LoginResponse
 import com.cody.haievents.auth.data.OTPSuccessResponse
 import com.cody.haievents.auth.data.OtpVerificationRequest
 import com.cody.haievents.auth.data.RegisterRequest
 import com.cody.haievents.auth.data.RegisterResponse
+import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.common.util.Result
 
@@ -18,5 +18,5 @@ internal interface AuthRepository {
     suspend fun otpVerification(otpRequest: OtpVerificationRequest): Result<AuthResultData>
     suspend fun loginUser(loginRequest: LoginRequest): Result<AuthResultData>
     suspend fun changePassword(request: ChangePasswordRequest): Result<ChangePasswordResponse>
-    suspend fun homePage(): Result<HomepageResponse>
+    suspend fun homePage(): Result<HomePageResponse>
 }

@@ -21,7 +21,7 @@ actual class PaymentGateway(private val context: Context) {
         return null
     }
 
-    actual fun startPayment(amount: Double) {
+    actual fun startPayment(amount: Double , razorpayKey: String) {
         val activity = findActivity()
         if (activity == null) {
             Toast.makeText(context, "Cannot find Activity to start payment", Toast.LENGTH_SHORT).show()
@@ -30,7 +30,7 @@ actual class PaymentGateway(private val context: Context) {
 
         val checkout = Checkout()
         // Use the secure key from BuildConfig
-        checkout.setKeyID("rzp_live_UeuZ7eVS4dSjOP")
+        checkout.setKeyID(razorpayKey)
 
         try {
             val options = JSONObject()
@@ -51,5 +51,9 @@ actual class PaymentGateway(private val context: Context) {
             Toast.makeText(activity, "Error starting payment: ${e.message}", Toast.LENGTH_LONG).show()
             e.printStackTrace()
         }
+    }
+
+    actual fun startPayment(amount: Double) {
+
     }
 }
