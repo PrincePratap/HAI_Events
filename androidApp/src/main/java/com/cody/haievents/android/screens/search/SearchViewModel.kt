@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cody.haievents.Show.data.model.Movie
+import com.cody.haievents.Show.data.model.SearchResult
 import com.cody.haievents.Show.domain.usecase.SearchTextUseCase
 
 import com.cody.haievents.common.util.Result
@@ -56,7 +56,7 @@ class SearchViewModel(
                     uiState.copy(
                         isLoading = false,
                         succeed = true, // Use 'succeed' to trigger one-time events like navigation
-                        showList = homepageResult.data?.movies ?: emptyList()
+                        showList = homepageResult.data?.results ?: emptyList()
                     )
                 }
             }
@@ -102,5 +102,5 @@ data class SearchUiState(
     var errorMessage: String? = null,
     var succeed: Boolean = false,
     var query: String = "",
-    var showList:  List<Movie> = emptyList()
+    var showList:  List<SearchResult> = emptyList()
 )

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,10 +34,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
+import com.cody.haievents.android.common.components.CommonTopBar
 import com.cody.haievents.android.common.componets.BookingBottomBar
 
 // Define the primary color from the image for reusability
@@ -59,7 +63,10 @@ fun ShowDetailedScreen(
             Column {
                 // Custom status bar to match the image
                 // Custom app bar
-                AppBar()
+                CommonTopBar(
+                    title = uiState.showDetail?.event?.title ?: "",
+                    onBackClick =   navigationBack
+                    )
             }
         },
         bottomBar = {
@@ -78,79 +85,63 @@ fun ShowDetailedScreen(
                 .padding(paddingValues)
                 .verticalScroll(rememberScrollState())
         ) {
-            ImageSection()
-            ContentSection(
-                modifier = Modifier.padding(16.dp)
-            )
+            uiState.showDetail?.event?.let { ImageSection(it.imagePath) }
+            uiState.showDetail?.event?.let {
+                ContentSection(
+                    title = it.title,
+                    location = it.detail.venue,
+                    date = "2023-1",
+                    time = it.detail.timeRange,
+                    language = it.language,
+                    description = it.detail.summary,
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
         }
     }
 }
 
 
 
-@Composable
-private fun AppBar() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(goldColor)
-            .padding(horizontal = 8.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-            contentDescription = "Back",
-            tint = Color.White
-        )
-        Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = "Raw & Real",
-            color = Color.White,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-            style = MaterialTheme.typography.titleLarge
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            imageVector = Icons.Filled.Share,
-            contentDescription = "Share",
-            tint = Color.White,
-            modifier = Modifier.padding(end = 8.dp)
-        )
-    }
-}
+
 
 
 @Composable
-private fun ImageSection() {
-    // In a real app, this would use a library like Coil to load an image.
-    // For this preview, a placeholder Box is used to represent the image area.
+private fun ImageSection(
+    imageUrl: String = "", // Pass your image URL here
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(2.1f) // Approximate aspect ratio from the image
-            .background(Color(0xFF191932)), // Dark blue from the image's brick wall
+            .aspectRatio(2.1f) // Keep the same ratio
+            .background(Color(0xFF191932)), // fallback bg while loading
         contentAlignment = Alignment.Center
     ) {
-        // Placeholder text to represent the content of the image
-        Text(
-            text = "OPEN MIC",
-            color = Color.White.copy(alpha = 0.7f),
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            letterSpacing = 4.sp
+        AsyncImage(
+            model = "https://haievents.com/$imageUrl",
+            contentDescription = "Event Image",
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop // Fits like BookMyShow banner style
         )
     }
 }
 
 @Composable
-private fun ContentSection(modifier: Modifier = Modifier) {
+private fun ContentSection(
+    modifier: Modifier = Modifier,
+    title: String,
+    location: String,
+    date: String,
+    time: String,
+    language: String,
+    description: String
+    ) {
     Column(
         modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Text(
-            text = "Raw & Real",
+            text = title,
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold
         )
@@ -161,16 +152,16 @@ private fun ContentSection(modifier: Modifier = Modifier) {
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                InfoItem(icon = Icons.Outlined.LocationOn, text = "Kamani Auditorium, Delhi")
-                InfoItem(icon = Icons.Outlined.Schedule, text = "7:00 PM")
+                InfoItem(icon = Icons.Outlined.LocationOn, text = location)
+                InfoItem(icon = Icons.Outlined.Schedule, text = time)
             }
             Spacer(Modifier.width(8.dp))
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                InfoItem(icon = Icons.Outlined.CalendarToday, text = "Sunday, 20 July 2025")
-                InfoItem(icon = Icons.Outlined.Language, text = "Hindi")
+                InfoItem(icon = Icons.Outlined.CalendarToday, text = date)
+                InfoItem(icon = Icons.Outlined.Language, text = language)
             }
         }
 
@@ -184,10 +175,7 @@ private fun ContentSection(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.Bold
             )
 
-            val description = "In a world that never stops speaking, what happens to a " +
-                    "voice that cannot be heard?\n\"The Silent Echo\" is a deeply " +
-                    "emotional and visually poetic play that follows the journey of " +
-                    "Aarohi, a mute girl, as she navigates through heartbreak, hope, and....."
+
 
             Text(
                 text = description,

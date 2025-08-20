@@ -8,6 +8,8 @@ import com.cody.haievents.auth.data.OTPSuccessResponse
 import com.cody.haievents.auth.data.OtpVerificationRequest
 import com.cody.haievents.auth.data.RegisterRequest
 import com.cody.haievents.auth.data.RegisterResponse
+import com.cody.haievents.auth.data.model.EditUserRequest
+import com.cody.haievents.auth.data.model.EditUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.common.util.Result
@@ -19,4 +21,9 @@ internal interface AuthRepository {
     suspend fun loginUser(loginRequest: LoginRequest): Result<AuthResultData>
     suspend fun changePassword(request: ChangePasswordRequest): Result<ChangePasswordResponse>
     suspend fun homePage(): Result<HomePageResponse>
+    suspend fun editUser(request: EditUserRequest): Result<EditUserResponse>
+
+
+
+
 }

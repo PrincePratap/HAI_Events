@@ -3,6 +3,7 @@ package com.cody.haievents.android.screens.addEvent.eventDetails
 
 
 
+
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,16 +27,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- Main Screen Composable ---
 
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
+
+
+// Define colors to match the screenshot
+val goldColor = Color(0xFFC9A959)
+val lightGoldBorder = Color(0xFFE0D0B1)
+val darkTextColor = Color.Black
+val lightTextColor = Color.Gray
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDetailsScreen() {
-    // Colors derived from the image
-    val goldColor = Color(0xFFC7A441)
-    val lightGoldBorder = Color(0xFFD3B878)
-    val screenBackgroundColor = Color(0xFF121212) // A dark background
-
-    // State for the form fields
     var eventTitle by remember { mutableStateOf("") }
     var organiserName by remember { mutableStateOf("") }
     var contactEmail by remember { mutableStateOf("") }
@@ -43,281 +48,355 @@ fun EventDetailsScreen() {
     var eventDate by remember { mutableStateOf("") }
     var eventTime by remember { mutableStateOf("") }
     var eventDescription by remember { mutableStateOf("") }
+    var ticketType by remember { mutableStateOf("Gold") }
+    var ticketQuantity by remember { mutableStateOf("500") }
+    var ticketPrice by remember { mutableStateOf("₹300") }
 
     Scaffold(
-        containerColor = screenBackgroundColor,
-        topBar = { AddEventTopBar(backgroundColor = goldColor) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Add Your Event", color = Color.White) },
+                navigationIcon = {
+                    IconButton(onClick = { /* Handle back press */ }) {
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.White
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = goldColor
+                )
+            )
+        },
+        containerColor = Color.White
     ) { paddingValues ->
         Column(
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
-                .background(Color.White)
-                .padding(24.dp)
-        ) {
-            EventCreationStepper()
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // Form sections
-            EventInputSection(label = "Event Title") {
-                EventTextField(
-                    value = eventTitle,
-                    onValueChange = { eventTitle = it },
-                    placeholder = "E.g Music Fiesta 2025",
-                    borderColor = lightGoldBorder
-                )
-            }
-            EventInputSection(label = "Organiser Name") {
-                EventTextField(
-                    value = organiserName,
-                    onValueChange = { organiserName = it },
-                    placeholder = "E.g Rajesh Singh",
-                    borderColor = lightGoldBorder
-                )
-            }
-            EventInputSection(label = "Contact Email") {
-                EventTextField(
-                    value = contactEmail,
-                    onValueChange = { contactEmail = it },
-                    placeholder = "e.g rajeshshr@gmail.com",
-                    borderColor = lightGoldBorder
-                )
-            }
-            EventInputSection(label = "Event Location") {
-                EventTextField(
-                    value = eventLocation,
-                    onValueChange = { eventLocation = it },
-                    placeholder = "E.g Mumbai, India",
-                    borderColor = lightGoldBorder
-                )
-            }
-
-            // Date and Time in a Row
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                Box(modifier = Modifier.weight(1f)) {
-                    EventInputSection(label = "Event Date") {
-                        EventTextField(
-                            value = eventDate,
-                            onValueChange = { eventDate = it },
-                            placeholder = "dd-mm-yyyy",
-                            borderColor = lightGoldBorder
-                        )
-                    }
-                }
-                Box(modifier = Modifier.weight(1f)) {
-                    EventInputSection(label = "Event Time") {
-                        EventTextField(
-                            value = eventTime,
-                            onValueChange = { eventTime = it },
-                            placeholder = "Eg. 6:30 PM - 9:30 PM",
-                            borderColor = lightGoldBorder
-                        )
-                    }
-                }
-            }
-
-            EventInputSection(label = "Event Category") {
-                EventCategoryDropdown(borderColor = lightGoldBorder)
-            }
-            EventInputSection(label = "Event Description") {
-                EventTextField(
-                    value = eventDescription,
-                    onValueChange = { eventDescription = it },
-                    placeholder = "Tell us more about your events...",
-                    minLines = 4,
-                    borderColor = lightGoldBorder
-                )
-            }
-            EventInputSection(label = "Event Poster") {
-                EventPosterPicker(borderColor = lightGoldBorder)
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Button(
-                onClick = { /*TODO*/ },
-                modifier = Modifier.fillMaxWidth().height(50.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = goldColor)
-            ) {
-                Text("Next", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-            }
-        }
-    }
-}
-
-
-// --- Reusable UI Components ---
-
-@Composable
-fun AddEventTopBar(backgroundColor: Color) {
-    Surface(
-        color = backgroundColor,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
-            IconButton(onClick = { /* Handle back navigation */ }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
-            }
-            Text(
-                text = "Add Your Event",
-                color = Color.White,
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 8.dp)
+            Spacer(modifier = Modifier.height(24.dp))
+            EventProgressIndicator()
+            Spacer(modifier = Modifier.height(24.dp))
+            EventForm(
+                eventTitle = eventTitle,
+                onEventTitleChange = { eventTitle = it },
+                organiserName = organiserName,
+                onOrganiserNameChange = { organiserName = it },
+                contactEmail = contactEmail,
+                onContactEmailChange = { contactEmail = it },
+                eventLocation = eventLocation,
+                onEventLocationChange = { eventLocation = it },
+                eventDate = eventDate,
+                onEventDateChange = { eventDate = it },
+                eventTime = eventTime,
+                onEventTimeChange = { eventTime = it },
+                eventDescription = eventDescription,
+                onEventDescriptionChange = { eventDescription = it },
+                ticketType = ticketType,
+                onTicketTypeChange = { ticketType = it },
+                ticketQuantity = ticketQuantity,
+                onTicketQuantityChange = { ticketQuantity = it },
+                ticketPrice = ticketPrice,
+                onTicketPriceChange = { ticketPrice = it }
             )
+            Spacer(modifier = Modifier.height(24.dp))
+            Button(
+                onClick = { /* Handle Next */ },
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = goldColor),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+            ) {
+                Text("Next", color = Color.White, fontSize = 16.sp)
+            }
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
 
 @Composable
-fun EventCreationStepper() {
+fun EventProgressIndicator() {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.Center
     ) {
-        Step(text = "Event\nDetails", isCompleted = true, isActive = true)
-        HorizontalDivider(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), color = Color.LightGray)
-        Step(text = "Bank Transfer\nDetails", isCompleted = true, isActive = false)
+        Step(title = "Event\nDetails", isActive = true)
+        Divider(
+            modifier = Modifier.weight(1f),
+            color = Color.LightGray,
+            thickness = 1.dp
+        )
+        Step(title = "Bank Transfer\nDetails", isActive = false)
     }
 }
 
 @Composable
-fun Step(text: String, isCompleted: Boolean, isActive: Boolean) {
-    val circleColor = if (isActive) Color.DarkGray else Color.LightGray
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            modifier = Modifier
-                .size(24.dp)
-                .clip(RoundedCornerShape(50))
-                .background(circleColor),
-            contentAlignment = Alignment.Center
-        ) {
-            if (isCompleted) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = "Completed",
-                    tint = Color.White,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text, textAlign = TextAlign.Center, fontSize = 12.sp, lineHeight = 14.sp)
-    }
-}
-
-@Composable
-fun EventInputSection(label: String, content: @Composable () -> Unit) {
-    Column(modifier = Modifier.padding(vertical = 8.dp)) {
+fun Step(title: String, isActive: Boolean) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier.width(120.dp)
+    ) {
         Text(
-            text = label,
-            fontWeight = FontWeight.Bold,
+            text = title,
+            fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
-            color = Color.Black.copy(alpha = 0.8f)
+            color = if (isActive) darkTextColor else lightTextColor,
+            textAlign = TextAlign.Center,
+            lineHeight = 16.sp
         )
         Spacer(modifier = Modifier.height(8.dp))
-        content()
+        Icon(
+            imageVector = Icons.Default.CheckCircle,
+            contentDescription = title,
+            tint = if (isActive) darkTextColor else Color.LightGray,
+            modifier = Modifier.size(28.dp)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun EventForm(
+    eventTitle: String, onEventTitleChange: (String) -> Unit,
+    organiserName: String, onOrganiserNameChange: (String) -> Unit,
+    contactEmail: String, onContactEmailChange: (String) -> Unit,
+    eventLocation: String, onEventLocationChange: (String) -> Unit,
+    eventDate: String, onEventDateChange: (String) -> Unit,
+    eventTime: String, onEventTimeChange: (String) -> Unit,
+    eventDescription: String, onEventDescriptionChange: (String) -> Unit,
+    ticketType: String, onTicketTypeChange: (String) -> Unit,
+    ticketQuantity: String, onTicketQuantityChange: (String) -> Unit,
+    ticketPrice: String, onTicketPriceChange: (String) -> Unit,
+) {
+    val textFieldColors = OutlinedTextFieldDefaults.colors(
+        focusedBorderColor = goldColor,
+        unfocusedBorderColor = lightGoldBorder,
+        cursorColor = goldColor,
+        focusedContainerColor = Color.White,
+        unfocusedContainerColor = Color.White,
+    )
+
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        FormInput(
+            label = "Event Title",
+            value = eventTitle,
+            onValueChange = onEventTitleChange,
+            placeholder = "E.g Music Fiesta 2025",
+            colors = textFieldColors
+        )
+        FormInput(
+            label = "Organiser Name",
+            value = organiserName,
+            onValueChange = onOrganiserNameChange,
+            placeholder = "E.g Rajesh Singh",
+            colors = textFieldColors
+        )
+        FormInput(
+            label = "Contact Email",
+            value = contactEmail,
+            onValueChange = onContactEmailChange,
+            placeholder = "E.g rajeshshr@gmail.com",
+            colors = textFieldColors
+        )
+        FormInput(
+            label = "Event Location",
+            value = eventLocation,
+            onValueChange = onEventLocationChange,
+            placeholder = "E.g Mumbai, India",
+            colors = textFieldColors
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+            FormInput(
+                label = "Event Date",
+                value = eventDate,
+                onValueChange = onEventDateChange,
+                placeholder = "dd-mm-yyyy",
+                modifier = Modifier.weight(1f),
+                colors = textFieldColors
+            )
+            FormInput(
+                label = "Event Time",
+                value = eventTime,
+                onValueChange = onEventTimeChange,
+                placeholder = "Eg. 6:30 PM - 9:30 PM",
+                modifier = Modifier.weight(1f),
+                colors = textFieldColors
+            )
+        }
+        CategoryDropdown(colors = textFieldColors)
+        FormInput(
+            label = "Event Description",
+            value = eventDescription,
+            onValueChange = onEventDescriptionChange,
+            placeholder = "Tell us more about your events...",
+            singleLine = false,
+            modifier = Modifier.height(120.dp),
+            colors = textFieldColors
+        )
+        EventPosterUploader()
+        TicketDetailsSection(
+            ticketType = ticketType, onTicketTypeChange = onTicketTypeChange,
+            ticketQuantity = ticketQuantity, onTicketQuantityChange = onTicketQuantityChange,
+            ticketPrice = ticketPrice, onTicketPriceChange = onTicketPriceChange,
+            colors = textFieldColors
+        )
     }
 }
 
 @Composable
-fun EventTextField(
+fun FormInput(
+    label: String,
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
-    borderColor: Color,
-    minLines: Int = 1
+    modifier: Modifier = Modifier,
+    singleLine: Boolean = true,
+    colors: TextFieldColors
 ) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholder = { Text(placeholder, color = Color.Gray) },
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = borderColor,
-            unfocusedBorderColor = borderColor.copy(alpha = 0.7f),
-            cursorColor = borderColor,
-            focusedTextColor = Color.Black,
-            unfocusedTextColor = Color.Black
-        ),
-        minLines = minLines,
-        maxLines = if (minLines > 1) minLines + 2 else 1
-    )
-}
-
-@Composable
-fun EventCategoryDropdown(borderColor: Color) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, borderColor.copy(alpha = 0.7f)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 15.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text("-Select category-", color = Color.Gray)
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
-                contentDescription = "Dropdown Arrow",
-                tint = Color.Gray
-            )
-        }
+    Column(modifier = modifier) {
+        Text(label, fontWeight = FontWeight.Bold, color = darkTextColor)
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            placeholder = { Text(placeholder, color = lightTextColor) },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            singleLine = singleLine,
+            colors = colors
+        )
     }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EventPosterPicker(borderColor: Color) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, borderColor.copy(alpha = 0.7f)),
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
+fun CategoryDropdown(colors: TextFieldColors) {
+    var expanded by remember { mutableStateOf(false) }
+    var selectedCategory by remember { mutableStateOf("") }
+    val categories = listOf("Music", "Sports", "Conference", "Workshop", "Art")
+
+    Column {
+        Text("Event Category", fontWeight = FontWeight.Bold, color = darkTextColor)
+        Spacer(modifier = Modifier.height(8.dp))
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
         ) {
-            Button(
-                onClick = { /*TODO*/ },
-                shape = RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp, topEnd = 0.dp, bottomEnd = 0.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE0E0E0),
-                    contentColor = Color.Black.copy(alpha = 0.8f)
-                ),
-                modifier = Modifier.height(55.dp)
+            OutlinedTextField(
+                value = selectedCategory,
+                onValueChange = {},
+                readOnly = true,
+                placeholder = { Text("-Select category-", color = lightTextColor) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                shape = RoundedCornerShape(12.dp),
+                colors = colors
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
             ) {
-                Text("Choose File", fontWeight = FontWeight.Normal)
+                categories.forEach { category ->
+                    DropdownMenuItem(
+                        text = { Text(category) },
+                        onClick = {
+                            selectedCategory = category
+                            expanded = false
+                        }
+                    )
+                }
             }
-            Text(
-                text = "No file chosen",
-                color = Color.Gray,
-                modifier = Modifier.padding(start = 16.dp)
-            )
         }
     }
 }
 
+@Composable
+fun EventPosterUploader() {
+    Column {
+        Text("Event Poster", fontWeight = FontWeight.Bold, color = darkTextColor)
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = "No file chosen",
+            onValueChange = {},
+            readOnly = true,
+            leadingIcon = {
+                Button(
+                    onClick = { /* Handle file choose */ },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.LightGray,
+                        contentColor = darkTextColor
+                    ),
+                    shape = RoundedCornerShape(8.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp)
+                ) {
+                    Text("Choose File", fontWeight = FontWeight.Normal)
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = lightGoldBorder,
+                unfocusedBorderColor = lightGoldBorder,
+                disabledTextColor = lightTextColor,
+                focusedContainerColor = Color.White,
+                unfocusedContainerColor = Color.White
+            ),
+            enabled = false
+        )
+    }
+}
 
-// --- Preview Function ---
+@Composable
+fun TicketDetailsSection(
+    ticketType: String, onTicketTypeChange: (String) -> Unit,
+    ticketQuantity: String, onTicketQuantityChange: (String) -> Unit,
+    ticketPrice: String, onTicketPriceChange: (String) -> Unit,
+    colors: TextFieldColors
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("Tickets Details", fontWeight = FontWeight.Bold, color = darkTextColor)
+        Row {
+            Text("Ticket Type", modifier = Modifier.weight(1f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
+            Text("Quantity", modifier = Modifier.weight(1f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
+            Text("Price", modifier = Modifier.weight(1f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+            OutlinedTextField(
+                value = ticketType, onValueChange = onTicketTypeChange,
+                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = colors
+            )
+            OutlinedTextField(
+                value = ticketQuantity, onValueChange = onTicketQuantityChange,
+                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = colors
+            )
+            OutlinedTextField(
+                value = ticketPrice, onValueChange = onTicketPriceChange,
+                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = colors
+            )
+        }
+        TextButton(onClick = { /* Add another ticket type */ }) {
+            Icon(Icons.Default.Add, contentDescription = "Add Ticket Type", tint = goldColor)
+            Spacer(modifier = Modifier.width(4.dp))
+            Text("Add Another Ticket Type", color = goldColor, fontWeight = FontWeight.Bold)
+        }
+    }
+}
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES, name = "Add Event Screen")
+@Preview(showBackground = true, device = "id:pixel_4")
 @Composable
 fun AddEventScreenPreview() {
-    MaterialTheme {
+
         EventDetailsScreen()
-    }
+
 }

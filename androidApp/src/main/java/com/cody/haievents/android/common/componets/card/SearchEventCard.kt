@@ -61,7 +61,7 @@ fun SearchEventCard(
             ) {
                 // Use Coil's AsyncImage to load the image from the URL
                 AsyncImage(
-                    model = imageURL,
+                    model = "https://haievents.com/$imageURL",
                     contentDescription = "Event Image",
                     modifier = Modifier.fillMaxSize(),
                     contentScale = ContentScale.Crop,

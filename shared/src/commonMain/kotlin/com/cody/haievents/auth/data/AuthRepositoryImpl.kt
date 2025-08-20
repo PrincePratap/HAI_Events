@@ -1,5 +1,7 @@
 package com.cody.haievents.auth.data
 
+import com.cody.haievents.auth.data.model.EditUserRequest
+import com.cody.haievents.auth.data.model.EditUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.domain.repository.AuthRepository
@@ -85,6 +87,10 @@ internal class AuthRepositoryImpl(
                 Result.Error(message = "Failed to get homepage: ${e.message}")
             }
         }
+    }
+
+    override suspend fun editUser(request: EditUserRequest): Result<EditUserResponse> {
+        TODO("Not yet implemented")
     }
 
 

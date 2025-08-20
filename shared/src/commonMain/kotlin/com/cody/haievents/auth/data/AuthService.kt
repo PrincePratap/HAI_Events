@@ -1,5 +1,7 @@
 package com.cody.haievents.auth.data
 
+import com.cody.haievents.auth.data.model.EditUserRequest
+import com.cody.haievents.auth.data.model.EditUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
@@ -33,6 +35,15 @@ internal class AuthService: KtorApi() {
     suspend fun homePage(): HomePageResponse = client.get {
         endPoint(path = "/api/homepage")
     }.body()
+
+    suspend fun homePage(token : String , request: EditUserRequest): EditUserResponse = client.post {
+        endPoint(path = "/api/profile/update")
+        setBody(request)
+        setToken(token)
+
+    }.body()
+
+
 
 
 

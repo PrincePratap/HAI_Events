@@ -1,6 +1,9 @@
 package com.cody.haievents.Show.data
 
+import com.cody.haievents.Show.data.model.AddEventRequest
+import com.cody.haievents.Show.data.model.AddEventResponse
 import com.cody.haievents.Show.data.model.BlogsListResponse
+import com.cody.haievents.Show.data.model.CategoryResponse
 import com.cody.haievents.Show.data.model.OrderRequest
 import com.cody.haievents.Show.data.model.OrderResponse
 import com.cody.haievents.Show.data.model.SearchShowResponse
@@ -67,6 +70,28 @@ internal class ShowRepositoryImpl(
         return withContext(dispatcher.io) {
             try {
                 val response = showService.createOrder(OrderRequest(amount = totalAmount.toInt()))
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to Create Order: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun addEvent(requestBody: AddEventRequest): Result<AddEventResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.addEvent(requestBody)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to Create Order: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun getAllCategories(): Result<CategoryResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.getALLCategories()
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to Create Order: ${e.message}")

@@ -1,13 +1,8 @@
 package com.cody.haievents.android.screens.profile
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -18,34 +13,33 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cody.haievents.android.R
 
-// --- Main Activity (Example Usage) ---
-
-
-// --- Theme Definition ---
+// --- Optional local colors (unused if your theme provides these) ---
 private val GoldColor = Color(0xFFC7A440)
 private val DarkBackgroundColor = Color(0xFF1C1C1E)
 private val WhiteColor = Color.White
 private val GrayColor = Color.Gray
 
-
-
-
-
-// --- Screen Composable ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    onBackClick: () -> Unit = {},
+    onEditProfileClick: () -> Unit = {},
+    onYourListedEventsClick: () -> Unit = {},
+    onChangePasswordClick: () -> Unit = {},
+    onMembershipClick: () -> Unit = {},
+    onNotificationsClick: () -> Unit = {},
+    onHelpSupportClick: () -> Unit = {},
+    onTermsClick: () -> Unit = {},
+    onPrivacyClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -57,7 +51,7 @@ fun ProfileScreen() {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* Handle back navigation */ }) {
+                    IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
@@ -81,20 +75,14 @@ fun ProfileScreen() {
         ) {
             Spacer(modifier = Modifier.height(32.dp))
 
-
-
-
-            Spacer(modifier = Modifier.height(16.dp))
-
+            // --- User info ---
             Text(
                 text = "Rajesh Singh",
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
-
             Spacer(modifier = Modifier.height(4.dp))
-
             Text(
                 text = "rajeshsingh@email.com",
                 style = MaterialTheme.typography.bodyMedium,
@@ -105,21 +93,53 @@ fun ProfileScreen() {
 
             // --- Menu Items ---
             Column(modifier = Modifier.padding(horizontal = 24.dp)) {
-                ProfileMenuItem(icon = Icons.Outlined.Edit, text = "Edit Profile")
-                ProfileMenuItem(icon = Icons.Outlined.Mic, text = "Your Listed Events")
-                ProfileMenuItem(icon = Icons.Outlined.Lock, text = "Change Password")
-                ProfileMenuItem(icon = Icons.Outlined.CardMembership, text = "Membership")
-                ProfileMenuItem(icon = Icons.Outlined.Notifications, text = "Notification")
-                ProfileMenuItem(icon = Icons.Outlined.HelpOutline, text = "Help & Support")
-                ProfileMenuItem(icon = Icons.Outlined.Description, text = "Terms & Condition")
-                ProfileMenuItem(icon = Icons.Outlined.Visibility, text = "Private Policy")
+                ProfileMenuItem(
+                    icon = Icons.Outlined.Edit,
+                    text = "Edit Profile",
+                    onClick = onEditProfileClick
+                )
+                ProfileMenuItem(
+                    icon = Icons.Outlined.Mic,
+                    text = "Your Listed Events",
+                    onClick = onYourListedEventsClick
+                )
+                ProfileMenuItem(
+                    icon = Icons.Outlined.Lock,
+                    text = "Change Password",
+                    onClick = onChangePasswordClick
+                )
+                ProfileMenuItem(
+                    icon = Icons.Outlined.CardMembership,
+                    text = "Membership",
+                    onClick = onMembershipClick
+                )
+                ProfileMenuItem(
+                    icon = Icons.Outlined.Notifications,
+                    text = "Notification",
+                    onClick = onNotificationsClick
+                )
+                ProfileMenuItem(
+                    icon = Icons.Outlined.HelpOutline,
+                    text = "Help & Support",
+                    onClick = onHelpSupportClick
+                )
+                ProfileMenuItem(
+                    icon = Icons.Outlined.Description,
+                    text = "Terms & Condition",
+                    onClick = onTermsClick
+                )
+                ProfileMenuItem(
+                    icon = Icons.Outlined.Visibility,
+                    text = "Private Policy",
+                    onClick = onPrivacyClick
+                )
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
             // --- Log Out Button ---
             Button(
-                onClick = { /* Handle log out */ },
+                onClick = onLogoutClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 16.dp)
@@ -140,13 +160,17 @@ fun ProfileScreen() {
     }
 }
 
-// --- Reusable Menu Item Composable ---
+// --- Reusable Menu Item Composable with click ---
 @Composable
-fun ProfileMenuItem(icon: ImageVector, text: String) {
+fun ProfileMenuItem(
+    icon: ImageVector,
+    text: String,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* Handle item click */ }
+            .clickable(onClick = onClick)
             .padding(vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -174,8 +198,16 @@ fun ProfileMenuItem(icon: ImageVector, text: String) {
 @Preview(showBackground = true, device = "id:pixel_6")
 @Composable
 fun ProfileScreenPreview() {
-
-        ProfileScreen()
-
+    ProfileScreen(
+        onBackClick = {},
+        onEditProfileClick = {},
+        onYourListedEventsClick = {},
+        onChangePasswordClick = {},
+        onMembershipClick = {},
+        onNotificationsClick = {},
+        onHelpSupportClick = {},
+        onTermsClick = {},
+        onPrivacyClick = {},
+        onLogoutClick = {}
+    )
 }
-

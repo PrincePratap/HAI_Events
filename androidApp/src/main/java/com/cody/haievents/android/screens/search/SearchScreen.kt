@@ -33,7 +33,6 @@ fun SearchScreen(
         ShowsSearchBar(
             query = uiState.query,
             onQueryChange = onQueryChange,
-            // It's good practice for a search bar to fill the width
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -61,13 +60,15 @@ fun SearchScreen(
                 // 4. Use the `items` extension function for the list
                 items(
                     items = uiState.showList,
-                    key = { show -> show.id } // Providing a key is a performance best practice
+                    key = { show -> show.data.id } // Providing a key is a performance best practice
                 ) { showItem ->
                     // 5. Populate the card with data from the list item
                     SearchEventCard(
-                        onClickCard = {navigateToShowDetails(showItem.id)},
-                        title = showItem.title,
-                        // Make the card fill the width inside the LazyColumn
+                        onClickCard = {navigateToShowDetails(showItem.data.id)},
+                        title = showItem.type,
+                        location = showItem.data.venue,
+                        dateTime = showItem.data.date + " " + showItem.data.time,
+                        imageURL = showItem.data.image
                     )
                 }
             }

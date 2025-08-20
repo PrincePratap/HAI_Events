@@ -49,7 +49,6 @@ fun CommonTopBar(
     title: String = "Open Mic",
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier,
-    titleColor: Color = Color.White,
 ) {
     Surface(
         color = GoldenYellow,
@@ -66,12 +65,12 @@ fun CommonTopBar(
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                     contentDescription = "Back",
-                    tint = titleColor
+                    tint = Color.White
                 )
             }
             Text(
                 text = title,
-                color = titleColor,
+                color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(start = 8.dp)

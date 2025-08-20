@@ -1,6 +1,9 @@
 package com.cody.haievents.Show.data
 
+import com.cody.haievents.Show.data.model.AddEventRequest
+import com.cody.haievents.Show.data.model.AddEventResponse
 import com.cody.haievents.Show.data.model.BlogsListResponse
+import com.cody.haievents.Show.data.model.CategoryResponse
 import com.cody.haievents.Show.data.model.OrderRequest
 import com.cody.haievents.Show.data.model.OrderResponse
 import com.cody.haievents.Show.data.model.SearchShowResponse
@@ -40,6 +43,16 @@ internal class ShowService: KtorApi() {
         endPoint(path = "/api/create-order")
         setBody(request)
     }.body()
+
+    suspend fun addEvent(request: AddEventRequest): AddEventResponse = client.post {
+        endPoint(path = "/api/add-user-event")
+        setBody(request)
+    }.body()
+
+    suspend fun getALLCategories(): CategoryResponse = client.get {
+        endPoint(path = "/api/categories")
+    }.body()
+
 
 
 
