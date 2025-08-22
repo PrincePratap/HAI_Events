@@ -1,20 +1,21 @@
 package com.cody.haievents.Show.data
 
-import com.cody.haievents.Show.data.model.AddEventRequest
-import com.cody.haievents.Show.data.model.AddEventResponse
+
 import com.cody.haievents.Show.data.model.BlogsListResponse
 import com.cody.haievents.Show.data.model.CategoryResponse
+import com.cody.haievents.Show.data.model.CreateUserEventRequest
+import com.cody.haievents.Show.data.model.CreateUserEventResponse
 import com.cody.haievents.Show.data.model.OrderRequest
 import com.cody.haievents.Show.data.model.OrderResponse
 import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.Show.data.model.ShowDetailPageResponse
-
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+
 
 
 internal class ShowService: KtorApi() {
@@ -44,7 +45,7 @@ internal class ShowService: KtorApi() {
         setBody(request)
     }.body()
 
-    suspend fun addEvent(request: AddEventRequest): AddEventResponse = client.post {
+    suspend fun addEvent(request: CreateUserEventRequest): CreateUserEventResponse = client.post {
         endPoint(path = "/api/add-user-event")
         setBody(request)
     }.body()

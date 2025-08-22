@@ -20,6 +20,8 @@ val unselectedNavColor = Color.Black
  val screenBackground = Color(0xFFF7F7F7)
  val primaryTextColor = Color(0xFF333333)
 
+val lightGrayColor = Color(0xFFE0E0E0)
+
 
 
 

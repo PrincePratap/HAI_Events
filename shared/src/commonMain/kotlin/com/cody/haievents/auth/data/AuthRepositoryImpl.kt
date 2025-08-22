@@ -2,6 +2,7 @@ package com.cody.haievents.auth.data
 
 import com.cody.haievents.auth.data.model.EditUserRequest
 import com.cody.haievents.auth.data.model.EditUserResponse
+import com.cody.haievents.auth.data.model.GetUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.domain.repository.AuthRepository
@@ -91,6 +92,18 @@ internal class AuthRepositoryImpl(
 
     override suspend fun editUser(request: EditUserRequest): Result<EditUserResponse> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun getUser(): Result<GetUserResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val token = userPreferences.getUserData().token
+                val response = authService.getUser(token)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to get homepage: ${e.message}")
+            }
+        }
     }
 
 

@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3.android)
     implementation(libs.billing)
+    implementation(libs.androidx.activity.ktx)
     debugImplementation(libs.compose.ui.tooling)
 
     implementation ("androidx.compose.material:material-icons-extended:1.7.8")

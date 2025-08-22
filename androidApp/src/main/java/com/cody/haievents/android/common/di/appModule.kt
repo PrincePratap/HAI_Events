@@ -1,9 +1,11 @@
 package com.cody.haievents.android.common.di
 
 import com.cody.haievents.android.screens.ShowDetailed.ShowDetailedViewModel
+import com.cody.haievents.android.screens.addEvent.eventDetails.EventDetailsViewModel
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
 import com.cody.haievents.android.screens.auth.otp.OTPViewModel
 import com.cody.haievents.android.screens.auth.register.RegisterViewModel
+import com.cody.haievents.android.screens.editProfile.EditProfileViewModel
 import com.cody.haievents.android.screens.homePage.HomePageViewModel
 import com.cody.haievents.android.screens.search.SearchViewModel
 import com.cody.haievents.android.screens.splash.SplashScreenViewModel
@@ -20,5 +22,7 @@ val appModule = module {
     viewModel {ShowDetailedViewModel(get())}
     viewModel { TicketViewModel(get(),get()) }
     viewModel { SearchViewModel(get()) }
+    viewModel{ EditProfileViewModel(get()) }
+    viewModel { EventDetailsViewModel()}
 
 }

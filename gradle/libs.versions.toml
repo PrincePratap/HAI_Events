@@ -9,6 +9,8 @@ runtimeAndroid = "1.7.2"
 checkout = "1.6.33"
 foundationLayoutAndroid = "1.7.2"
 billing = "1.1.0"
+coreI18n = "1.0.0"
+activityKtx = "1.8.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -23,6 +25,8 @@ androidx-runtime-android = { group = "androidx.compose.runtime", name = "runtime
 checkout = { group = "com.razorpay", name = "checkout", version.ref = "checkout" }
 androidx-foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroid" }
 billing = { group = "com.google.androidbrowserhelper", name = "billing", version.ref = "billing" }
+androidx-core-i18n = { group = "androidx.core", name = "core-i18n", version.ref = "coreI18n" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

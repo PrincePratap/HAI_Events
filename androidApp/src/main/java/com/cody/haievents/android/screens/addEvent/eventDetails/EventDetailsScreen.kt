@@ -3,23 +3,17 @@ package com.cody.haievents.android.screens.addEvent.eventDetails
 
 
 
-
-import android.content.res.Configuration
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -40,17 +34,20 @@ val lightTextColor = Color.Gray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EventDetailsScreen() {
-    var eventTitle by remember { mutableStateOf("") }
-    var organiserName by remember { mutableStateOf("") }
-    var contactEmail by remember { mutableStateOf("") }
-    var eventLocation by remember { mutableStateOf("") }
-    var eventDate by remember { mutableStateOf("") }
-    var eventTime by remember { mutableStateOf("") }
-    var eventDescription by remember { mutableStateOf("") }
-    var ticketType by remember { mutableStateOf("Gold") }
-    var ticketQuantity by remember { mutableStateOf("500") }
-    var ticketPrice by remember { mutableStateOf("₹300") }
+fun EventDetailsScreen(
+    uiState: EventDetailsUiState = EventDetailsUiState(),
+    onNextClick: () -> Unit = {},
+    onBackClick: () -> Unit = {},
+    onChangeTitle: (String) -> Unit = {},
+    onChangeOrganiserName: (String) -> Unit = {},
+    onChangeContactEmail: (String) -> Unit = {},
+    onChangeEventLocation: (String) -> Unit = {},
+    onChangeEventDate: (String) -> Unit = {},
+    onChangeEventTime: (String) -> Unit = {},
+    onChangeEventDescription: (String) -> Unit = {},
+    onChangeTicketType: (String) -> Unit ={}
+) {
+
 
     Scaffold(
         topBar = {
@@ -82,26 +79,26 @@ fun EventDetailsScreen() {
             EventProgressIndicator()
             Spacer(modifier = Modifier.height(24.dp))
             EventForm(
-                eventTitle = eventTitle,
-                onEventTitleChange = { eventTitle = it },
-                organiserName = organiserName,
-                onOrganiserNameChange = { organiserName = it },
-                contactEmail = contactEmail,
-                onContactEmailChange = { contactEmail = it },
-                eventLocation = eventLocation,
-                onEventLocationChange = { eventLocation = it },
-                eventDate = eventDate,
-                onEventDateChange = { eventDate = it },
-                eventTime = eventTime,
-                onEventTimeChange = { eventTime = it },
-                eventDescription = eventDescription,
-                onEventDescriptionChange = { eventDescription = it },
-                ticketType = ticketType,
-                onTicketTypeChange = { ticketType = it },
-                ticketQuantity = ticketQuantity,
-                onTicketQuantityChange = { ticketQuantity = it },
-                ticketPrice = ticketPrice,
-                onTicketPriceChange = { ticketPrice = it }
+                eventTitle = uiState.eventTitle,
+                onEventTitleChange = { onChangeTitle(it) },
+                organiserName = uiState.organiserName,
+                onOrganiserNameChange = onChangeOrganiserName,
+                contactEmail = uiState.contactEmail,
+                onContactEmailChange = onChangeContactEmail,
+                eventLocation = uiState.eventLocation,
+                onEventLocationChange = onChangeEventLocation,
+                eventDate = uiState.eventDate,
+                onEventDateChange = onChangeEventDate,
+                eventTime = uiState.eventTime,
+                onEventTimeChange = onChangeEventTime,
+                eventDescription = uiState.eventDescription,
+                onEventDescriptionChange = onChangeEventDescription,
+                ticketType = uiState.ticketType,
+                onTicketTypeChange = onChangeTicketType,
+                ticketQuantity = uiState.ticketQuantity,
+                onTicketQuantityChange = { onChangeTicketType(it) },
+                ticketPrice = uiState.ticketPrice,
+                onTicketPriceChange = onChangeTitle
             )
             Spacer(modifier = Modifier.height(24.dp))
             Button(

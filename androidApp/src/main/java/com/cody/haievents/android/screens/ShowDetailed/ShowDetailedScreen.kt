@@ -61,12 +61,10 @@ fun ShowDetailedScreen(
     Scaffold(
         topBar = {
             Column {
-                // Custom status bar to match the image
-                // Custom app bar
+
                 CommonTopBar(
                     title = uiState.showDetail?.event?.title ?: "",
-                    onBackClick =   navigationBack
-                    )
+                    onBackClick =   navigationBack)
             }
         },
         bottomBar = {

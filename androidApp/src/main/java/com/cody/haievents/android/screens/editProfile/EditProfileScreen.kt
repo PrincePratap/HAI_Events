@@ -1,60 +1,64 @@
 package com.cody.haievents.android.screens.editProfile
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-// Define the theme colors to match the image
-val goldColor = Color(0xFFC7A64D)
-val lightGrayColor = Color(0xFFE0E0E0)
+import com.cody.haievents.android.common.componets.LabeledTextField
+import com.cody.haievents.android.common.theming.goldColor
+import com.cody.haievents.android.common.theming.lightGrayColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditProfileScreen() {
-    // State holders for each form field
-    var firstName by remember { mutableStateOf("Rajesh") }
-    var lastName by remember { mutableStateOf("Singh") }
-    var dob by remember { mutableStateOf("") }
-    var telephone by remember { mutableStateOf("7849046537") }
-    var address by remember { mutableStateOf("7849046537") }
-    var zipCode by remember { mutableStateOf("") }
+fun EditProfileScreen(
+    uiState: EditProfileState,
+    onFirstNameChange: (String) -> Unit,
+    onLastNameChange: (String) -> Unit,
+    onDobChange: (String) -> Unit,
+    onTelephoneChange: (String) -> Unit = {},
+    onAddressChange: (String) -> Unit,
+    onZipChange: (String) -> Unit,
+    onPickImage: (Uri?) -> Unit,
+    onSave: () -> Unit,
+    onBack: () -> Unit,
+    onDismissError: () -> Unit,
+) {
+    val focusManager = LocalFocusManager.current
+    val scrollState = rememberScrollState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    // Image picker
+    val imagePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        onPickImage(uri)
+    }
+
+    // Show error snackbar when errorMessage changes
+    LaunchedEffect(uiState.errorMessage) {
+        uiState.errorMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            onDismissError()
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -67,7 +71,7 @@ fun EditProfileScreen() {
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* Handle back navigation */ }) {
+                    IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Back",
@@ -80,158 +84,187 @@ fun EditProfileScreen() {
                 )
             )
         },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         containerColor = Color.White
     ) { paddingValues ->
-        Column(
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
         ) {
-            // Form Fields
-            LabeledTextField(
-                label = "First Name",
-                value = firstName,
-                onValueChange = { firstName = it }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LabeledTextField(
-                label = "Last Name",
-                value = lastName,
-                onValueChange = { lastName = it }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LabeledTextField(
-                label = "Date of Birth",
-                value = dob,
-                onValueChange = { dob = it },
-                placeholder = "dd-mm-yyyy"
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LabeledTextField(
-                label = "Telephone No.",
-                value = telephone,
-                onValueChange = { telephone = it }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LabeledTextField(
-                label = "Address",
-                value = address,
-                onValueChange = { address = it }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            LabeledTextField(
-                label = "ZIP Code",
-                value = zipCode,
-                onValueChange = { zipCode = it },
-                placeholder = "e.g. 400001"
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Profile Image Uploader
-            Text(
-                text = "Profile Image",
-                fontWeight = FontWeight.Bold,
-                color = Color.Black,
-                modifier = Modifier.padding(bottom = 4.dp)
-            )
-            Box(
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .border(
-                        width = 1.dp,
-                        color = goldColor.copy(alpha = 0.7f),
-                        shape = RoundedCornerShape(8.dp)
-                    )
-                    .padding(horizontal = 12.dp),
-                contentAlignment = Alignment.CenterStart
+                    .fillMaxSize()
+                    .padding(16.dp)
+                    .verticalScroll(scrollState)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+
+                // --- Form Fields ---
+                LabeledTextField(
+                    label = "First Name",
+                    value = uiState.firstName,
+                    onValueChange = onFirstNameChange,
+                    capitalization = KeyboardCapitalization.Words
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LabeledTextField(
+                    label = "Last Name",
+                    value = uiState.lastName,
+                    onValueChange = onLastNameChange,
+                    capitalization = KeyboardCapitalization.Words
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LabeledTextField(
+                    label = "Date of Birth",
+                    value = uiState.dob,
+                    onValueChange = onDobChange,
+                    placeholder = "dd-mm-yyyy",
+                    keyboardType = KeyboardType.Number
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LabeledTextField(
+                    label = "Telephone No.",
+                    value = uiState.telephone,
+                    onValueChange = onTelephoneChange,
+                    keyboardType = KeyboardType.Phone
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LabeledTextField(
+                    label = "Address",
+                    value = uiState.address,
+                    onValueChange = onAddressChange,
+                    maxLines = 3
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                LabeledTextField(
+                    label = "ZIP Code",
+                    value = uiState.zipCode,
+                    onValueChange = onZipChange,
+                    placeholder = "e.g. 400001",
+                    keyboardType = KeyboardType.Number
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                // --- Profile Image Uploader ---
+                Text(
+                    text = "Profile Image",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black,
+                    modifier = Modifier.padding(bottom = 4.dp)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .border(
+                            width = 1.dp,
+                            color = goldColor.copy(alpha = 0.7f),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(horizontal = 12.dp),
+                    contentAlignment = Alignment.CenterStart
                 ) {
-                    Button(
-                        onClick = { /* TODO: Handle file chooser */ },
-                        shape = RoundedCornerShape(4.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = lightGrayColor
-                        ),
-                        elevation = ButtonDefaults.buttonElevation(0.dp)
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        Text("Choose File", color = Color.Black.copy(alpha = 0.8f))
+                        Button(
+                            onClick = { imagePicker.launch("image/*") },
+                            shape = RoundedCornerShape(4.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = lightGrayColor
+                            ),
+                            elevation = ButtonDefaults.buttonElevation(0.dp)
+                        ) {
+                            Text("Choose File", color = Color.Black.copy(alpha = 0.8f))
+                        }
+                        Text(
+                            text = "No file chosen", // You can reflect chosen filename via uiState later
+                            color = Color.Gray
+                        )
                     }
-                    Text("No file chosen", color = Color.Gray)
+                }
+
+                Spacer(modifier = Modifier.height(32.dp))
+
+                // --- Save Changes Button ---
+                Button(
+                    onClick = {
+                        focusManager.clearFocus()
+                        onSave()
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(50.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = goldColor),
+                    enabled = !uiState.isLoading && uiState.firstName.isNotBlank()
+                ) {
+                    Text(
+                        text = if (uiState.isLoading) "Saving..." else "Save Changes",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                if (uiState.succeed) {
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        "Profile updated successfully.",
+                        color = Color(0xFF2E7D32),
+                        fontSize = 14.sp
+                    )
                 }
             }
 
-            Spacer(modifier = Modifier.height(32.dp))
-
-            // Save Changes Button
-            Button(
-                onClick = { /* TODO: Handle save changes */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = goldColor)
-            ) {
-                Text(
-                    text = "Save Changes",
-                    color = Color.White,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold
-                )
+            // Loading overlay
+            if (uiState.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(0.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(color = goldColor)
+                }
             }
         }
     }
 }
 
-/**
- * A reusable Composable for a labeled text input field.
- */
-@Composable
-fun LabeledTextField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    placeholder: String = ""
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = label,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            modifier = Modifier.padding(bottom = 4.dp)
-        )
-        OutlinedTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text(text = placeholder, color = Color.Gray) },
-            shape = RoundedCornerShape(8.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = goldColor,
-                unfocusedBorderColor = goldColor.copy(alpha = 0.7f),
-                cursorColor = goldColor,
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.Black
-            ),
-            singleLine = true
-        )
-    }
-}
+/* ---------------------------- PREVIEW ---------------------------- */
 
-
-@Preview(showBackground = true, )
+@Preview(showBackground = true)
 @Composable
 fun EditProfileScreenPreview() {
-        EditProfileScreen()
+    EditProfileScreen(
+        uiState = EditProfileState(
+            firstName = "Aditya",
+            lastName = "Singh",
+            dob = "01-01-2000",
+            telephone = "7849046537",
+            address = "221B Baker Street",
+            zipCode = "400001",
+            isLoading = false,
+            errorMessage = null,
+            succeed = false
+        ),
+        onFirstNameChange = {},
+        onLastNameChange = {},
+        onDobChange = {},
+        onTelephoneChange = {},
+        onAddressChange = {},
+        onZipChange = {},
+        onPickImage = {},
+        onSave = {},
+        onBack = {},
+        onDismissError = {}
+    )
 }
