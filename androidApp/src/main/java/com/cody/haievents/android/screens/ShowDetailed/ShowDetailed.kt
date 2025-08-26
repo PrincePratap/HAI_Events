@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
+import com.cody.haievents.android.screens.destinations.GaneshTheaterDestination
 import com.cody.haievents.android.screens.destinations.TicketDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -38,7 +39,12 @@ fun ShowDetailed(
         uiState = uiState,
         navigationBack = { navigator.navigateUp() },
         navigateToTicketList = {
-            navigator.navigate(TicketDestination(showId))
+            if(uiState.showDetail?.theaterType==2){
+                navigator.navigate(GaneshTheaterDestination.route)
+            }else{
+                navigator.navigate(TicketDestination(showId))
+            }
+
         }
     )
 

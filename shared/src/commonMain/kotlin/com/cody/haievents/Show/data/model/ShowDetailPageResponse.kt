@@ -5,15 +5,18 @@ package com.cody.haievents.Show.data.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
+
+
 @Serializable
 data class ShowDetailPageResponse(
     @SerialName("status") val status: Boolean,
-    @SerialName("event") val event: EventDetails,
-    @SerialName("venue_is_nsui") val venueIsNsui: Boolean
+    @SerialName("event") val event: Event,
+    @SerialName("venue_seat") val theaterType: Int,
 )
 
 @Serializable
-data class EventDetails(
+data class Event(
     @SerialName("id") val id: Int,
     @SerialName("title") val title: String,
     @SerialName("slug") val slug: String,
@@ -23,8 +26,6 @@ data class EventDetails(
     @SerialName("votes") val votes: Int,
     @SerialName("release_date") val releaseDate: String,
     @SerialName("category_id") val categoryId: Int,
-    @SerialName("created_at") val createdAt: String,
-    @SerialName("updated_at") val updatedAt: String,
     @SerialName("category") val category: Category,
     @SerialName("ticket_types") val ticketTypes: List<TicketType>,
     @SerialName("detail") val detail: EventDetail
@@ -34,9 +35,7 @@ data class EventDetails(
 data class Category(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
-    @SerialName("image_path") val imagePath: String,
-    @SerialName("created_at") val createdAt: String? = null,
-    @SerialName("updated_at") val updatedAt: String? = null
+    @SerialName("image_path") val imagePath: String
 )
 
 @Serializable
@@ -47,9 +46,7 @@ data class TicketType(
     @SerialName("role_type") val roleType: String,
     @SerialName("name") val name: String,
     @SerialName("price") val price: String,
-    @SerialName("quantity") val quantity: Int,
-    @SerialName("created_at") val createdAt: String,
-    @SerialName("updated_at") val updatedAt: String
+    @SerialName("quantity") val quantity: Int
 )
 
 @Serializable

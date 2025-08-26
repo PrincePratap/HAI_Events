@@ -1,42 +1,47 @@
 package com.cody.haievents.android.screens.addEvent.eventDetails
 
-
-
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.Show.data.model.Role
+import com.cody.haievents.Show.data.model.TicketTypeRequest
+import com.cody.haievents.android.common.theming.darkTextColor
+import com.cody.haievents.android.common.theming.goldColor
+import com.cody.haievents.android.common.theming.lightGoldBorder
+import com.cody.haievents.android.common.theming.lightTextColor
 
 
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.CheckCircle
+// ---- Ticket UI Row (strings for easy typing; convert to Int on submit) ----
+data class TicketRowUi(
+    val role: Role = Role.ATTENDEE,  // default to attendee
+    val name: String = "",
+    val quantity: String = "",
+    val price: String = ""
+)
 
-
-// Define colors to match the screenshot
-val goldColor = Color(0xFFC9A959)
-val lightGoldBorder = Color(0xFFE0D0B1)
-val darkTextColor = Color.Black
-val lightTextColor = Color.Gray
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventDetailsScreen(
     uiState: EventDetailsUiState = EventDetailsUiState(),
-    onNextClick: () -> Unit = {},
+    onNextClick: (List<TicketTypeRequest>) -> Unit = {},
     onBackClick: () -> Unit = {},
     onChangeTitle: (String) -> Unit = {},
     onChangeOrganiserName: (String) -> Unit = {},
@@ -45,27 +50,15 @@ fun EventDetailsScreen(
     onChangeEventDate: (String) -> Unit = {},
     onChangeEventTime: (String) -> Unit = {},
     onChangeEventDescription: (String) -> Unit = {},
-    onChangeTicketType: (String) -> Unit ={}
+    clickOnChooseFile: () -> Unit = {},
 ) {
-
+    // 🔹 Dynamic list of ticket rows
+    val tickets = remember { mutableStateListOf(TicketRowUi()) }
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Add Your Event", color = Color.White) },
-                navigationIcon = {
-                    IconButton(onClick = { /* Handle back press */ }) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = goldColor
-                )
-            )
+            // Your top bar, if any
+            // SmallTopAppBar(title = { Text("Create Event") }, navigationIcon = { ... })
         },
         containerColor = Color.White
     ) { paddingValues ->
@@ -78,9 +71,10 @@ fun EventDetailsScreen(
             Spacer(modifier = Modifier.height(24.dp))
             EventProgressIndicator()
             Spacer(modifier = Modifier.height(24.dp))
+
             EventForm(
                 eventTitle = uiState.eventTitle,
-                onEventTitleChange = { onChangeTitle(it) },
+                onEventTitleChange = onChangeTitle,
                 organiserName = uiState.organiserName,
                 onOrganiserNameChange = onChangeOrganiserName,
                 contactEmail = uiState.contactEmail,
@@ -93,16 +87,31 @@ fun EventDetailsScreen(
                 onEventTimeChange = onChangeEventTime,
                 eventDescription = uiState.eventDescription,
                 onEventDescriptionChange = onChangeEventDescription,
-                ticketType = uiState.ticketType,
-                onTicketTypeChange = onChangeTicketType,
-                ticketQuantity = uiState.ticketQuantity,
-                onTicketQuantityChange = { onChangeTicketType(it) },
-                ticketPrice = uiState.ticketPrice,
-                onTicketPriceChange = onChangeTitle
+
+                // 🔹 Tickets (dynamic)
+                tickets = tickets,
+                onTicketChange = { idx, updated -> tickets[idx] = updated },
+                onAddTicket = { tickets.add(TicketRowUi()) },
+                onRemoveTicket = { idx -> if (tickets.size > 1) tickets.removeAt(idx) },
+
+                clickOnChooseFile = clickOnChooseFile
             )
+
             Spacer(modifier = Modifier.height(24.dp))
+
             Button(
-                onClick = { /* Handle Next */ },
+                onClick = {
+                    // 🔹 Build List<TicketTypeRequest> for API
+                    val built: List<TicketTypeRequest> = tickets.map {
+                        TicketTypeRequest(
+                            name = it.name.trim(),
+                            price = it.price.toIntOrNull() ?: 0,
+                            role = it.role,
+                            quantity = it.quantity.toIntOrNull() ?: 0
+                        )
+                    }
+                    onNextClick(built)
+                },
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = goldColor),
                 modifier = Modifier
@@ -111,6 +120,7 @@ fun EventDetailsScreen(
             ) {
                 Text("Next", color = Color.White, fontSize = 16.sp)
             }
+
             Spacer(modifier = Modifier.height(24.dp))
         }
     }
@@ -167,9 +177,14 @@ fun EventForm(
     eventDate: String, onEventDateChange: (String) -> Unit,
     eventTime: String, onEventTimeChange: (String) -> Unit,
     eventDescription: String, onEventDescriptionChange: (String) -> Unit,
-    ticketType: String, onTicketTypeChange: (String) -> Unit,
-    ticketQuantity: String, onTicketQuantityChange: (String) -> Unit,
-    ticketPrice: String, onTicketPriceChange: (String) -> Unit,
+
+    // 🔹 Dynamic tickets API
+    tickets: List<TicketRowUi>,
+    onTicketChange: (index: Int, updated: TicketRowUi) -> Unit,
+    onAddTicket: () -> Unit,
+    onRemoveTicket: (index: Int) -> Unit,
+
+    clickOnChooseFile: () -> Unit
 ) {
     val textFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = goldColor,
@@ -208,12 +223,13 @@ fun EventForm(
             placeholder = "E.g Mumbai, India",
             colors = textFieldColors
         )
+
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             FormInput(
                 label = "Event Date",
                 value = eventDate,
                 onValueChange = onEventDateChange,
-                placeholder = "dd-mm-yyyy",
+                placeholder = "yyyy-mm-dd",
                 modifier = Modifier.weight(1f),
                 colors = textFieldColors
             )
@@ -221,12 +237,14 @@ fun EventForm(
                 label = "Event Time",
                 value = eventTime,
                 onValueChange = onEventTimeChange,
-                placeholder = "Eg. 6:30 PM - 9:30 PM",
+                placeholder = "HH:mm or 6:30 PM",
                 modifier = Modifier.weight(1f),
                 colors = textFieldColors
             )
         }
+
         CategoryDropdown(colors = textFieldColors)
+
         FormInput(
             label = "Event Description",
             value = eventDescription,
@@ -236,11 +254,15 @@ fun EventForm(
             modifier = Modifier.height(120.dp),
             colors = textFieldColors
         )
-        EventPosterUploader()
+
+        EventPosterUploader(clickOnChooseFile = clickOnChooseFile)
+
+        // 🔹 Tickets section
         TicketDetailsSection(
-            ticketType = ticketType, onTicketTypeChange = onTicketTypeChange,
-            ticketQuantity = ticketQuantity, onTicketQuantityChange = onTicketQuantityChange,
-            ticketPrice = ticketPrice, onTicketPriceChange = onTicketPriceChange,
+            tickets = tickets,
+            onTicketChange = onTicketChange,
+            onAddTicket = onAddTicket,
+            onRemoveTicket = onRemoveTicket,
             colors = textFieldColors
         )
     }
@@ -270,7 +292,6 @@ fun FormInput(
         )
     }
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -319,7 +340,9 @@ fun CategoryDropdown(colors: TextFieldColors) {
 }
 
 @Composable
-fun EventPosterUploader() {
+fun EventPosterUploader(
+    clickOnChooseFile: () -> Unit = {}
+) {
     Column {
         Text("Event Poster", fontWeight = FontWeight.Bold, color = darkTextColor)
         Spacer(modifier = Modifier.height(8.dp))
@@ -329,7 +352,7 @@ fun EventPosterUploader() {
             readOnly = true,
             leadingIcon = {
                 Button(
-                    onClick = { /* Handle file choose */ },
+                    onClick = clickOnChooseFile,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.LightGray,
                         contentColor = darkTextColor
@@ -354,35 +377,86 @@ fun EventPosterUploader() {
     }
 }
 
+// -------------------------- Tickets Section --------------------------
+
 @Composable
 fun TicketDetailsSection(
-    ticketType: String, onTicketTypeChange: (String) -> Unit,
-    ticketQuantity: String, onTicketQuantityChange: (String) -> Unit,
-    ticketPrice: String, onTicketPriceChange: (String) -> Unit,
+    tickets: List<TicketRowUi>,
+    onTicketChange: (index: Int, updated: TicketRowUi) -> Unit,
+    onAddTicket: () -> Unit,
+    onRemoveTicket: (index: Int) -> Unit,
     colors: TextFieldColors
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text("Tickets Details", fontWeight = FontWeight.Bold, color = darkTextColor)
+
+        // Header
         Row {
-            Text("Ticket Type", modifier = Modifier.weight(1f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
-            Text("Quantity", modifier = Modifier.weight(1f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
-            Text("Price", modifier = Modifier.weight(1f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
+            Text("Role",        modifier = Modifier.weight(1f),   color = darkTextColor, fontWeight = FontWeight.SemiBold)
+            Text("Ticket Type", modifier = Modifier.weight(1.2f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
+            Text("Quantity",    modifier = Modifier.weight(0.9f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
+            Text("Price",       modifier = Modifier.weight(0.9f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
+            Spacer(Modifier.width(40.dp))
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-            OutlinedTextField(
-                value = ticketType, onValueChange = onTicketTypeChange,
-                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = colors
-            )
-            OutlinedTextField(
-                value = ticketQuantity, onValueChange = onTicketQuantityChange,
-                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = colors
-            )
-            OutlinedTextField(
-                value = ticketPrice, onValueChange = onTicketPriceChange,
-                modifier = Modifier.weight(1f), shape = RoundedCornerShape(12.dp), colors = colors
-            )
+
+        // Rows
+        tickets.forEachIndexed { index, item ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                RoleSelector(
+                    value = item.role,
+                    onChange = { onTicketChange(index, item.copy(role = it)) },
+                    modifier = Modifier.weight(1f)
+                )
+
+                OutlinedTextField(
+                    value = item.name,
+                    onValueChange = { onTicketChange(index, item.copy(name = it)) },
+                    modifier = Modifier.weight(1.2f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = colors,
+                    placeholder = { Text("E.g. VIP") }
+                )
+
+                OutlinedTextField(
+                    value = item.quantity,
+                    onValueChange = { t ->
+                        onTicketChange(index, item.copy(quantity = t.filter(Char::isDigit)))
+                    },
+                    modifier = Modifier.weight(0.9f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = colors,
+                    placeholder = { Text("E.g. 50") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+
+                OutlinedTextField(
+                    value = item.price,
+                    onValueChange = { t ->
+                        onTicketChange(index, item.copy(price = t.filter(Char::isDigit)))
+                    },
+                    modifier = Modifier.weight(0.9f),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = colors,
+                    placeholder = { Text("E.g. 999") },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                )
+
+                IconButton(onClick = { onRemoveTicket(index) }, enabled = tickets.size > 1) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Remove",
+                        tint = if (tickets.size > 1) Color.Red else Color.LightGray
+                    )
+                }
+            }
         }
-        TextButton(onClick = { /* Add another ticket type */ }) {
+
+        // Add new row
+        TextButton(onClick = onAddTicket) {
             Icon(Icons.Default.Add, contentDescription = "Add Ticket Type", tint = goldColor)
             Spacer(modifier = Modifier.width(4.dp))
             Text("Add Another Ticket Type", color = goldColor, fontWeight = FontWeight.Bold)
@@ -390,10 +464,41 @@ fun TicketDetailsSection(
     }
 }
 
+// Two-option selector for Role (Performer / Attendee)
+@Composable
+private fun RoleSelector(
+    value: Role,
+    onChange: (Role) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        FilterChip(
+            selected = value == Role.PERFORMER,
+            onClick = { onChange(Role.PERFORMER) },
+            label = { Text("Performer") },
+            colors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = goldColor.copy(alpha = 0.15f),
+                selectedLabelColor = darkTextColor
+            )
+        )
+        FilterChip(
+            selected = value == Role.ATTENDEE,
+            onClick = { onChange(Role.ATTENDEE) },
+            label = { Text("Attendee") },
+            colors = FilterChipDefaults.filterChipColors(
+                selectedContainerColor = goldColor.copy(alpha = 0.15f),
+                selectedLabelColor = darkTextColor
+            )
+        )
+    }
+}
+
 @Preview(showBackground = true, device = "id:pixel_4")
 @Composable
 fun AddEventScreenPreview() {
-
-        EventDetailsScreen()
-
+    EventDetailsScreen()
 }

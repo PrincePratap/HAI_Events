@@ -36,20 +36,42 @@ fun Seat(number: String) {
     }
 }
 
+enum class LabelPosition {
+    LEFT, RIGHT, BOTH, NONE
+}
 @Composable
-fun SeatRow(label: String, seats: IntRange) {
+fun SeatRow(
+    label: String,
+    seats: IntRange,
+    labelPosition: LabelPosition = LabelPosition.LEFT // default = left
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        Text(
-            text = label,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.width(24.dp)
-        )
+        // Left label if enabled
+        if (labelPosition == LabelPosition.LEFT || labelPosition == LabelPosition.BOTH) {
+            Text(
+                text = label,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.width(24.dp)
+            )
+        }
+
+        // Seats
         seats.forEach { number ->
             Seat(number = number.toString())
+        }
+
+        // Right label if enabled
+        if (labelPosition == LabelPosition.RIGHT || labelPosition == LabelPosition.BOTH) {
+            Text(
+                text = label,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.width(24.dp)
+            )
         }
     }
 }

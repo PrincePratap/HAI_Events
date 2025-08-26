@@ -8,6 +8,7 @@ import com.cody.haievents.Show.data.model.OrderRequest
 import com.cody.haievents.Show.data.model.OrderResponse
 import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.Show.data.model.ShowDetailPageResponse
+import com.cody.haievents.Show.data.model.UploadEventImage
 import com.cody.haievents.Show.domain.repository.ShowRepository
 import com.cody.haievents.auth.data.AuthService
 import com.cody.haievents.auth.domain.repository.AuthRepository
@@ -25,11 +26,13 @@ internal class ShowRepositoryImpl(
     override suspend fun showDetails(showId: Int): Result<ShowDetailPageResponse> {
         return withContext(dispatcher.io) {
             try {
-                val response = showService.getShowDetail(showId, userPreferences.getUserData().token)
+                val response =
+                    showService.getShowDetail(showId, userPreferences.getUserData().token)
                 Result.Success(response)
             } catch (e: Exception) {
-                Result.Error(message = "Failed to send OTP: ${e.message}")
+                Result.Error(message = "Failed to Get Show Details: ${e.message}")
             }
+
         }
     }
 
@@ -95,6 +98,18 @@ internal class ShowRepositoryImpl(
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to Create Order: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun uploadEventImage(imageBytes: ByteArray, fileName: String): Result<UploadEventImage> {
+        return withContext(dispatcher.io) {
+            try {
+                val response =
+                    showService.uploadEventImage(imageBytes = imageBytes, fileName = fileName)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to upload image  : ${e.message}")
             }
         }
     }

@@ -8,6 +8,7 @@ import com.cody.haievents.Show.data.model.CreateUserEventResponse
 import com.cody.haievents.Show.data.model.OrderResponse
 import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.Show.data.model.ShowDetailPageResponse
+import com.cody.haievents.Show.data.model.UploadEventImage
 
 import com.cody.haievents.common.util.Result
 
@@ -21,5 +22,8 @@ internal interface ShowRepository {
     suspend fun createOrder(totalAmount: String): Result<OrderResponse>
     suspend fun addEvent(requestBody: CreateUserEventRequest): Result<CreateUserEventResponse>
     suspend fun getAllCategories(): Result<CategoryResponse>
+    suspend fun uploadEventImage(imageBytes: ByteArray, fileName: String) : Result<UploadEventImage>
+
+
 }
 

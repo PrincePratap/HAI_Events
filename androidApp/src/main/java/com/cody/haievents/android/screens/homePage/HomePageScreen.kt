@@ -32,7 +32,7 @@ fun HomePageScreen(
         item { EventCategoriesItems() }
 
         uiState.homePageData?.featured?.let { featuredList ->
-            items(items = featuredList, key = { it.id }) { featuredShow ->
+            items(items = featuredList, key = { it.id!! }) { featuredShow ->
                 // This will now create a card for "Open Mic", "Theatre Shows", "Concert", etc.
                 TheatreShowsCard(
                     item = featuredShow,

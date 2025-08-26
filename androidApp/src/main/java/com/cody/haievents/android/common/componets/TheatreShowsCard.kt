@@ -37,7 +37,7 @@ fun TheatreShowsCard(item: FeaturedCategory? = null, onItemClick: (Int) -> Unit 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.surface) // Typically white
+            .background(MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)) {
             item?.name?.let { TheatreShowsHeader(headerText = it) }
@@ -50,7 +50,7 @@ fun TheatreShowsCard(item: FeaturedCategory? = null, onItemClick: (Int) -> Unit 
         ) {
             if (item != null) {
                 items(item.items) { show ->
-                    TheatreShowCard(show = show.data, onItemClick = {onItemClick(it)})
+                    show.data?.let { TheatreShowCard(show = it, onItemClick = {onItemClick(it)}) }
                 }
             }
         }

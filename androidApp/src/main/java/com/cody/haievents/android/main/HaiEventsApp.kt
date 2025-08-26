@@ -21,7 +21,6 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 
 @Composable
 fun  HaiEventsApp() {
-
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route

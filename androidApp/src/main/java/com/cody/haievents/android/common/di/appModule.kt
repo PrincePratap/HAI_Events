@@ -23,6 +23,6 @@ val appModule = module {
     viewModel { TicketViewModel(get(),get()) }
     viewModel { SearchViewModel(get()) }
     viewModel{ EditProfileViewModel(get()) }
-    viewModel { EventDetailsViewModel()}
+    viewModel { EventDetailsViewModel(get(),get())}
 
 }

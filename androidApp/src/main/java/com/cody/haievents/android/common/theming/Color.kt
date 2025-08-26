@@ -24,6 +24,12 @@ val lightGrayColor = Color(0xFFE0E0E0)
 
 
 
+// Define colors to match the screenshot
+val lightGoldBorder = Color(0xFFE0D0B1)
+val darkTextColor = Color.Black
+val lightTextColor = Color.Gray
+
+
 
 
 internal val LightColors = lightColorScheme(

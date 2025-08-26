@@ -9,21 +9,26 @@ import com.cody.haievents.Show.data.model.OrderRequest
 import com.cody.haievents.Show.data.model.OrderResponse
 import com.cody.haievents.Show.data.model.SearchShowResponse
 import com.cody.haievents.Show.data.model.ShowDetailPageResponse
+import com.cody.haievents.Show.data.model.UploadEventImage
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
+import io.ktor.http.path
 
 
 internal class ShowService: KtorApi() {
 
     suspend fun getShowDetail(showId: Int, userToken: String): ShowDetailPageResponse = client.get {
         endPoint(path = "/api/event-detail")
+        setToken(userToken)
         parameter("id", showId)
-        parameter("api_token", userToken)
     }.body()
 
     suspend fun getTicketPrice(showId: Int,): getShowTicketResponse = client.get {
@@ -53,6 +58,29 @@ internal class ShowService: KtorApi() {
     suspend fun getALLCategories(): CategoryResponse = client.get {
         endPoint(path = "/api/categories")
     }.body()
+
+
+    suspend fun uploadEventImage(imageBytes: ByteArray, fileName: String): UploadEventImage {
+        return client.post {
+            endPoint(path = "/api/upload-user-event-image")
+            setBody(
+                MultiPartFormDataContent(
+                    formData {
+                        // This 'append' maps directly to the key-value pair in Postman
+                        append("image", imageBytes, Headers.build {
+                            // This header tells the server what kind of file it is
+                            append(HttpHeaders.ContentType, "image/jpeg") // Or image/png, etc.
+                            // This header provides the filename
+                            append(HttpHeaders.ContentDisposition, "filename=\"$fileName\"")
+                        })
+                    }
+                )
+            )
+        }.body() // Ktor automatically deserializes the JSON response into our data class
+    }
+
+
+
 
 
 

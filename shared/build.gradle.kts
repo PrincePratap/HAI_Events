@@ -48,6 +48,9 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0-RC.2")
             implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
+            implementation(libs.jetbrains.kotlinx.datetime)
+
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

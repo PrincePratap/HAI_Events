@@ -36,7 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 fun TheatreShowCard(show: ItemData, onItemClick: (Int) -> Unit) {
     Card(
         modifier =
-        Modifier.width(320.dp).clickable{onItemClick(show.id)}  ,
+        Modifier.width(320.dp).clickable{ show.id?.let { onItemClick(it) } }  ,
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -61,27 +61,31 @@ fun TheatreShowCard(show: ItemData, onItemClick: (Int) -> Unit) {
 
 
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(
-                    text = show.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                show.title?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = show.venue,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                show.venue?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    InfoItem(icon = Icons.Default.CalendarToday, text = show.date)
-                    InfoItem(icon = Icons.Default.Schedule, text = show.time)
+                    show.date?.let { InfoItem(icon = Icons.Default.CalendarToday, text = it) }
+                    show.time?.let { InfoItem(icon = Icons.Default.Schedule, text = it) }
                 }
             }
         }
