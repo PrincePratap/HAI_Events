@@ -1,138 +1,200 @@
 package com.cody.haievents.android.screens.GaneshTheater
 
-import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cody.haievents.android.common.componets.Seat
-import com.cody.haievents.android.common.componets.SeatRow
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.horizontalScroll
-private const val MIN_SCALE = 0.7f
-private const val MAX_SCALE = 3f
+import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
+import com.cody.haievents.android.common.componets.SeatKey
+import com.cody.haievents.android.common.componets.theater.GaneshTheaterBlockFirst
+import com.cody.haievents.android.common.componets.theater.GaneshTheaterBlockSecond
+import com.cody.haievents.android.common.componets.theater.GaneshTheaterBlockThird
+import kotlin.math.max
+import kotlin.math.min
+
+/* ---------------- Zoom wrapper ---------------- */
 
 @Composable
-fun GaneshTheaterScreen() {
-    val verticalScroll = rememberScrollState()
-    val horizontalScroll = rememberScrollState()
+private fun ZoomableCanvas(
+    modifier: Modifier = Modifier,
+    minScale: Float = 0.5f,
+    maxScale: Float = 3f,
+    // expose scale if you want to show % somewhere
+    content: @Composable (scale: Float) -> Unit
+) {
+    var scale by remember { mutableFloatStateOf(1f) }
+    var translation by remember { mutableStateOf(Offset.Zero) }
+
+    val transformState = rememberTransformableState { zoomChange, panChange, _ ->
+        // pinch-to-zoom
+        val newScale = (scale * zoomChange).coerceIn(minScale, maxScale)
+        // adjust pan responsiveness as scale changes
+        val pan = panChange * (if (newScale > 1f) 1f else 0f)
+        scale = newScale
+        translation += pan
+    }
+
+    // double-tap to toggle zoom (center-ish)
+    val doubleTapModifier = Modifier.pointerInput(Unit) {
+        detectTapGestures(
+            onDoubleTap = {
+                if (scale <= 1f + 1e-3f) {
+                    scale = 2f.coerceIn(minScale, maxScale)
+                } else {
+                    scale = 1f
+                    translation = Offset.Zero
+                }
+            }
+        )
+    }
 
     Box(
-        modifier = Modifier
-            .verticalScroll(verticalScroll)
-            .horizontalScroll(horizontalScroll)
+        modifier = modifier
+            .then(doubleTapModifier)
+            .transformable(transformState) // pinch + pan gestures
     ) {
-        // Place your seat blocks here
-        Column {
-            BlockThird()
-//            BlockSecond()
-//            BlockFirst()
+        Box(
+            modifier = Modifier
+                .graphicsLayer(
+                    scaleX = scale,
+                    scaleY = scale,
+                    translationX = translation.x,
+                    translationY = translation.y
+                )
+        ) {
+            content(scale)
+        }
+
+        // Optional: simple zoom controls (overlay)
+        Row(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Surface(tonalElevation = 2.dp, shape = MaterialTheme.shapes.small) {
+                Row {
+                    IconButton(onClick = {
+                        scale = max(1f, (scale - 0.25f)).coerceAtLeast(minScale)
+                        if (scale == 1f) translation = Offset.Zero
+                    }) { Icon(androidx.compose.material.icons.Icons.Default.Remove, contentDescription = "Zoom out") }
+
+                    IconButton(onClick = {
+                        scale = min(maxScale, scale + 0.25f)
+                    }) { Icon(androidx.compose.material.icons.Icons.Default.Add, contentDescription = "Zoom in") }
+                }
+            }
         }
     }
 }
 
-
-
-
+/* --------------- Your screen with zoom + scroll --------------- */
 
 @Composable
-private fun BlockThird() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center // Center the block for a better default view
-    ) {
-        Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.End
-        ) {
-            SeatRow(label = "Z", seats = 1..14)
-            SeatRow(label = "Y", seats = 1..14)
-            SeatRow(label = "X", seats = 1..14)
-            SeatRow(label = "W", seats = 1..14)
-            SeatRow(label = "V", seats = 1..14)
-            SeatRow(label = "U", seats = 1..14)
-            SeatRow(label = "T", seats = 1..14)
-        }
+fun GaneshTheaterScreen(
+    uiState: GaneshTheaterUiState
+) {
+    val vScroll = rememberScrollState()
+    val hScroll = rememberScrollState()
 
-        Spacer(Modifier.width(16.dp))
+    // local selection
+    var selected by remember { mutableStateOf(setOf<SeatKey>()) }
 
-        Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (13..26).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (13..26).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (12..25).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (11..24).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (10..23).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (9..22).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (6..18).forEach { Seat(number = it.toString()) } }
-        }
+    // reserved → SeatKey
+    val booked: Set<SeatKey> = remember(uiState.seatConfig) {
+        uiState.seatConfig
+            ?.seatConfig
+            ?.flatMap { row -> row.reservedSeats.map { SeatKey(row.row, it) } }
+            ?.toSet() ?: emptySet()
+    }
 
-        Spacer(Modifier.width(16.dp))
+    // We’ll control scroll enabling depending on zoom level (inside ZoomableCanvas)
+    Box(Modifier.fillMaxSize()) {
+        when {
+            uiState.isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
 
-        Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (14..28).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (13..26).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (13..26).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (12..25).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (11..24).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (10..23).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (9..22).forEach { Seat(number = it.toString()) } }
-            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) { (6..18).forEach { Seat(number = it.toString()) } }
-        }
+            uiState.errorMessage != null -> Box(Modifier.fillMaxSize(), Alignment.Center) {
+                Text(uiState.errorMessage ?: "Something went wrong")
+            }
 
-        Spacer(Modifier.width(16.dp))
+            uiState.seatConfig != null -> {
+                ZoomableCanvas(
+                    modifier = Modifier
+                        // Scroll only when not zoomed in (scale==1); ZoomableCanvas tells us scale
+                        .let { base ->
+                            // The inner lambda gets the scale; build modifiers at runtime
+                            // We’ll attach scroll inside content below to know the scale
+                            base
+                        }
+                ) { scale ->
+                    // Enable scroll only at 1x to avoid gesture conflict with pan
+                    val scrollEnabled = scale <= 1f + 1e-3f
 
-        Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.Start
-        ) {
-            SeatRow(label = "K", seats = 1..13)
-            SeatRow(label = "J", seats = 1..13)
-            SeatRow(label = "I", seats = 1..13)
-            SeatRow(label = "H", seats = 1..12)
-            SeatRow(label = "G", seats = 1..12)
-            SeatRow(label = "F", seats = 1..11)
-            SeatRow(label = "E", seats = 1..10)
-            SeatRow(label = "D", seats = 1..9)
-            SeatRow(label = "C", seats = 1..8)
-            SeatRow(label = "B", seats = 1..5)
+                    Column(
+                        modifier = Modifier
+                            .then(
+                                Modifier
+                                    .verticalScroll(vScroll, enabled = scrollEnabled)
+                                    .horizontalScroll(hScroll, enabled = scrollEnabled)
+                            )
+                            .padding(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(32.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        // Third (top), Second, First — your current order
+                        GaneshTheaterBlockThird(
+                            selectedSeats = selected,
+                            bookedSeats = booked
+                        ) { key -> selected = if (key in selected) selected - key else selected + key }
+
+                        GaneshTheaterBlockSecond(
+                            selectedSeats = selected,
+                            bookedSeats = booked
+                        ) { key -> selected = if (key in selected) selected - key else selected + key }
+
+                        GaneshTheaterBlockFirst(
+                            selectedSeats = selected,
+                            bookedSeats = booked
+                        ) { key -> selected = if (key in selected) selected - key else selected + key }
+                    }
+                }
+            }
+
+            else -> Box(Modifier.fillMaxSize(), Alignment.Center) { Text("No seat configuration available.") }
         }
     }
 }
 
-@Preview(showBackground = true, widthDp = 2000, heightDp = 2000)
+@Preview(showBackground = true, widthDp = 1200, heightDp = 800)
 @Composable
-fun SeatBookingScreenPreview() {
-     GaneshTheaterScreen()
+private fun SeatBookingScreenPreview() {
+    GaneshTheaterScreen(
+        uiState = GaneshTheaterUiState(
+            isLoading = false,
+            succeed = true,
+            seatConfig = GaneshTheaterGetSeatResponse(
+                status = true,
+                seatConfig = emptyList()
+            )
+        )
+    )
 }

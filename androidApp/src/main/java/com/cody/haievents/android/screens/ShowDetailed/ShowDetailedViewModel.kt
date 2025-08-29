@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cody.haievents.Show.data.model.ShowDetailPageResponse
-import com.cody.haievents.Show.data.model.TicketType
+import com.cody.haievents.Show.model.ShowDetailPageResponse
+import com.cody.haievents.Show.model.TicketType
 import com.cody.haievents.Show.domain.usecase.ShowDetailUseCase
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch

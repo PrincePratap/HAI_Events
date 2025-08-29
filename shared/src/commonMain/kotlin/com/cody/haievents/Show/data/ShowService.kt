@@ -1,15 +1,16 @@
 package com.cody.haievents.Show.data
 
 
-import com.cody.haievents.Show.data.model.BlogsListResponse
-import com.cody.haievents.Show.data.model.CategoryResponse
-import com.cody.haievents.Show.data.model.CreateUserEventRequest
-import com.cody.haievents.Show.data.model.CreateUserEventResponse
-import com.cody.haievents.Show.data.model.OrderRequest
-import com.cody.haievents.Show.data.model.OrderResponse
-import com.cody.haievents.Show.data.model.SearchShowResponse
-import com.cody.haievents.Show.data.model.ShowDetailPageResponse
-import com.cody.haievents.Show.data.model.UploadEventImage
+import com.cody.haievents.Show.model.BlogsListResponse
+import com.cody.haievents.Show.model.CategoryResponse
+import com.cody.haievents.Show.model.CreateUserEventRequest
+import com.cody.haievents.Show.model.CreateUserEventResponse
+import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
+import com.cody.haievents.Show.model.OrderRequest
+import com.cody.haievents.Show.model.OrderResponse
+import com.cody.haievents.Show.model.SearchShowResponse
+import com.cody.haievents.Show.model.ShowDetailPageResponse
+import com.cody.haievents.Show.model.UploadEventImage
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.MultiPartFormDataContent
@@ -45,7 +46,7 @@ internal class ShowService: KtorApi() {
         endPoint(path = "/api/blogs")
     }.body()
 
-    suspend fun createOrder(request:OrderRequest): OrderResponse = client.post {
+    suspend fun createOrder(request: OrderRequest): OrderResponse = client.post {
         endPoint(path = "/api/create-order")
         setBody(request)
     }.body()
@@ -78,6 +79,10 @@ internal class ShowService: KtorApi() {
             )
         }.body() // Ktor automatically deserializes the JSON response into our data class
     }
+
+    suspend fun getGaneshTheater(): GaneshTheaterGetSeatResponse = client.get {
+        endPoint(path = "/api/ganeshkala/seats")
+    }.body()
 
 
 

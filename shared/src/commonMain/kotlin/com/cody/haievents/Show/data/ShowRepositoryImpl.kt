@@ -1,15 +1,16 @@
 package com.cody.haievents.Show.data
 
-import com.cody.haievents.Show.data.model.BlogsListResponse
-import com.cody.haievents.Show.data.model.CategoryResponse
-import com.cody.haievents.Show.data.model.CreateUserEventRequest
-import com.cody.haievents.Show.data.model.CreateUserEventResponse
-import com.cody.haievents.Show.data.model.OrderRequest
-import com.cody.haievents.Show.data.model.OrderResponse
-import com.cody.haievents.Show.data.model.SearchShowResponse
-import com.cody.haievents.Show.data.model.ShowDetailPageResponse
-import com.cody.haievents.Show.data.model.UploadEventImage
+import com.cody.haievents.Show.model.BlogsListResponse
+import com.cody.haievents.Show.model.CategoryResponse
+import com.cody.haievents.Show.model.CreateUserEventRequest
+import com.cody.haievents.Show.model.CreateUserEventResponse
+import com.cody.haievents.Show.model.OrderRequest
+import com.cody.haievents.Show.model.OrderResponse
+import com.cody.haievents.Show.model.SearchShowResponse
+import com.cody.haievents.Show.model.ShowDetailPageResponse
+import com.cody.haievents.Show.model.UploadEventImage
 import com.cody.haievents.Show.domain.repository.ShowRepository
+import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
 import com.cody.haievents.auth.data.AuthService
 import com.cody.haievents.auth.domain.repository.AuthRepository
 import com.cody.haievents.common.data.local.UserPreferences
@@ -110,6 +111,17 @@ internal class ShowRepositoryImpl(
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to upload image  : ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun getGaneshTheater(): Result<GaneshTheaterGetSeatResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.getGaneshTheater()
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to Create Order: ${e.message}")
             }
         }
     }

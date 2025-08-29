@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cody.haievents.Show.data.TicketType
-import com.cody.haievents.Show.data.model.OrderResponse
+import com.cody.haievents.Show.model.OrderResponse
 import com.cody.haievents.Show.domain.usecase.TicketListUseCase
 import com.cody.haievents.Show.domain.usecase.createOrderUseCase
 import com.cody.haievents.common.util.Result

@@ -1,102 +1,133 @@
 package com.cody.haievents.android.common.componets.theater
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.cody.haievents.android.common.componets.LabelPosition
+import com.cody.haievents.android.common.componets.SeatKey
 import com.cody.haievents.android.common.componets.SeatRow
 
-
+// spacing knobs
+private val ColumnGap: Dp = 24.dp
+private val RowGap: Dp = 8.dp
+private val SeatRowHeight: Dp = 40.dp
 
 @Composable
- fun GaneshTheaterBlockSecond()  {
+private fun FixedHeightSeatRow2(
+    label: String,
+    seats: IntRange,
+    labelPosition: LabelPosition,
+    selectedSeats: Set<SeatKey>,
+    bookedSeats: Set<SeatKey>,
+    onSeatToggle: (SeatKey) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .wrapContentWidth()
+            .height(SeatRowHeight),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        SeatRow(
+            label = label,
+            seats = seats,
+            labelPosition = labelPosition,
+            selectedSeats = selectedSeats,
+            bookedSeats = bookedSeats,
+            onSeatToggle = onSeatToggle
+        )
+    }
+}
+
+@Composable
+fun GaneshTheaterBlockSecond(
+    selectedSeats: Set<SeatKey> = emptySet(),
+    bookedSeats: Set<SeatKey> = emptySet(),
+    onSeatToggle: (SeatKey) -> Unit = {}
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .wrapContentHeight()
             .padding(16.dp),
         verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.Center // Center the block for a better default view
+        horizontalArrangement = Arrangement.spacedBy(ColumnGap)
     ) {
+        // LEFT column (labels on the left)
         Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(RowGap),
             horizontalAlignment = Alignment.End
         ) {
-            SeatRow(label = "S", seats = 1..18)
-            SeatRow(label = "R", seats = 1..18)
-            SeatRow(label = "Q", seats = 1..17)
-            SeatRow(label = "P", seats = 1..17)
-            SeatRow(label = "O", seats = 1..12)
-            SeatRow(label = "N", seats = 1..12)
-            SeatRow(label = "M", seats = 1..12)
-            SeatRow(label = "L", seats = 1..11)
+            FixedHeightSeatRow2("S", 1..18, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("R", 1..18, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("Q", 1..17, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("P", 1..17, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("O", 1..12, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("N", 1..12, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("M", 1..12, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("L", 1..11, LabelPosition.LEFT, selectedSeats, bookedSeats, onSeatToggle)
         }
 
-        Spacer(Modifier.width(16.dp))
-
+        // MID-LEFT column
         Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(RowGap),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SeatRow(label = "S", seats = 19..34)
-            SeatRow(label = "R", seats = 19..34)
-            SeatRow(label = "Q", seats = 18..33)
-            SeatRow(label = "P", seats = 18..33)
-            SeatRow(label = "O", seats = 13..28)
-            SeatRow(label = "N", seats = 13..28)
-            SeatRow(label = "M", seats = 13..28)
-            SeatRow(label = "L", seats = 12..26)
+            FixedHeightSeatRow2("S", 19..34, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("R", 19..34, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("Q", 18..33, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("P", 18..33, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("O", 13..28, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("N", 13..28, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("M", 13..28, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("L", 12..26, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
         }
 
-        Spacer(Modifier.width(16.dp))
-
+        // MID-RIGHT column
         Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(RowGap),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            SeatRow(label = "S", seats = 35..50)
-            SeatRow(label = "R", seats = 35..50)
-            SeatRow(label = "Q", seats = 34..49)
-            SeatRow(label = "P", seats = 34..49)
-            SeatRow(label = "O", seats = 29..44)
-            SeatRow(label = "N", seats = 29..44)
-            SeatRow(label = "M", seats = 29..44)
-            SeatRow(label = "L", seats = 27..41)
+            FixedHeightSeatRow2("S", 35..50, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("R", 35..50, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("Q", 34..49, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("P", 34..49, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("O", 29..44, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("N", 29..44, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("M", 29..44, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("L", 27..41, LabelPosition.NONE, selectedSeats, bookedSeats, onSeatToggle)
         }
 
-        Spacer(Modifier.width(16.dp))
-
+        // RIGHT column (labels on the right)
         Column(
-            modifier = Modifier.wrapContentWidth(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(RowGap),
             horizontalAlignment = Alignment.Start
         ) {
-            SeatRow(label = "S", seats = 35..34)
-            SeatRow(label = "R", seats = 35..34)
-            SeatRow(label = "Q", seats = 34..33)
-            SeatRow(label = "P", seats = 34..33)
-            SeatRow(label = "O", seats = 29..28)
-            SeatRow(label = "N", seats = 29..28)
-            SeatRow(label = "M", seats = 29..28)
-            SeatRow(label = "L", seats = 17..26)
+            FixedHeightSeatRow2("S", 51..68, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("R", 51..68, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("Q", 50..67, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("P", 50..66, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("O", 45..57, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("N", 45..56, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("M", 45..56, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
+            FixedHeightSeatRow2("L", 42..53, LabelPosition.RIGHT, selectedSeats, bookedSeats, onSeatToggle)
         }
     }
 }
 
-
 @Preview(showBackground = true, widthDp = 2000, heightDp = 2000)
 @Composable
-private fun GaneshTheaterBlockSecondPreview() {
-    GaneshTheaterBlockSecond()
+private fun GaneshTheaterBlockSecond_Preview() {
+    var selected by remember { mutableStateOf(setOf<SeatKey>()) }
+    val booked = remember { setOf(SeatKey("S", 1), SeatKey("P", 20)) }
+
+    GaneshTheaterBlockSecond(
+        selectedSeats = selected,
+        bookedSeats = booked
+    ) { key ->
+        selected = if (key in selected) selected - key else selected + key
+    }
 }

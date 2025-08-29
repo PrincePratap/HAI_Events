@@ -17,8 +17,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
 
 // Imports for building a ticket list for the validator
-import com.cody.haievents.Show.data.model.TicketTypeRequest
-import com.cody.haievents.Show.data.model.Role
+import com.cody.haievents.Show.model.TicketTypeRequest
+import com.cody.haievents.Show.model.Role
 
 @Destination
 @Composable

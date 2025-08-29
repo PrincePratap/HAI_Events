@@ -22,8 +22,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cody.haievents.Show.data.model.Role
-import com.cody.haievents.Show.data.model.TicketTypeRequest
+import com.cody.haievents.Show.model.Role
+import com.cody.haievents.Show.model.TicketTypeRequest
 import com.cody.haievents.android.common.theming.darkTextColor
 import com.cody.haievents.android.common.theming.goldColor
 import com.cody.haievents.android.common.theming.lightGoldBorder

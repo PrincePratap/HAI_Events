@@ -1,6 +1,6 @@
 package com.cody.haievents.Show.domain.usecase
 
-import com.cody.haievents.Show.data.model.SearchShowResponse
+import com.cody.haievents.Show.model.SearchShowResponse
 import com.cody.haievents.Show.domain.repository.ShowRepository
 import com.cody.haievents.common.util.Result
 import org.koin.core.component.KoinComponent

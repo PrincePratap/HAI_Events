@@ -1,4 +1,4 @@
-package com.cody.haievents.Show.data.model
+package com.cody.haievents.Show.model
 
 
 import kotlinx.serialization.SerialName

@@ -1,7 +1,7 @@
 package com.cody.haievents.Show.domain.usecase
 
-import com.cody.haievents.Show.data.model.CreateUserEventRequest
-import com.cody.haievents.Show.data.model.TicketTypeRequest
+import com.cody.haievents.Show.model.CreateUserEventRequest
+import com.cody.haievents.Show.model.TicketTypeRequest
 import com.cody.haievents.common.util.Result
 import kotlinx.datetime.LocalDate
 

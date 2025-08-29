@@ -1,5 +1,6 @@
 package com.cody.haievents.android.common.di
 
+import com.cody.haievents.android.screens.GaneshTheater.GaneshTheaterViewModel
 import com.cody.haievents.android.screens.ShowDetailed.ShowDetailedViewModel
 import com.cody.haievents.android.screens.addEvent.eventDetails.EventDetailsViewModel
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
@@ -24,5 +25,7 @@ val appModule = module {
     viewModel { SearchViewModel(get()) }
     viewModel{ EditProfileViewModel(get()) }
     viewModel { EventDetailsViewModel(get(),get())}
+
+    viewModel{ GaneshTheaterViewModel(get()) }
 
 }

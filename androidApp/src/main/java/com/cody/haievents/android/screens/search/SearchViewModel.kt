@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cody.haievents.Show.data.model.SearchResult
+import com.cody.haievents.Show.model.SearchResult
 import com.cody.haievents.Show.domain.usecase.SearchTextUseCase
 
 import com.cody.haievents.common.util.Result

@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cody.haievents.Show.data.model.CreateUserEventRequest
-import com.cody.haievents.Show.data.model.TicketTypeRequest
+import com.cody.haievents.Show.model.CreateUserEventRequest
+import com.cody.haievents.Show.model.TicketTypeRequest
 import com.cody.haievents.Show.domain.usecase.EventDetailsUseCase
 import com.cody.haievents.Show.domain.usecase.UploadImageUseCase
 import com.cody.haievents.common.util.Result
