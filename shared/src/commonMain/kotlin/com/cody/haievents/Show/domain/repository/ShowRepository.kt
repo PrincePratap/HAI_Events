@@ -5,6 +5,7 @@ import com.cody.haievents.Show.model.BlogsListResponse
 import com.cody.haievents.Show.model.CategoryResponse
 import com.cody.haievents.Show.model.CreateUserEventRequest
 import com.cody.haievents.Show.model.CreateUserEventResponse
+import com.cody.haievents.Show.model.GaneshTheaterBookingRequest
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
 import com.cody.haievents.Show.model.OrderResponse
 import com.cody.haievents.Show.model.SearchShowResponse
@@ -25,5 +26,6 @@ internal interface ShowRepository {
     suspend fun getAllCategories(): Result<CategoryResponse>
     suspend fun uploadEventImage(imageBytes: ByteArray, fileName: String) : Result<UploadEventImage>
     suspend fun getGaneshTheater(): Result<GaneshTheaterGetSeatResponse>
+    suspend fun ganeshTheaterBooking(request: GaneshTheaterBookingRequest): Result<GaneshTheaterGetSeatResponse>
 }
 

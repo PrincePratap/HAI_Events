@@ -24,3 +24,28 @@ data class SeatRowConfig(
     @SerialName("blocks") val blocks: List<List<Int>>,
     @SerialName("reservedSeats") val reservedSeats: List<Int>
 )
+
+
+
+
+@Serializable
+data class  GaneshTheaterBookingRequest(
+    @SerialName("name") val name: String,
+    @SerialName("email") val email: String,
+    @SerialName("phone") val phone: String,
+    @SerialName("item_id") val itemId: Int,
+    @SerialName("seats") val seats: List<Seat>
+)
+
+@Serializable
+data class Seat(
+    @SerialName("row") val row: String,
+    @SerialName("number") val number: Int
+)
+
+@Serializable
+data class GaneshTheaterBookingResponse(
+    @SerialName("status") val status: Boolean,
+    @SerialName("message") val message: String
+)
+

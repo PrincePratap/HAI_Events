@@ -5,6 +5,7 @@ import com.cody.haievents.Show.model.BlogsListResponse
 import com.cody.haievents.Show.model.CategoryResponse
 import com.cody.haievents.Show.model.CreateUserEventRequest
 import com.cody.haievents.Show.model.CreateUserEventResponse
+import com.cody.haievents.Show.model.GaneshTheaterBookingRequest
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
 import com.cody.haievents.Show.model.OrderRequest
 import com.cody.haievents.Show.model.OrderResponse
@@ -83,6 +84,11 @@ internal class ShowService: KtorApi() {
     suspend fun getGaneshTheater(): GaneshTheaterGetSeatResponse = client.get {
         endPoint(path = "/api/ganeshkala/seats")
     }.body()
+
+    suspend fun ganeshTheaterBooking(request: GaneshTheaterBookingRequest): GaneshTheaterGetSeatResponse = client.post {
+        endPoint(path = "/api/ganeshkala/book")
+    }.body()
+
 
 
 

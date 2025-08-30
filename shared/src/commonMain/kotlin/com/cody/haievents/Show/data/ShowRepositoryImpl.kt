@@ -10,6 +10,7 @@ import com.cody.haievents.Show.model.SearchShowResponse
 import com.cody.haievents.Show.model.ShowDetailPageResponse
 import com.cody.haievents.Show.model.UploadEventImage
 import com.cody.haievents.Show.domain.repository.ShowRepository
+import com.cody.haievents.Show.model.GaneshTheaterBookingRequest
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
 import com.cody.haievents.auth.data.AuthService
 import com.cody.haievents.auth.domain.repository.AuthRepository
@@ -124,6 +125,10 @@ internal class ShowRepositoryImpl(
                 Result.Error(message = "Failed to Create Order: ${e.message}")
             }
         }
+    }
+
+    override suspend fun ganeshTheaterBooking(request: GaneshTheaterBookingRequest): Result<GaneshTheaterGetSeatResponse> {
+        TODO("Not yet implemented")
     }
 
 
