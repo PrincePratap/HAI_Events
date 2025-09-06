@@ -20,6 +20,9 @@ fun HomePageScreen(
     onRetry: () -> Unit,
     navigateToShowDetails: (Int) -> Unit,
     navigateToSearchScreen : () -> Unit = {},
+    navigateToCategoryScreen: () -> Unit = {},
+    clickOnCategoryItem: (String) -> Unit = {}
+
 ) {
     // LazyColumn is used for displaying scrollable lists of items efficiently.
     LazyColumn(
@@ -29,7 +32,14 @@ fun HomePageScreen(
         item { HomeScreenHeader(clickOnSearch =
             navigateToSearchScreen
         ) }
-        item { EventCategoriesItems() }
+        item { EventCategoriesItems(
+            onCategoryClick = { categoryId ->
+                clickOnCategoryItem(categoryId.toString())
+            },
+            onSeeAllClick = {
+                navigateToCategoryScreen()
+            }
+        ) }
 
         uiState.homePageData?.featured?.let { featuredList ->
             items(items = featuredList, key = { it.id!! }) { featuredShow ->

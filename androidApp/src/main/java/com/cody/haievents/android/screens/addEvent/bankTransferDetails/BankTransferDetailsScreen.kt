@@ -47,7 +47,6 @@ fun BankTransferDetailsScreen() {
                 .padding(paddingValues)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                 .background(Color.White)
                 .padding(24.dp)
         ) {

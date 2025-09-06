@@ -24,24 +24,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cody.haievents.Show.model.Role
 import com.cody.haievents.Show.model.TicketTypeRequest
+import com.cody.haievents.android.common.components.CommonTopBar
+import com.cody.haievents.android.common.componets.CommonButton
+import com.cody.haievents.android.common.componets.EventPosterUploader
+import com.cody.haievents.android.common.componets.TicketDetailsSection
+import com.cody.haievents.android.common.componets.TicketRowUi
 import com.cody.haievents.android.common.theming.darkTextColor
 import com.cody.haievents.android.common.theming.goldColor
 import com.cody.haievents.android.common.theming.lightGoldBorder
 import com.cody.haievents.android.common.theming.lightTextColor
 
 
-// ---- Ticket UI Row (strings for easy typing; convert to Int on submit) ----
-data class TicketRowUi(
-    val role: Role = Role.ATTENDEE,  // default to attendee
-    val name: String = "",
-    val quantity: String = "",
-    val price: String = ""
-)
+
 
 @Composable
 fun EventDetailsScreen(
     uiState: EventDetailsUiState = EventDetailsUiState(),
-    onNextClick: (List<TicketTypeRequest>) -> Unit = {},
+    onNextClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
     onChangeTitle: (String) -> Unit = {},
     onChangeOrganiserName: (String) -> Unit = {},
@@ -50,16 +49,17 @@ fun EventDetailsScreen(
     onChangeEventDate: (String) -> Unit = {},
     onChangeEventTime: (String) -> Unit = {},
     onChangeEventDescription: (String) -> Unit = {},
-    clickOnChooseFile: () -> Unit = {},
 ) {
     // 🔹 Dynamic list of ticket rows
-    val tickets = remember { mutableStateListOf(TicketRowUi()) }
 
     Scaffold(
         topBar = {
-            // Your top bar, if any
-            // SmallTopAppBar(title = { Text("Create Event") }, navigationIcon = { ... })
+           CommonTopBar(onBackClick = onBackClick, title = "Event Details", modifier = Modifier)
         },
+        bottomBar = {
+            CommonButton(text = "Next", onClick = onNextClick)
+        },
+
         containerColor = Color.White
     ) { paddingValues ->
         Column(
@@ -88,40 +88,12 @@ fun EventDetailsScreen(
                 eventDescription = uiState.eventDescription,
                 onEventDescriptionChange = onChangeEventDescription,
 
-                // 🔹 Tickets (dynamic)
-                tickets = tickets,
-                onTicketChange = { idx, updated -> tickets[idx] = updated },
-                onAddTicket = { tickets.add(TicketRowUi()) },
-                onRemoveTicket = { idx -> if (tickets.size > 1) tickets.removeAt(idx) },
-
-                clickOnChooseFile = clickOnChooseFile
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
-                onClick = {
-                    // 🔹 Build List<TicketTypeRequest> for API
-                    val built: List<TicketTypeRequest> = tickets.map {
-                        TicketTypeRequest(
-                            name = it.name.trim(),
-                            price = it.price.toIntOrNull() ?: 0,
-                            role = it.role,
-                            quantity = it.quantity.toIntOrNull() ?: 0
-                        )
-                    }
-                    onNextClick(built)
-                },
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = goldColor),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(50.dp)
-            ) {
-                Text("Next", color = Color.White, fontSize = 16.sp)
-            }
 
-            Spacer(modifier = Modifier.height(24.dp))
+
         }
     }
 }
@@ -178,13 +150,7 @@ fun EventForm(
     eventTime: String, onEventTimeChange: (String) -> Unit,
     eventDescription: String, onEventDescriptionChange: (String) -> Unit,
 
-    // 🔹 Dynamic tickets API
-    tickets: List<TicketRowUi>,
-    onTicketChange: (index: Int, updated: TicketRowUi) -> Unit,
-    onAddTicket: () -> Unit,
-    onRemoveTicket: (index: Int) -> Unit,
 
-    clickOnChooseFile: () -> Unit
 ) {
     val textFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = goldColor,
@@ -255,16 +221,7 @@ fun EventForm(
             colors = textFieldColors
         )
 
-        EventPosterUploader(clickOnChooseFile = clickOnChooseFile)
 
-        // 🔹 Tickets section
-        TicketDetailsSection(
-            tickets = tickets,
-            onTicketChange = onTicketChange,
-            onAddTicket = onAddTicket,
-            onRemoveTicket = onRemoveTicket,
-            colors = textFieldColors
-        )
     }
 }
 
@@ -339,165 +296,12 @@ fun CategoryDropdown(colors: TextFieldColors) {
     }
 }
 
-@Composable
-fun EventPosterUploader(
-    clickOnChooseFile: () -> Unit = {}
-) {
-    Column {
-        Text("Event Poster", fontWeight = FontWeight.Bold, color = darkTextColor)
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
-            value = "No file chosen",
-            onValueChange = {},
-            readOnly = true,
-            leadingIcon = {
-                Button(
-                    onClick = clickOnChooseFile,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.LightGray,
-                        contentColor = darkTextColor
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    Text("Choose File", fontWeight = FontWeight.Normal)
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = lightGoldBorder,
-                unfocusedBorderColor = lightGoldBorder,
-                disabledTextColor = lightTextColor,
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White
-            ),
-            enabled = false
-        )
-    }
-}
 
-// -------------------------- Tickets Section --------------------------
 
-@Composable
-fun TicketDetailsSection(
-    tickets: List<TicketRowUi>,
-    onTicketChange: (index: Int, updated: TicketRowUi) -> Unit,
-    onAddTicket: () -> Unit,
-    onRemoveTicket: (index: Int) -> Unit,
-    colors: TextFieldColors
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Tickets Details", fontWeight = FontWeight.Bold, color = darkTextColor)
 
-        // Header
-        Row {
-            Text("Role",        modifier = Modifier.weight(1f),   color = darkTextColor, fontWeight = FontWeight.SemiBold)
-            Text("Ticket Type", modifier = Modifier.weight(1.2f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
-            Text("Quantity",    modifier = Modifier.weight(0.9f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
-            Text("Price",       modifier = Modifier.weight(0.9f), color = darkTextColor, fontWeight = FontWeight.SemiBold)
-            Spacer(Modifier.width(40.dp))
-        }
 
-        // Rows
-        tickets.forEachIndexed { index, item ->
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                RoleSelector(
-                    value = item.role,
-                    onChange = { onTicketChange(index, item.copy(role = it)) },
-                    modifier = Modifier.weight(1f)
-                )
 
-                OutlinedTextField(
-                    value = item.name,
-                    onValueChange = { onTicketChange(index, item.copy(name = it)) },
-                    modifier = Modifier.weight(1.2f),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = colors,
-                    placeholder = { Text("E.g. VIP") }
-                )
-
-                OutlinedTextField(
-                    value = item.quantity,
-                    onValueChange = { t ->
-                        onTicketChange(index, item.copy(quantity = t.filter(Char::isDigit)))
-                    },
-                    modifier = Modifier.weight(0.9f),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = colors,
-                    placeholder = { Text("E.g. 50") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
-
-                OutlinedTextField(
-                    value = item.price,
-                    onValueChange = { t ->
-                        onTicketChange(index, item.copy(price = t.filter(Char::isDigit)))
-                    },
-                    modifier = Modifier.weight(0.9f),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = colors,
-                    placeholder = { Text("E.g. 999") },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-                )
-
-                IconButton(onClick = { onRemoveTicket(index) }, enabled = tickets.size > 1) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Remove",
-                        tint = if (tickets.size > 1) Color.Red else Color.LightGray
-                    )
-                }
-            }
-        }
-
-        // Add new row
-        TextButton(onClick = onAddTicket) {
-            Icon(Icons.Default.Add, contentDescription = "Add Ticket Type", tint = goldColor)
-            Spacer(modifier = Modifier.width(4.dp))
-            Text("Add Another Ticket Type", color = goldColor, fontWeight = FontWeight.Bold)
-        }
-    }
-}
-
-// Two-option selector for Role (Performer / Attendee)
-@Composable
-private fun RoleSelector(
-    value: Role,
-    onChange: (Role) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        FilterChip(
-            selected = value == Role.PERFORMER,
-            onClick = { onChange(Role.PERFORMER) },
-            label = { Text("Performer") },
-            colors = FilterChipDefaults.filterChipColors(
-                selectedContainerColor = goldColor.copy(alpha = 0.15f),
-                selectedLabelColor = darkTextColor
-            )
-        )
-        FilterChip(
-            selected = value == Role.ATTENDEE,
-            onClick = { onChange(Role.ATTENDEE) },
-            label = { Text("Attendee") },
-            colors = FilterChipDefaults.filterChipColors(
-                selectedContainerColor = goldColor.copy(alpha = 0.15f),
-                selectedLabelColor = darkTextColor
-            )
-        )
-    }
-}
-
-@Preview(showBackground = true, device = "id:pixel_4")
+@Preview(showBackground = true,)
 @Composable
 fun AddEventScreenPreview() {
     EventDetailsScreen()

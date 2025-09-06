@@ -14,7 +14,6 @@ class GetUserUseCase : KoinComponent {
     suspend operator fun invoke(
     ): Result<GetUserResponse> {
 
-
         return repository.getUser()
     }
 }

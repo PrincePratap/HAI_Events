@@ -59,6 +59,7 @@ kotlin {
             api("io.insert-koin:koin-android:$koinVersion")
             implementation("io.ktor:ktor-client-android:$ktorVersion")
             api("androidx.datastore:datastore-preferences:$datastoreVersion")
+//            implementation("com.phonepe.android.sdk.pg:paymentsdk:2.5.0") // Check for the latest version
 //            implementation("com.razorpay:checkout:1.6.40")
 
         }

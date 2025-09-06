@@ -1,7 +1,10 @@
 package com.cody.haievents.Show.data
 
 
+import com.cody.haievents.Show.model.AllCategoryResponse
+import com.cody.haievents.Show.model.BlogItemResponse
 import com.cody.haievents.Show.model.BlogsListResponse
+import com.cody.haievents.Show.model.CategoryItemsResponse
 import com.cody.haievents.Show.model.CategoryResponse
 import com.cody.haievents.Show.model.CreateUserEventRequest
 import com.cody.haievents.Show.model.CreateUserEventResponse
@@ -47,6 +50,11 @@ internal class ShowService: KtorApi() {
         endPoint(path = "/api/blogs")
     }.body()
 
+    suspend fun getBlogsItem(blogId: Int): BlogItemResponse = client.get {
+        parameter("id", blogId)
+        endPoint(path = "/api/get-blog")
+    }.body()
+
     suspend fun createOrder(request: OrderRequest): OrderResponse = client.post {
         endPoint(path = "/api/create-order")
         setBody(request)
@@ -89,6 +97,15 @@ internal class ShowService: KtorApi() {
         endPoint(path = "/api/ganeshkala/book")
     }.body()
 
+
+    suspend fun getAllCategory(): AllCategoryResponse = client.get {
+        endPoint(path = "/api/categories")
+    }.body()
+
+    suspend fun  getCategoryItems(categoryID: Int): CategoryItemsResponse = client.get {
+        parameter("category_id", categoryID)
+        endPoint(path = "/api/events-by-category")
+    }.body()
 
 
 

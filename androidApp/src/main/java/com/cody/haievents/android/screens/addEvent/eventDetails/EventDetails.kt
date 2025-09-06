@@ -19,6 +19,7 @@ import org.koin.androidx.compose.koinViewModel
 // Imports for building a ticket list for the validator
 import com.cody.haievents.Show.model.TicketTypeRequest
 import com.cody.haievents.Show.model.Role
+import com.cody.haievents.android.screens.destinations.EventImageAndTicketsDestination
 
 @Destination
 @Composable
@@ -69,7 +70,7 @@ fun EventDetails(navigator: DestinationsNavigator) {
         uiState = uiState,
 
         onNextClick = {
-            viewModel.checkEventDetails()
+          navigator.navigate(EventImageAndTicketsDestination.route)
         },
 
         onBackClick = { navigator.popBackStack() },
@@ -80,6 +81,6 @@ fun EventDetails(navigator: DestinationsNavigator) {
         onChangeEventDate = viewModel::updateEventDate,
         onChangeEventTime = viewModel::updateEventTime,
         onChangeEventDescription = viewModel::updateEventDescription,
-        clickOnChooseFile = { imagePickerLauncher.launch("image/*") },
+//        clickOnChooseFile = { imagePickerLauncher.launch("image/*") },
     )
 }

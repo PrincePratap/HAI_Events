@@ -66,8 +66,8 @@ fun EditProfile(
             // viewModel.setImageUri(uri) // if you add this to the VM
         },
         onSave = {
-            Log.i(TAG, "onSave() clicked")
-            // viewModel.saveProfile() // if implemented
+            Log.i(TAG, "updateUser() clicked")
+          viewModel.updateUser()
         },
         onBack = {
             Log.i(TAG, "onBack() -> navigator.popBackStack()")

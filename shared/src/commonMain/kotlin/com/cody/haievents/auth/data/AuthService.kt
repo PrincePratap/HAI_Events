@@ -5,6 +5,9 @@ import com.cody.haievents.auth.data.model.EditUserResponse
 import com.cody.haievents.auth.data.model.GetUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.data.model.ProfileImageUploadResponse
+import com.cody.haievents.auth.model.EditUserProfileRequest
+import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -58,42 +61,19 @@ internal class AuthService: KtorApi() {
         setToken(token)
     }.body()
 
-//    suspend fun uploadImage(
-//        token: String,
-//        imageBytes: ByteArray,
-//        fileName: String,
-//        fieldName: String = "image",            // change if your backend expects a different key
-//    ): ProfileImageUploadResponse {
-//        val contentType = when (fileName.substringAfterLast('.', "").lowercase()) {
-//            "png" -> ContentType.Image.PNG
-//            "jpg", "jpeg" -> ContentType.Image.JPEG
-//            "webp" -> ContentType.parse("image/webp")
-//            else -> ContentType.Application.OctetStream
-//        }
-//
-//        return client.post {
-//            endPoint(path = "/api/profile/upload-image")       // your helper
-//            setToken(token)          // your helper (e.g., adds Authorization header)
-//
-//            setBody(
-//                MultiPartFormDataContent(
-//                    formData {
-//                        append(
-//                            key = fieldName,
-//                            value = ByteReadPacket(imageBytes),
-//                            headers = Headers.build {
-//                                append(
-//                                    HttpHeaders.ContentDisposition,
-//                                    "form-data; name=\"$fieldName\"; filename=\"$fileName\""
-//                                )
-//                                append(HttpHeaders.ContentType, contentType.toString())
-//                            }
-//                        )
-//                    }
-//                )
-//            )
-//        }.body()
-//    }
+
+    suspend fun updateUser(token : String, request: EditUserProfileRequest): ProfileUpdateResponse = client.post {
+        endPoint(path = "/api/profile/update")
+        setBody(request)
+        setToken(token)
+    }.body()
+
+    suspend fun getTermsConditions(type :Int): TermsConditionsResponse = client.get {
+        endPoint(path = "/api/page")
+        parameter("type", type)
+
+    }.body()
+
 
 
 

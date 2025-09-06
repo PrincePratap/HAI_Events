@@ -10,6 +10,9 @@ import com.cody.haievents.Show.model.SearchShowResponse
 import com.cody.haievents.Show.model.ShowDetailPageResponse
 import com.cody.haievents.Show.model.UploadEventImage
 import com.cody.haievents.Show.domain.repository.ShowRepository
+import com.cody.haievents.Show.model.AllCategoryResponse
+import com.cody.haievents.Show.model.BlogItemResponse
+import com.cody.haievents.Show.model.CategoryItemsResponse
 import com.cody.haievents.Show.model.GaneshTheaterBookingRequest
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
 import com.cody.haievents.auth.data.AuthService
@@ -129,6 +132,39 @@ internal class ShowRepositoryImpl(
 
     override suspend fun ganeshTheaterBooking(request: GaneshTheaterBookingRequest): Result<GaneshTheaterGetSeatResponse> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun getAllCategory(): Result<AllCategoryResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.getAllCategory()
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to get All Category: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun getCategoryItems(categoryID : Int): Result<CategoryItemsResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.getCategoryItems(categoryID)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to get $categoryID Category: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun getBlogsItem(blogsId: Int): Result<BlogItemResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = showService.getBlogsItem(blogsId)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to get blog ${blogsId}  ${e.message}")
+            }
+        }
     }
 
 

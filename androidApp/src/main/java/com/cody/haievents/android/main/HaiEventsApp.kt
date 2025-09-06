@@ -54,7 +54,6 @@ fun  HaiEventsApp() {
         )
     }
 
-    // Navigate to Splash only once
     LaunchedEffect(Unit) {
         if (!hasNavigatedToSplash) {
             navController.navigate(SplashDestination.route) {

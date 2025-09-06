@@ -6,6 +6,9 @@ import com.cody.haievents.auth.data.model.GetUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.domain.repository.AuthRepository
+import com.cody.haievents.auth.model.EditUserProfileRequest
+import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.data.local.UserPreferences
 import com.cody.haievents.common.data.local.toUserSettings
 import com.cody.haievents.common.util.DispatcherProvider
@@ -90,10 +93,6 @@ internal class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun editUser(request: EditUserRequest): Result<EditUserResponse> {
-        TODO("Not yet implemented")
-    }
-
     override suspend fun getUser(): Result<GetUserResponse> {
         return withContext(dispatcher.io) {
             try {
@@ -102,6 +101,29 @@ internal class AuthRepositoryImpl(
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to get homepage: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun updateUser(request: EditUserProfileRequest): Result<ProfileUpdateResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val token = userPreferences.getUserData().token
+                val response = authService.updateUser(token, request)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to update user : ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun getTermsConditions(type : Int): Result<TermsConditionsResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = authService.getTermsConditions(type)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to get terms conditions and privacy policy : ${e.message}")
             }
         }
     }

@@ -17,9 +17,9 @@ fun  Search(navigator: DestinationsNavigator) {
     val context = LocalContext.current
 
     SearchScreen(
-        uiState = uiState ,
+        uiState = uiState,
         onQueryChange = {viewModel.updateQuery(it) },
-        navigateToShowDetails = { navigator.navigate(ShowDetailedDestination(it))
-        }
+        navigateToShowDetails = { navigator.navigate(ShowDetailedDestination(it)) },
+        navigationBack = { navigator.navigateUp() }
     )
 }

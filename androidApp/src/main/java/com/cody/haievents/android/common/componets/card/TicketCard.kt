@@ -48,11 +48,20 @@ fun TicketCard(
 ) {
     val contentColor = if (enabled) primaryTextColor else disabledTextGray
 
+    Column(modifier = Modifier.fillMaxWidth()) {
 
-    Column {
-        Row() {
-
-            Column {
+        // HEADER: left info (weighted) + right action
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f),                     // ← takes remaining width
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
                 Text(
                     text = title,
                     fontWeight = FontWeight.Bold,
@@ -66,15 +75,15 @@ fun TicketCard(
                 )
             }
 
-            Box(modifier = Modifier.padding(top = 4.dp)) {
+            // Right-aligned button
+            Box(modifier = Modifier.padding(start = 12.dp)) {
                 buttonContent()
             }
         }
 
+        // FEATURES
         Column(modifier = Modifier.wrapContentHeight()) {
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             features.forEach { feature ->
                 Row(verticalAlignment = Alignment.Top) {
                     Text(text = "• ", color = contentColor, fontSize = 14.sp)
@@ -88,25 +97,11 @@ fun TicketCard(
                 Spacer(modifier = Modifier.height(4.dp))
             }
         }
+
         HorizontalDivider(color = dividerColor)
-
-
-    }
-
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(screenBackground)
-            .padding(horizontal = 24.dp, vertical = 20.dp),
-        verticalAlignment = Alignment.Top,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Spacer(modifier = Modifier.width(16.dp))
-
-
     }
 }
+
 
 @Composable
 fun AddButton(onClick: () -> Unit) {

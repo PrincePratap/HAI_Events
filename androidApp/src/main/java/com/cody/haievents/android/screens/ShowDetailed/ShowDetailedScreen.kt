@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -32,16 +33,33 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.cody.haievents.android.common.components.CommonTopBar
 import com.cody.haievents.android.common.componets.BookingBottomBar
+// Small utility to avoid ripple on the "Read more" text/icon
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.composed
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 
 // Define the primary color from the image for reusability
 private val goldColor = Color(0xFFD1A34F)
@@ -60,12 +78,9 @@ fun ShowDetailedScreen(
 ) {
     Scaffold(
         topBar = {
-            Column {
-
-                CommonTopBar(
-                    title = uiState.showDetail?.event?.title ?: "",
-                    onBackClick =   navigationBack)
-            }
+            CommonTopBar(
+                title = uiState.showDetail?.event?.title ?: "",
+                onBackClick =   navigationBack)
         },
         bottomBar = {
             uiState.startPrice?.let {
@@ -124,81 +139,72 @@ private fun ImageSection(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun ContentSection(
     modifier: Modifier = Modifier,
     title: String,
     location: String,
-    date: String,
+    date: String,          // show as-is
     time: String,
     language: String,
     description: String
-    ) {
+) {
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // Title
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
+            fontWeight = FontWeight.Bold,
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        // Venue (full width)
+        InfoRowLabeled(
+            icon = Icons.Outlined.LocationOn,
+            label = "Venue",
+            value = location
+        )
+
+        // Time (full width)
+        InfoRowLabeled(
+            icon = Icons.Outlined.Schedule,
+            label = "Time",
+            value = time
+        )
+
+        // Chips (wrap automatically)
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            InfoChip(
+                icon = Icons.Outlined.CalendarToday,
+                text = date
+            )
+            InfoChip(
+                icon = Icons.Outlined.Language,
+                text = language.uppercase()
+            )
+        }
+
+        Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+
+        // About
+        Text(
+            text = "About the Show",
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold
         )
 
-        // Info Grid
-        Row(modifier = Modifier.fillMaxWidth()) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                InfoItem(icon = Icons.Outlined.LocationOn, text = location)
-                InfoItem(icon = Icons.Outlined.Schedule, text = time)
-            }
-            Spacer(Modifier.width(8.dp))
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                InfoItem(icon = Icons.Outlined.CalendarToday, text = date)
-                InfoItem(icon = Icons.Outlined.Language, text = language)
-            }
-        }
-
-        HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
-
-        // About the Show Section
-        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                text = "About the Show",
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-
-
-
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyLarge,
-                lineHeight = 24.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(top = 4.dp)
-            ) {
-                Text(
-                    text = "Read more",
-                    color = goldColor,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "Read more",
-                    tint = goldColor,
-                    modifier = Modifier.size(20.dp)
-                )
-            }
-        }
+        ExpandableText(
+            text = description,
+            collapsedLines = 4
+        )
     }
 }
 
@@ -219,4 +225,129 @@ private fun InfoItem(icon: ImageVector, text: String) {
             fontWeight = FontWeight.SemiBold
         )
     }
+}
+
+@Composable
+private fun InfoRowLabeled(
+    icon: ImageVector,
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Top
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .size(20.dp)
+                .padding(top = 2.dp)
+        )
+        Spacer(Modifier.width(12.dp))
+        Column(Modifier.weight(1f)) {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun InfoChip(
+    icon: ImageVector,
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Surface(
+        shape = RoundedCornerShape(24.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+        modifier = modifier
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+/** Collapsible long text with "Read more / Read less" */
+@Composable
+private fun ExpandableText(
+    text: String,
+    collapsedLines: Int = 3
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.bodyLarge,
+            lineHeight = 24.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = if (expanded) Int.MAX_VALUE else collapsedLines,
+            overflow = TextOverflow.Ellipsis
+        )
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(top = 4.dp)
+        ) {
+            Text(
+                text = if (expanded) "Read less" else "Read more",
+                color = goldColor,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .padding(end = 2.dp)
+                    .noRippleClickable { expanded = !expanded }
+            )
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = null,
+                tint = goldColor,
+                modifier = Modifier
+                    .size(20.dp)
+                    .rotate(if (expanded) 180f else 0f)
+                    .noRippleClickable { expanded = !expanded }
+            )
+        }
+    }
+}
+
+
+private fun Modifier.noRippleClickable(onClick: () -> Unit) = composed {
+    this.clickable(
+        indication = null,
+        interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() },
+        role = Role.Button,
+        onClick = onClick
+    )
 }

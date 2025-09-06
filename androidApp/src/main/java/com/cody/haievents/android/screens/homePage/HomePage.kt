@@ -6,11 +6,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
+import com.cody.haievents.android.main.MainActivity
+import com.cody.haievents.android.screens.destinations.AllCategoriesDestination
 import com.cody.haievents.android.screens.destinations.SearchDestination
 import com.cody.haievents.android.screens.destinations.ShowDetailedDestination
-import com.cody.haievents.payment.PaymentGateway
-import com.cody.haievents.payment.PaymentResult
-import com.cody.haievents.payment.PaymentResultHandler
+
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
@@ -27,6 +27,7 @@ fun HomePage(
     val viewModel: HomePageViewModel = koinViewModel()
     val uiState = viewModel.uiState
     val context = LocalContext.current
+
 
 
 
@@ -47,14 +48,27 @@ fun HomePage(
         navigateToSearchScreen = {
             navigator.navigate(SearchDestination.route)
         },
+        navigateToCategoryScreen = {
+            navigator.navigate(AllCategoriesDestination.route)
+        },
+        clickOnCategoryItem = {
+            // Implement click on category item
+        }
 
     )
 
-    LaunchedEffect(key1 = uiState.errorMessage) {
-        uiState.errorMessage?.let { error ->
-            Log.e(TAG, "Side Effect: Error state observed. Showing Toast for message: '$error'")
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
-            viewModel.onErrorMessageShown()
+        LaunchedEffect(key1 = uiState.errorMessage) {
+            uiState.errorMessage?.let { error ->
+                Log.e(TAG, "Side Effect: Error state observed. Showing Toast for message: '$error'")
+                Toast.makeText(context, error, Toast.LENGTH_LONG).show()
+                viewModel.onErrorMessageShown()
+            }
         }
-    }
 }
+
+//@Composable
+//fun PayWithPhonePeButton(orderId: String, token: String) {
+//    Button(onClick = {  }) {
+//        Text("Pay with PhonePe")
+//    }
+//}

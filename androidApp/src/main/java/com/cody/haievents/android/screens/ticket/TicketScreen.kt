@@ -23,14 +23,21 @@ import com.cody.haievents.android.common.theming.lightGoldColor
 import com.cody.haievents.android.common.theming.primaryTextColor
 import com.cody.haievents.android.common.theming.screenBackground
 import com.cody.haievents.Show.data.TicketType
+import com.cody.haievents.android.common.components.CommonTopBar
 
 @Composable
 fun TicketScreen(
     uiState: TicketUiState,
     onQuantityChange: (ticketId: String, newQuantity: Int) -> Unit,
     onGetTicketClick: () -> Unit,
+    navigationBack: () -> Unit
 ) {
     Scaffold(
+        topBar = {
+            CommonTopBar(
+                title = "Tickets",
+                onBackClick =   navigationBack)
+        },
         bottomBar = {
             if (uiState.totalTickets > 0) {
                 BottomCheckoutBar(
@@ -136,23 +143,105 @@ fun BottomCheckoutBar(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun TicketPurchaseScreenPreview() {
+@Preview(
+    name = "TicketScreen – with selection",
+    showBackground = true,
+    widthDp = 411,
+    heightDp = 891
+)
+//@Composable
+//fun TicketScreenPreview_Selected() {
+//    // sample tickets (adjust fields to your TicketType)
 //    val sampleTickets = listOf(
-//        TicketType(id = 101, event_id = 1, event_source = "movie", role_type = "performer", name = "Performer 1", price = "1.00", quantity = 10, created_at = "", updated_at = ""),
-//        TicketType(id = 102, event_id = 1, event_source = "movie", role_type = "performer", name = "Performer 2", price = "200.00", quantity = 10, created_at = "", updated_at = "")
+//        TicketType(
+//            id = 101,
+//            event_id = 1,
+//            event_source = "movie",
+//            role_type = "VIP",
+//            name = "VIP Pass",
+//            price = "200.00",
+//            quantity = 10,
+//            created_at = "",
+//            updated_at = ""
+//        ),
+//        TicketType(
+//            id = 102,
+//            event_id = 1,
+//            event_source = "movie",
+//            role_type = "Regular",
+//            name = "Regular",
+//            price = "150.00",
+//            quantity = 20,
+//            created_at = "",
+//            updated_at = ""
+//        )
 //    )
+//
 //    val state = TicketUiState(
 //        ticketList = sampleTickets,
-//        selectedQuantities = mapOf(101 to 0, 102 to 2),
-//        totalTickets = 2,
-//        totalPrice = 400
+//        selectedQuantities = mapOf(101 to 1, 102 to 2), // id -> qty
+//        totalTickets = 3,
+//        totalPrice = 200 + (2 * 150)
 //    )
+//
+//    MaterialTheme {
+//        TicketScreen(
+//            uiState = state,
+//            onQuantityChange = { _, _ -> },
+//            onGetTicketClick = {}
+//        )
+//    }
+//}
 
-//    TicketScreen(
-//        uiState = state,
-//        onQuantityChange = { _, _ -> },
-//        onGetTicketClick = {}
+//@Preview(
+//    name = "TicketScreen – empty (no selection => no bottom bar)",
+//    showBackground = true,
+//    widthDp = 411
+//)
+//@Composable
+//fun TicketScreenPreview_Empty() {
+//    val sampleTickets = listOf(
+//        TicketType(
+//            id = 201,
+//            event_id = 2,
+//            event_source = "concert",
+//            role_type = "Balcony",
+//            name = "Balcony",
+//            price = "399.00",
+//            quantity = 5,
+//            created_at = "",
+//            updated_at = ""
+//        )
 //    )
+//
+//    val state = TicketUiState(
+//        ticketList = sampleTickets,
+//        selectedQuantities = mapOf(201 to 0),
+//        totalTickets = 0,
+//        totalPrice = 0
+//    )
+//
+//    MaterialTheme {
+//        TicketScreen(
+//            uiState = state,
+//            onQuantityChange = { _, _ -> },
+//            onGetTicketClick = {}
+//        )
+//    }
+//}
+
+@Preview(
+    name = "BottomCheckoutBar",
+    showBackground = true,
+    widthDp = 411
+)
+@Composable
+fun BottomCheckoutBarPreview() {
+    MaterialTheme {
+        BottomCheckoutBar(
+            totalPrice = 749,
+            ticketCount = 2,
+            onGetTicketClick = {}
+        )
+    }
 }

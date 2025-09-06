@@ -41,6 +41,7 @@ import androidx.compose.material.icons.filled.WatchLater
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 
 
@@ -73,7 +74,11 @@ fun CommonTopBar(
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 8.dp)
+                maxLines = 1,                               // <- only one line
+                overflow = TextOverflow.Ellipsis,           // <- show "..."
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .weight(1f)
             )
         }
     }
@@ -133,18 +138,7 @@ fun HeaderSection() {
                 lineHeight = 36.sp
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "Delhi",
-                    color = Color.White,
-                    fontSize = 15.sp
-                )
-                Icon(
-                    imageVector = Icons.Default.KeyboardArrowDown,
-                    contentDescription = "Change location",
-                    tint = Color.White
-                )
-            }
+
         }
         Icon(
             imageVector = Icons.Outlined.Notifications,

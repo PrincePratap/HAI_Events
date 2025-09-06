@@ -27,7 +27,10 @@ import java.util.Locale
 @Composable
 fun GaneshTheaterScreen(
     uiState: GaneshTheaterUiState,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    clickOnProceed : (String) -> Unit = {},
+
+
 ) {
     val vScroll = rememberScrollState()
     val hScroll = rememberScrollState()
@@ -94,7 +97,7 @@ fun GaneshTheaterScreen(
                         Button(
                             enabled = selected.isNotEmpty(),
                             onClick = {
-                                // TODO: handle continue/checkout
+                                clickOnProceed(totalPriceText)
                             }
                         ) { Text("Proceed") }
                     }

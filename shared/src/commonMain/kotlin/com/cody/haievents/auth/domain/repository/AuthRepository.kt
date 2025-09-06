@@ -13,6 +13,9 @@ import com.cody.haievents.auth.data.model.EditUserResponse
 import com.cody.haievents.auth.data.model.GetUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
+import com.cody.haievents.auth.model.EditUserProfileRequest
+import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.util.Result
 
 
@@ -22,8 +25,11 @@ internal interface AuthRepository {
     suspend fun loginUser(loginRequest: LoginRequest): Result<AuthResultData>
     suspend fun changePassword(request: ChangePasswordRequest): Result<ChangePasswordResponse>
     suspend fun homePage(): Result<HomePageResponse>
-    suspend fun editUser(request: EditUserRequest): Result<EditUserResponse>
     suspend fun getUser(): Result<GetUserResponse>
+    suspend fun updateUser(request: EditUserProfileRequest): Result<ProfileUpdateResponse>
+    suspend fun getTermsConditions(type : Int): Result<TermsConditionsResponse>
+
+
 
 
 

@@ -1,7 +1,10 @@
 package com.cody.haievents.Show.domain.repository
 
 import com.cody.haievents.Show.data.getShowTicketResponse
+import com.cody.haievents.Show.model.AllCategoryResponse
+import com.cody.haievents.Show.model.BlogItemResponse
 import com.cody.haievents.Show.model.BlogsListResponse
+import com.cody.haievents.Show.model.CategoryItemsResponse
 import com.cody.haievents.Show.model.CategoryResponse
 import com.cody.haievents.Show.model.CreateUserEventRequest
 import com.cody.haievents.Show.model.CreateUserEventResponse
@@ -27,5 +30,11 @@ internal interface ShowRepository {
     suspend fun uploadEventImage(imageBytes: ByteArray, fileName: String) : Result<UploadEventImage>
     suspend fun getGaneshTheater(): Result<GaneshTheaterGetSeatResponse>
     suspend fun ganeshTheaterBooking(request: GaneshTheaterBookingRequest): Result<GaneshTheaterGetSeatResponse>
+    suspend fun getAllCategory(): Result<AllCategoryResponse>
+    suspend fun getCategoryItems(categoryID : Int): Result<CategoryItemsResponse>
+    suspend fun getBlogsItem(blogsId : Int): Result<BlogItemResponse>
+
+
+
 }
 

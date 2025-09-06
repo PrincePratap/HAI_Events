@@ -7,11 +7,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cody.haievents.auth.domain.usecase.GetUserUseCase
+import com.cody.haievents.auth.domain.usecase.UpdateUserUseCase
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch
 
 class EditProfileViewModel(
-    private val getUserUseCase: GetUserUseCase
+    private val getUserUseCase: GetUserUseCase,
+    private val updateUserUseCase: UpdateUserUseCase
 ) : ViewModel() {
 
     companion object {
@@ -46,6 +48,51 @@ class EditProfileViewModel(
 //                        TAG,
 //                        "getUser(): mapped -> firstName='$firstName', lastName='$lastName', dob='$dob', phone='$telephone'"
 //                    )
+
+                    if (user != null) {
+                        uiState = uiState.copy(
+                            firstName = user.firstName,
+                            lastName = user.lastName,
+                            dob = user.detail.dob ?: "",
+                            telephone = user.detail.telephone ?: "",
+                            address = user.detail.address ?: "",
+                            zipCode = user.detail.zip ?: "",
+                            isLoading = false,
+                            errorMessage = null,
+                            succeed = true
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun updateUser() {
+        Log.i(TAG, "getUser(): started")
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true, errorMessage = null, succeed = false)
+
+            when (val result = updateUserUseCase(
+                firstName = uiState.firstName,
+                lastName = uiState.lastName,
+                dob = uiState.dob,
+                address = uiState.address,
+                zip = uiState.zipCode,
+                image = ""
+            )) {
+                is Result.Error -> {
+                    Log.w(TAG, "getUser(): failed -> ${result.message}")
+                    uiState = uiState.copy(
+                        isLoading = false,
+                        errorMessage = result.message ?: "Something went wrong"
+                    )
+                }
+
+                is Result.Success -> {
+
+                    val user = result.data?.data
+                    Log.i(TAG, "getUser(): success, mapping response to UI state")
+
 
                     if (user != null) {
                         uiState = uiState.copy(

@@ -20,16 +20,23 @@ import androidx.compose.foundation.layout.fillMaxSize
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items // Correct import for LazyColumn items
+import com.cody.haievents.android.common.components.CommonTopBar
 
 
 @Composable
 fun SearchScreen(
     uiState: SearchUiState, // Removed default value to encourage providing state
     onQueryChange: (String) -> Unit,
-    navigateToShowDetails: (Int) -> Unit
+    navigateToShowDetails: (Int) -> Unit,
+    navigationBack: () -> Unit
 ) {
     // 1. Use a Column to structure the screen vertically
     Column(modifier = Modifier.fillMaxSize()) {
+
+        CommonTopBar(
+            title = "Search the your events",
+            onBackClick =   navigationBack)
+
         ShowsSearchBar(
             query = uiState.query,
             onQueryChange = onQueryChange,
@@ -46,8 +53,8 @@ fun SearchScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp) // Adds space between items
             ) {
-                // 3. Add a header as the first item in the LazyColumn
-                // This makes the header scroll away with the list content.
+
+
                 item {
                     Text(
                         text = "Latest Updates",

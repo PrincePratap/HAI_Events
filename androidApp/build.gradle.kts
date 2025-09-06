@@ -68,5 +68,12 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("com.razorpay:checkout:1.6.33")
+//    implementation("phonepe.intentsdk.android.release:IntentSDK:5.1.1")
+//    implementation ("com.phonepe.intent.sdk.api:phonepe-intent:")
+    implementation ("phonepe.intentsdk.android.release:IntentSDK:5.1.1")
+
+//    implementation("com.phonepe.android.sdk.release:phonepe-payments-sdk:1.0.0") // Replace with actual version
+
+
 
 }

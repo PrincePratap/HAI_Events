@@ -60,7 +60,8 @@ class EventDetailsViewModel(
                     )
                     uiState.copy(
                         isLoading = false,
-                        succeed = true
+                        succeed = true,
+                        eventImage = uploadResult.data?.imageUrl ?: ""
                     )
                 }
             }
@@ -142,6 +143,7 @@ data class EventDetailsUiState(
     var eventDate: String = "",
     var eventTime: String = "",
     var eventDescription: String = "",
+    var eventImage: String = "",
     var ticketTypesList: List<TicketTypeRequest> = emptyList(),
     var builtRequest: CreateUserEventRequest? = null,
     var isLoading: Boolean = false,
