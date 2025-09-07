@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import com.cody.haievents.android.screens.destinations.HomePageDestination
+import com.cody.haievents.android.screens.destinations.RegisterDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
@@ -13,7 +14,6 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun Login(
     navigator: DestinationsNavigator,
-
 ) {
     val viewModel: LoginViewModel = koinViewModel()
     Log.d("LoginComposable", "Login Composable Loaded")
@@ -35,6 +35,12 @@ fun Login(
         onLoginClick = {
             Log.d("LoginComposable", "Login button clicked")
             viewModel.login()
+        },
+        onRegisterClick = {
+            navigator.navigate(RegisterDestination.route)
+        },
+        onForgotPasswordClick = {
+            navigator.navigate(RegisterDestination.route)
         }
     )
 

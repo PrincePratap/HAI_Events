@@ -83,4 +83,5 @@ dependencies {
     implementation(libs.checkout)
     implementation(libs.androidx.foundation.layout.android)
     implementation(libs.androidx.core.i18n)
+    implementation(libs.androidx.compose.material.core)
 }

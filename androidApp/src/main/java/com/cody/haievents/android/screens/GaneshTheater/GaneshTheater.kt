@@ -41,8 +41,10 @@ fun GaneshTheater() {
     // 👇 Observe paymentResponse trigger
     LaunchedEffect(uiState.paymentResponse) {
         uiState.paymentResponse?.let { resp ->
-            val orderId = resp.order.orderId
-            val token = resp.order.token
+            Log.d("GaneshTheater", "orderID ${resp.merchantOrderId}  token ${resp.token}")
+
+            val orderId = resp.merchantOrderId
+            val token = resp.token
             context.startPayment(token, orderId)   // call MainActivity method
             viewModel.clearPaymentTrigger()        // reset so it doesn’t repeat
         }

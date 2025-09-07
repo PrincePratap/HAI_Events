@@ -1,4 +1,3 @@
-// androidApp/src/main/java/com/cody/haievents/android/main/MainActivity.kt
 package com.cody.haievents.android.main
 
 import android.app.Activity
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import com.cody.haievents.android.common.theming.MyApplicationTheme
 import com.phonepe.intent.sdk.api.PhonePeKt
 import com.phonepe.intent.sdk.api.models.PhonePeEnvironment
-import java.util.UUID
 
 
 private const val TAG = "PhonePeIntegration"
@@ -48,7 +46,7 @@ class MainActivity : ComponentActivity() {
             merchantId = "M234FIQGR25BJ",
             flowId = "FLOW_" + System.currentTimeMillis(),
             phonePeEnvironment = PhonePeEnvironment.RELEASE,  // ← prod
-            enableLogging = false,
+            enableLogging = true,
             appId = packageName
         )
 
@@ -62,43 +60,40 @@ class MainActivity : ComponentActivity() {
 
     fun startPayment(token: String, orderId: String) {
         try {
+            Log.i(TAG, "startPayment() orderId=$orderId, token.len=${token}")
             PhonePeKt.startCheckoutPage(
                 context = this,
                 token = token,
                 orderId = orderId,
                 activityResultLauncher = phonePeLauncher
             )
-        } catch (e: Exception) {
-            Log.e(TAG, "startCheckoutPage failed", e)
-            Toast.makeText(this, "Unable to start PhonePe", Toast.LENGTH_SHORT).show()
+        } catch (e: Throwable) {
+            Log.e(TAG, "startCheckoutPage threw", e)
+            Toast.makeText(this, "PhonePe launch failed: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private val phonePeLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-            Log.w(TAG, "SDK returned resultCode=${result.resultCode}")
-            val data = result.data
-            data?.extras?.keySet()?.forEach { k ->
-                Log.d(TAG, "result.extra[$k]=${data.extras?.get(k)}")
-            }
-
-            when (result.resultCode) {
-                Activity.RESULT_OK -> {
-                    Toast.makeText(
-                        this,
-                        "Returned from PhonePe (verify on server)",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                else -> {
-                    Toast.makeText(
-                        this,
-                        "Payment cancelled/failed (verify on server)",
-                        Toast.LENGTH_SHORT
-                    ).show()
+            Log.w(TAG, "SDK resultCode=${result.resultCode}")
+            val intent = result.data
+            if (intent == null) {
+                Log.w(TAG, "No intent data returned")
+            } else {
+                Log.i(TAG, "data=$intent")
+                intent.extras?.keySet()?.forEach { k ->
+                    Log.i(TAG, "extra[$k]=${intent.extras?.get(k)}")
                 }
             }
+
+            val msg = when (result.resultCode) {
+                Activity.RESULT_OK -> "Payment flow finished (verify on server)"
+                Activity.RESULT_CANCELED -> "Payment canceled by user (verify on server)"
+                else -> "Payment failed/unknown (verify on server)"
+            }
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+
         }
 
 

@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun BookingBottomBar(
     amount: String= "0",
-    onBookClick: () -> Unit = {}
+    onBookClick:  () -> Unit = {}
 ) {
     // Use Surface for the card-like container with a white background.
     Surface(

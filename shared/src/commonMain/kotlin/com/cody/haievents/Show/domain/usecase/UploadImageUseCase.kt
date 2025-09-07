@@ -15,7 +15,6 @@ class UploadImageUseCase : KoinComponent {
     suspend operator fun invoke(
         imageBytes: ByteArray,
         fileName: String
-
         ): Result<UploadEventImage> {
 
 

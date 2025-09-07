@@ -20,7 +20,8 @@ data class CreateUserEventRequest(
     @SerialName("ifsc_code") val ifscCode: String? = null,
     @SerialName("account_number") val accountNumber: String? = null,
     @SerialName("bank_phone_number") val bankPhoneNumber: String? = null,
-    @SerialName("ticket_types") val ticketTypes: List<TicketTypeRequest>? = null
+    @SerialName("ticket_types") val ticketTypes: List<TicketTypeRequest>? = null,
+    @SerialName("image_path") val imagePath: String? = null
 )
 
 @Serializable

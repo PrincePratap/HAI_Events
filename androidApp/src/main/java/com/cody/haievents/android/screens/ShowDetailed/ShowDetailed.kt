@@ -3,6 +3,7 @@ package com.cody.haievents.android.screens.ShowDetailed
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import com.cody.haievents.android.common.componets.dialog.ChairSelectionDialog
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
 import com.cody.haievents.android.screens.destinations.GaneshTheaterDestination
 import com.cody.haievents.android.screens.destinations.TicketDestination
@@ -19,7 +20,7 @@ private const val TAG = "ShowDetailedRoute"
 fun ShowDetailed(
     navigator: DestinationsNavigator,
     showId: Int
-    ) {
+) {
 
     Log.d(TAG, "HomePage Composable entered composition.")
 
@@ -39,13 +40,14 @@ fun ShowDetailed(
         uiState = uiState,
         navigationBack = { navigator.navigateUp() },
         navigateToTicketList = {
-            if(uiState.showDetail?.theaterType==2){
-                navigator.navigate(GaneshTheaterDestination.route)
-            }else{
-                navigator.navigate(TicketDestination(showId))
-            }
+            navigator.navigate(TicketDestination(showId))
+        },
+        navigateToGaneshTheater = {
+            navigator.navigate(GaneshTheaterDestination.route)
 
         }
+
+
     )
 
 

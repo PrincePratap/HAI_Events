@@ -15,10 +15,6 @@ import androidx.compose.ui.platform.LocalContext
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
-
-// Imports for building a ticket list for the validator
-import com.cody.haievents.Show.model.TicketTypeRequest
-import com.cody.haievents.Show.model.Role
 import com.cody.haievents.android.screens.destinations.EventImageAndTicketsDestination
 
 @Destination
@@ -36,25 +32,25 @@ fun EventDetails(navigator: DestinationsNavigator) {
     var pickedName by remember { mutableStateOf<String?>(null) }
 
     // Image picker
-    val imagePickerLauncher =
-        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            pickedUri = uri
-            if (uri != null) {
-                // Try to extract a display name; fall back to default
-                pickedName = context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-                    val idx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    if (idx >= 0 && cursor.moveToFirst()) cursor.getString(idx) else null
-                } ?: "image_${System.currentTimeMillis()}.jpg"
-
-                // Read bytes and call ViewModel
-                context.contentResolver.openInputStream(uri)?.use { stream ->
-                    val bytes = stream.readBytes()
-                    viewModel.uploadEventImage(bytes, pickedName ?: "image.jpg")
-                }
-            } else {
-                Log.d("EventDetails", "Image picker canceled")
-            }
-        }
+//    val imagePickerLauncher =
+//        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+//            pickedUri = uri
+//            if (uri != null) {
+//                // Try to extract a display name; fall back to default
+//                pickedName = context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+//                    val idx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+//                    if (idx >= 0 && cursor.moveToFirst()) cursor.getString(idx) else null
+//                } ?: "image_${System.currentTimeMillis()}.jpg"
+//
+//                // Read bytes and call ViewModel
+//                context.contentResolver.openInputStream(uri)?.use { stream ->
+//                    val bytes = stream.readBytes()
+//                    viewModel.uploadEventImage(bytes, pickedName ?: "image.jpg")
+//                }
+//            } else {
+//                Log.d("EventDetails", "Image picker canceled")
+//            }
+//        }
 
     // React to validation results (optional navigation place-holder)
     LaunchedEffect(uiState.succeed, uiState.errorMessage) {

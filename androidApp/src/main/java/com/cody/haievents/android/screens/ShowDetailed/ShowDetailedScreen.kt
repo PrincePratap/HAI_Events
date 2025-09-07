@@ -60,6 +60,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.cody.haievents.android.common.componets.dialog.ChairSelectionDialog
 
 // Define the primary color from the image for reusability
 private val goldColor = Color(0xFFD1A34F)
@@ -74,8 +75,11 @@ fun DetailedPagePreview() {
 fun ShowDetailedScreen(
     uiState: ShowDetailedUiState,
     navigationBack: () -> Unit = {},
-    navigateToTicketList: () -> Unit = {}
+    navigateToTicketList:  () -> Unit = {},
+    navigateToGaneshTheater : (Int) -> Unit = {}
 ) {
+    var showDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             CommonTopBar(
@@ -86,7 +90,13 @@ fun ShowDetailedScreen(
             uiState.startPrice?.let {
                 BookingBottomBar(
                     amount = it,
-                    onBookClick = navigateToTicketList
+                    onBookClick = {
+                        if(uiState.showDetail?.theaterType == 2){
+                            showDialog = true
+                        }else{
+                            navigateToTicketList()
+                        }
+                    }
                 )
             }
         },
@@ -112,7 +122,22 @@ fun ShowDetailedScreen(
             }
         }
     }
+
+    if (showDialog) {
+        ChairSelectionDialog(
+            onDismiss = { showDialog = false },
+            onSelectCushion = {
+                showDialog = false
+                navigateToGaneshTheater(1) // Navigate further (Cushion)
+            },
+            onSelectPlastic = {
+                showDialog = false
+                navigateToGaneshTheater(2) // Navigate further (Plastic)
+            }
+        )
+    }
 }
+
 
 
 
@@ -351,3 +376,9 @@ private fun Modifier.noRippleClickable(onClick: () -> Unit) = composed {
         onClick = onClick
     )
 }
+//        ChairSelectionDialog(
+//            onDismiss = {},
+//            onSelect = {}
+//        )
+
+

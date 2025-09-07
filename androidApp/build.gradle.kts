@@ -12,11 +12,10 @@ android {
     compileSdk = 35
     defaultConfig {
         applicationId = "com.cody.haievents.android"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-//        buildConfigField("String", "RAZORPAY_API_KEY", "\"${localProperties.getProperty("RAZORPAY_API_KEY")}\"")
 
     }
     buildFeatures {

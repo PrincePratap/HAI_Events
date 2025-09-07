@@ -20,15 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// --- Optional local colors (unused if your theme provides these) ---
-private val GoldColor = Color(0xFFC7A440)
-private val DarkBackgroundColor = Color(0xFF1C1C1E)
-private val WhiteColor = Color.White
+
 private val GrayColor = Color.Gray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
+    userName  : String = "Cody Rajput ",
+    userEmail : String = "CodyRajput@gmail.com",
     onBackClick: () -> Unit = {},
     onEditProfileClick: () -> Unit = {},
     onYourListedEventsClick: () -> Unit = {},
@@ -77,14 +76,14 @@ fun ProfileScreen(
 
             // --- User info ---
             Text(
-                text = "Rajesh Singh",
+                text = userName,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "rajeshsingh@email.com",
+                text = userEmail,
                 style = MaterialTheme.typography.bodyMedium,
                 color = GrayColor
             )

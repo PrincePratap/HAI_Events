@@ -12,8 +12,8 @@ class EventDetailsUseCase {
         organiserName: String,
         contactEmail: String,
         eventLocation: String,
-        eventDate: String,          // YYYY-MM-DD, DD-MM-YYYY, or DD/MM/YYYY
-        eventTime: String,          // HH:mm, h:mm AM/PM, or "h:mm AM/PM - h:mm AM/PM"
+        eventDate: String,
+        eventTime: String,
         eventDescription: String,
         ticketTypesList: List<TicketTypeRequest>
     ): Result<CreateUserEventRequest> {
@@ -31,11 +31,7 @@ class EventDetailsUseCase {
         if (eventDescription.isBlank()) return Result.Error(message ="Event description cannot be empty")
         if (eventDescription.trim().length < 10) return Result.Error(message ="Event description should be at least 10 characters")
 
-//        val normalizedDate = normalizeDateToIso(eventDate.trim())
-//            ?: return Result.Error(message ="Invalid date. Use YYYY-MM-DD or DD-MM-YYYY or DD/MM/YYYY")
-//
-//        val normalizedTime = normalizeTimeOrRange(eventTime.trim())
-//            ?: return Result.Error(message = "Invalid time. Use HH:mm, h:mm AM/PM, or a range like 6:30 PM - 9:30 PM")
+
 
         if (ticketTypesList.isEmpty()) return Result.Error(message ="Add at least one ticket type")
 
@@ -81,87 +77,11 @@ class EventDetailsUseCase {
             ifscCode = null,
             accountNumber = null,
             bankPhoneNumber = null,
-            ticketTypes = cleanedTickets
+            ticketTypes = emptyList()
         )
 
         return Result.Success(payload)
     }
 
-//    // ---------------- helpers (KMM-safe, no java.time, no String.format) ----------------
-//
-//    private fun isValidEmail(email: String): Boolean {
-//        val regex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\$")
-//        return regex.matches(email.trim())
-//    }
-//
-//    /** Accepts: YYYY-MM-DD, DD-MM-YYYY, DD/MM/YYYY → returns ISO YYYY-MM-DD */
-//    private fun normalizeDateToIso(input: String): String? {
-//        val s = input.trim()
-//        return when {
-//            // ISO: YYYY-MM-DD
-//            s.matches(Regex("\\d{4}-\\d{2}-\\d{2}")) -> {
-//                val (y, m, d) = s.split("-").map { it.toInt() }
-//                runCatching { LocalDate(y, m, d) }.getOrNull()?.let { isoDate(it.year, it.monthNumber, it.dayOfMonth) }
-//            }
-//            // DD-MM-YYYY
-//            s.matches(Regex("\\d{2}-\\d{2}-\\d{4}")) -> {
-//                val (d, m, y) = s.split("-").map { it.toInt() }
-//                runCatching { LocalDate(y, m, d) }.getOrNull()?.let { isoDate(it.year, it.monthNumber, it.dayOfMonth) }
-//            }
-//            // DD/MM/YYYY
-//            s.matches(Regex("\\d{2}/\\d{2}/\\d{4}")) -> {
-//                val (d, m, y) = s.split("/").map { it.toInt() }
-//                runCatching { LocalDate(y, m, d) }.getOrNull()?.let { isoDate(it.year, it.monthNumber, it.dayOfMonth) }
-//            }
-//            else -> null
-//        }
-//    }
-//
-//    /** Accepts single "HH:mm" or "h:mm AM/PM", or range "… - …" → returns "HH:mm" or "HH:mm - HH:mm" */
-//    private fun normalizeTimeOrRange(input: String): String? {
-//        val parts = input.split(" - ").map { it.trim() }
-//        return when (parts.size) {
-//            1 -> parseTimeTo24h(parts[0])
-//            2 -> {
-//                val start = parseTimeTo24h(parts[0]) ?: return null
-//                val end = parseTimeTo24h(parts[1]) ?: return null
-//                "$start - $end"
-//            }
-//            else -> null
-//        }
-//    }
-//
-//    /** Parses "HH:mm" or "h:mm AM/PM" → "HH:mm" */
-//    private fun parseTimeTo24h(input: String): String? {
-//        val s = input.trim().replace(Regex("\\s+"), " ")
-//        // 12h with AM/PM
-//        Regex("(?i)^(\\d{1,2}):(\\d{2})\\s*([AP]M)\$").matchEntire(s)?.let { m ->
-//            val h = m.groupValues[1].toInt()
-//            val min = m.groupValues[2].toInt()
-//            val meridian = m.groupValues[3].uppercase()
-//            if (h !in 1..12 || min !in 0..59) return null
-//            val hh = when (meridian) {
-//                "AM" -> if (h == 12) 0 else h
-//                "PM" -> if (h == 12) 12 else h + 12
-//                else -> return null
-//            }
-//            return hhmm(hh, min)
-//        }
-//        // 24h
-//        Regex("^(\\d{1,2}):(\\d{2})\$").matchEntire(s)?.let { m ->
-//            val h = m.groupValues[1].toInt()
-//            val min = m.groupValues[2].toInt()
-//            if (h in 0..23 && min in 0..59) return hhmm(h, min)
-//        }
-//        return null
-//    }
-//
-//    // ---- tiny formatting helpers using padStart (KMM-safe) ----
-//    private fun isoDate(y: Int, m: Int, d: Int): String =
-//        "${y.toString().padStart(4, '0')}-${m.toString().padStart(2, '0')}-${d.toString().padStart(2, '0')}"
-//
-//    private fun hhmm(h: Int, m: Int): String =
-//        "${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}"
-//
-//    private fun pretty(s: String) = s.lowercase().replaceFirstChar { it.titlecase() }
+
 }

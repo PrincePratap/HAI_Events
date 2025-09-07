@@ -47,7 +47,7 @@ class GaneshTheaterViewModel(
     }
 
     fun makePayment() {
-        val amount = 1 // ₹200 — ensure SERVER converts to paise when calling PhonePe
+        val amount = 30 // ₹200 — ensure SERVER converts to paise when calling PhonePe
         val meta = Meta(
             seats = listOf(Seat("Y", 42), Seat("U", 44)),
         )
@@ -63,8 +63,8 @@ class GaneshTheaterViewModel(
                     _uiState.update { it.copy(isLoading = false, errorMessage = result.message) }
                 }
                 is Result.Success -> {
-                    val orderId = result.data?.order?.orderId
-                    val phonepeToken = result.data?.order?.token
+                    val orderId = result.data?.merchantOrderId
+                    val phonepeToken = result.data?.token
                     Log.i(
                         TAG, "makePayment: create-order OK -> orderId=$orderId, hasTokenParam=$phonepeToken"
                     )

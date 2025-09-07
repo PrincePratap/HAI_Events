@@ -12,6 +12,7 @@ foundationLayoutAndroid = "1.7.2"
 billing = "1.1.0"
 coreI18n = "1.0.0"
 activityKtx = "1.8.0"
+composeMaterialCore = "1.5.0"
 
 [libraries]
 jetbrains-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetimeVersion" }
@@ -29,6 +30,7 @@ androidx-foundation-layout-android = { group = "androidx.compose.foundation", na
 billing = { group = "com.google.androidbrowserhelper", name = "billing", version.ref = "billing" }
 androidx-core-i18n = { group = "androidx.core", name = "core-i18n", version.ref = "coreI18n" }
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
+androidx-compose-material-core = { group = "androidx.wear.compose", name = "compose-material-core", version.ref = "composeMaterialCore" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
