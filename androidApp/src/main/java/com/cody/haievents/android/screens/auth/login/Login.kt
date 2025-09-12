@@ -4,6 +4,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.cody.haievents.android.screens.auth.forgetpassword.ForgetPassword
+import com.cody.haievents.android.screens.destinations.ForgetPasswordDestination
 import com.cody.haievents.android.screens.destinations.HomePageDestination
 import com.cody.haievents.android.screens.destinations.RegisterDestination
 import com.ramcosta.composedestinations.annotation.Destination
@@ -40,7 +42,7 @@ fun Login(
             navigator.navigate(RegisterDestination.route)
         },
         onForgotPasswordClick = {
-            navigator.navigate(RegisterDestination.route)
+            navigator.navigate(ForgetPasswordDestination.route)
         }
     )
 

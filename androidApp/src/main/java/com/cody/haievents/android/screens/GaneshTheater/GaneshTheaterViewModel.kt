@@ -46,8 +46,8 @@ class GaneshTheaterViewModel(
         }
     }
 
-    fun makePayment() {
-        val amount = 30 // ₹200 — ensure SERVER converts to paise when calling PhonePe
+    fun makePayment(totalAmount: String) {
+        val amount = 1
         val meta = Meta(
             seats = listOf(Seat("Y", 42), Seat("U", 44)),
         )

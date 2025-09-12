@@ -66,7 +66,6 @@ fun GaneshTheaterBlockFirst(
                 color = colorOf("A"), price = priceOf("A"))
         }
 
-        // ===== MID COLUMN (no labels) =====
         Column(
             verticalArrangement = Arrangement.spacedBy(RowGap),
             horizontalAlignment = Alignment.CenterHorizontally

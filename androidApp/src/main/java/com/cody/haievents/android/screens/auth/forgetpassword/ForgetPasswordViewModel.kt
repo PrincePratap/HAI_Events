@@ -6,37 +6,36 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cody.haievents.android.screens.auth.login.LoginUiState
-import com.cody.haievents.auth.domain.usecase.LogInUseCase
+import com.cody.haievents.auth.domain.usecase.ForgetPasswordUseCase
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch
 
 class ForgetPasswordViewModel(
-    private val useCase: LogInUseCase
-): ViewModel() {
+    private val useCase: ForgetPasswordUseCase
+) : ViewModel() {
 
-    var uiState by mutableStateOf(LoginUiState())
+    var uiState by mutableStateOf(ForgetPasswordUiState())
         private set
 
-    fun login() {
-        Log.d("LoginViewModel", "Login started with email=${uiState.identifiers}, password=${uiState.password}")
+    fun submitForgetPasswordRequest() {
+        Log.d(TAG, "Forget password started with email=${uiState.email}")
 
         viewModelScope.launch {
-            uiState = uiState.copy(isLoading = true)
+            uiState = uiState.copy(isLoading = true, errorMessage = null, succeed = false)
 
-            val authResultData = useCase(uiState.identifiers, uiState.password)
+            val result = useCase(uiState.email)
 
-            uiState = when (authResultData) {
+            uiState = when (result) {
                 is Result.Error -> {
-                    Log.e("LoginViewModel", "Login failed: ${authResultData.message}")
+                    Log.e(TAG, "Forget password failed: ${result.message}")
                     uiState.copy(
                         isLoading = false,
-                        errorMessage = authResultData.message
+                        errorMessage = result.message
                     )
                 }
 
                 is Result.Success -> {
-                    Log.d("LoginViewModel", "Login successful!")
+                    Log.d(TAG, "Forget password successful, response=${result.data}")
                     uiState.copy(
                         isLoading = false,
                         succeed = true
@@ -46,10 +45,20 @@ class ForgetPasswordViewModel(
         }
     }
 
-    fun updateIdentifiers(input: String) {
-        Log.d("LoginViewModel", "Email updated: $input")
-        uiState = uiState.copy(identifiers = input)
+    fun updateEmail(input: String) {
+        Log.d(TAG, "Email input updated: $input")
+        uiState = uiState.copy(email = input)
     }
 
-
+    companion object {
+        private const val TAG = "ForgetPasswordViewModel"
+    }
 }
+
+
+data class ForgetPasswordUiState(
+    var email: String = "",
+    var isLoading: Boolean = false,
+    var errorMessage: String? = null,
+    var succeed: Boolean = false
+)

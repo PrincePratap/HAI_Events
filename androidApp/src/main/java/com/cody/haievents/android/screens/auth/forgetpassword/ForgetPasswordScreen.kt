@@ -52,14 +52,11 @@ import com.cody.haievents.android.screens.auth.login.LoginUiState
 
 @Composable
 fun ForgetPasswordScreen(
-    uiState: LoginUiState  = LoginUiState(),
+    uiState: ForgetPasswordUiState  = ForgetPasswordUiState(),
     onIdentifierChange: (String) -> Unit = {},
-    onPasswordChange: (String) -> Unit = {},
-    onLoginClick: () -> Unit = {},
+    onSendOTPClick: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
-    onForgotPasswordClick: () -> Unit = {}
 ) {
-    var passwordVisible by remember { mutableStateOf(false) }
 
 
     Surface(
@@ -85,7 +82,7 @@ fun ForgetPasswordScreen(
 
             // Phone or Email Field
             OutlinedTextField(
-                value = uiState.identifiers,
+                value = uiState.email,
                 onValueChange = onIdentifierChange,
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Enter Email or Phone", color = Color.Gray) },
@@ -112,7 +109,7 @@ fun ForgetPasswordScreen(
 
             // Log In Button
             CommonButton(
-                onClick = onLoginClick,
+                onClick = onSendOTPClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -161,16 +158,13 @@ fun ForgetPasswordScreen(
 private fun ForgetPasswordScreenPreview_Light() {
     MaterialTheme {
         ForgetPasswordScreen(
-            uiState = LoginUiState(
-                identifiers = "user@example.com",
-                password = "Secret@123",
+            uiState = ForgetPasswordUiState(
+                email = "user@example.com",
                 isLoading = false
             ),
             onIdentifierChange = {},
-            onPasswordChange = {},
-            onLoginClick = {},
+            onSendOTPClick = {},
             onRegisterClick = {},
-            onForgotPasswordClick = {}
         )
     }
 }

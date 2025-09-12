@@ -14,6 +14,10 @@ import com.cody.haievents.auth.data.model.GetUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.model.EditUserProfileRequest
+import com.cody.haievents.auth.model.ForgetPasswordOTPTokenResponse
+import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
+import com.cody.haievents.auth.model.ForgetPasswordRequest
+import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.util.Result
@@ -28,12 +32,7 @@ internal interface AuthRepository {
     suspend fun getUser(): Result<GetUserResponse>
     suspend fun updateUser(request: EditUserProfileRequest): Result<ProfileUpdateResponse>
     suspend fun getTermsConditions(type : Int): Result<TermsConditionsResponse>
-
-
-
-
-
-
-
+    suspend fun forgetPassword(request: ForgetPasswordRequest): Result<ForgetPasswordResponse>
+    suspend fun verifyForgetPasswordOtp(request: ForgetPasswordOtpTokenRequest):Result<ForgetPasswordOTPTokenResponse>
 
 }

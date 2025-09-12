@@ -19,13 +19,11 @@ fun EditProfile(
 
     val uiState = viewModel.uiState
 
-    // One-time initial load
     LaunchedEffect(Unit) {
         Log.i(TAG, "Initial load -> viewModel.getUser()")
         viewModel.getUser()
     }
 
-    // Log effects for error/success changes (optional but helpful)
     LaunchedEffect(uiState.errorMessage) {
         uiState.errorMessage?.let { Log.w(TAG, "uiState.errorMessage: $it") }
     }

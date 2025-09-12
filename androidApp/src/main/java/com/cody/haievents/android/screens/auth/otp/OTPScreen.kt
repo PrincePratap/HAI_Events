@@ -32,10 +32,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cody.haievents.android.R
 import com.cody.haievents.android.common.componets.AuthTopBar
 import com.cody.haievents.android.common.componets.ResendTimeFun
+import com.cody.haievents.android.common.theming.darkBackgroundColor
+import com.cody.haievents.android.common.theming.goldColor
 
 // We can define the colors used in the app for consistency.
-val goldColor = Color(0xFFC9A43B)
-val darkBackgroundColor = Color(0xFF1C1C1E)
+
 
 @Composable
 fun OTPScreen(

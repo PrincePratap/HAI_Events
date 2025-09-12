@@ -1,8 +1,5 @@
 package com.cody.haievents.android.screens.GaneshTheater
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -50,11 +47,11 @@ fun GaneshTheater() {
         }
     }
 
-    GaneshTheaterScreen(
+    GaneshTheaterCushionChairsScreen(
         uiState = uiState,
         clickOnProceed = {
             if (!uiState.isLoading) {
-                viewModel.makePayment()
+                viewModel.makePayment(it)
             }
         }
     )

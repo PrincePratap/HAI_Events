@@ -7,6 +7,10 @@ import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.domain.model.AuthResultData
 import com.cody.haievents.auth.domain.repository.AuthRepository
 import com.cody.haievents.auth.model.EditUserProfileRequest
+import com.cody.haievents.auth.model.ForgetPasswordOTPTokenResponse
+import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
+import com.cody.haievents.auth.model.ForgetPasswordRequest
+import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.data.local.UserPreferences
@@ -124,6 +128,28 @@ internal class AuthRepositoryImpl(
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to get terms conditions and privacy policy : ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun forgetPassword(request: ForgetPasswordRequest): Result<ForgetPasswordResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = authService.forgetPassword(request)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to forget password: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun verifyForgetPasswordOtp(request: ForgetPasswordOtpTokenRequest): Result<ForgetPasswordOTPTokenResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = authService.forgetPasswordOtp(request)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to forget password otp: ${e.message}")
             }
         }
     }

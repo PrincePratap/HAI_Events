@@ -1,12 +1,37 @@
 package com.cody.haievents.android.screens.GaneshTheater
 
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidthIn
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -16,16 +41,17 @@ import androidx.compose.ui.unit.dp
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
 import com.cody.haievents.android.common.components.CommonTopBar
 import com.cody.haievents.android.common.componets.SeatKey
+import com.cody.haievents.android.common.componets.ZoomableCanvas
 import com.cody.haievents.android.common.componets.theater.GaneshTheaterBlockFirst
 import com.cody.haievents.android.common.componets.theater.GaneshTheaterBlockSecond
 import com.cody.haievents.android.common.componets.theater.GaneshTheaterBlockThird
-import com.cody.haievents.android.common.componets.ZoomableCanvas
 import java.text.NumberFormat
 import java.util.Locale
 
-@OptIn(ExperimentalLayoutApi::class)
+
+
 @Composable
-fun GaneshTheaterCushionChairsScreen(
+fun GaneshTheaterPlasticChairsScreen(
     uiState: GaneshTheaterUiState,
     onBackClick: () -> Unit = {},
     clickOnProceed: (String) -> Unit = {},
@@ -141,7 +167,6 @@ fun GaneshTheaterCushionChairsScreen(
                                     .padding(8.dp),
                                 verticalArrangement = Arrangement.spacedBy(20.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally,
-                                // tiny breathing room above bottomBar
                                 contentPadding = PaddingValues(bottom = 8.dp)
                             ) {
                                 item {
@@ -186,8 +211,8 @@ fun GaneshTheaterCushionChairsScreen(
 
 @Preview(showBackground = true, widthDp = 1200, heightDp = 800)
 @Composable
-private fun SeatBookingScreenPreview() {
-    GaneshTheaterCushionChairsScreen(
+private fun GaneshTheaterPlasticChairsScreenPreview() {
+    GaneshTheaterPlasticChairsScreen(
         uiState = GaneshTheaterUiState(
             isLoading = false,
             succeed = true,

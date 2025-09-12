@@ -6,6 +6,10 @@ import com.cody.haievents.auth.data.model.GetUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.auth.data.model.ProfileImageUploadResponse
 import com.cody.haievents.auth.model.EditUserProfileRequest
+import com.cody.haievents.auth.model.ForgetPasswordOTPTokenResponse
+import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
+import com.cody.haievents.auth.model.ForgetPasswordRequest
+import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.data.remote.KtorApi
@@ -72,6 +76,15 @@ internal class AuthService: KtorApi() {
         endPoint(path = "/api/page")
         parameter("type", type)
 
+    }.body()
+
+    suspend fun forgetPassword(request: ForgetPasswordRequest): ForgetPasswordResponse = client.post {
+        setBody(request)
+        endPoint(path = "/api/forgot-password")
+    }.body()
+    suspend fun forgetPasswordOtp(request: ForgetPasswordOtpTokenRequest): ForgetPasswordOTPTokenResponse = client.post {
+        setBody(request)
+        endPoint(path = "/api/register/verify-otp")
     }.body()
 
 

@@ -7,11 +7,7 @@ import androidx.compose.ui.graphics.Color
 
 val MyRed = Color(0xFFD23030)
 val GoldenYellow = Color(0xFFD6AD41)
-
 val AlmostBlack = Color(0xFF181818)
-
-
-
 
  val goldColor = Color(0xFFC9A24C)
  val lightGoldColor = Color(0xFFE6C47C)
@@ -20,11 +16,10 @@ val AlmostBlack = Color(0xFF181818)
 val lightGrayColor = Color(0xFFE0E0E0)
 
 
-
-// Define colors to match the screenshot
 val lightGoldBorder = Color(0xFFE0D0B1)
 val darkTextColor = Color.Black
 val lightTextColor = Color.Gray
+val darkBackgroundColor = Color(0xFF1C1C1E)
 
 
 
