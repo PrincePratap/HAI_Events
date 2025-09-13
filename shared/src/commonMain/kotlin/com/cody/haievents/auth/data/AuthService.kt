@@ -11,6 +11,8 @@ import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
 import com.cody.haievents.auth.model.ForgetPasswordRequest
 import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.SetNewPasswordRequest
+import com.cody.haievents.auth.model.SetNewPasswordResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.data.remote.KtorApi
 import io.ktor.client.call.body
@@ -87,6 +89,10 @@ internal class AuthService: KtorApi() {
         endPoint(path = "/api/register/verify-otp")
     }.body()
 
+    suspend fun resetPassword(request: SetNewPasswordRequest): SetNewPasswordResponse = client.post {
+        setBody(request)
+        endPoint(path = "/api/reset-password")
+    }.body()
 
 
 

@@ -12,6 +12,8 @@ import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
 import com.cody.haievents.auth.model.ForgetPasswordRequest
 import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.SetNewPasswordRequest
+import com.cody.haievents.auth.model.SetNewPasswordResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.data.local.UserPreferences
 import com.cody.haievents.common.data.local.toUserSettings
@@ -150,6 +152,17 @@ internal class AuthRepositoryImpl(
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to forget password otp: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun resetPassword(request: SetNewPasswordRequest): Result<SetNewPasswordResponse>{
+        return withContext(dispatcher.io){
+            try {
+                val response = authService.resetPassword(request)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to reset password: ${e.message}")
             }
         }
     }

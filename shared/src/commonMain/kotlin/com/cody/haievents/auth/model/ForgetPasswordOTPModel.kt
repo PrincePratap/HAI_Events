@@ -10,8 +10,6 @@ data class ForgetPasswordOtpTokenRequest(
 )
 
 
-
-
 @Serializable
 data class ForgetPasswordOTPTokenResponse(
     @SerialName("status") val status: Boolean,

@@ -1,7 +1,6 @@
 package com.cody.haievents.android.screens.auth.newpassword
 
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
@@ -18,7 +16,6 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -45,10 +42,10 @@ import com.cody.haievents.android.screens.auth.login.LoginUiState
 
 @Composable
 fun NewPasswordScreen(
-    uiState: LoginUiState,
-    onPasswordChange: (String) -> Unit,
-    onConfirmPasswordChange: (String) -> Unit,
-    onLoginClick: () -> Unit,
+    uiState: NewPasswordUiState = NewPasswordUiState(),
+    onPasswordChange: (String) -> Unit = { },
+    onConfirmPasswordChange: (String) -> Unit = {},
+    onSetNewPasswordClick: () -> Unit = {},
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -107,7 +104,7 @@ fun NewPasswordScreen(
 
 
             OutlinedTextField(
-                value = uiState.password,
+                value = uiState.confirmPassword,
                 onValueChange = onConfirmPasswordChange,
                 modifier = Modifier.fillMaxWidth(),
                 placeholder = { Text("Enter your new confirm password", color = Color.Gray) },
@@ -140,7 +137,7 @@ fun NewPasswordScreen(
 
             // Log In Button
             CommonButton(
-                onClick = onLoginClick,
+                onClick = onSetNewPasswordClick,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -170,9 +167,7 @@ private fun PreviewNewPasswordScreen_Light() {
     var confirm by remember { mutableStateOf("") }
 
     NewPasswordScreen(
-        uiState = ui,
         onPasswordChange = { ui = ui.copy(password = it) },
         onConfirmPasswordChange = { confirm = it },
-        onLoginClick = { /* no-op */ }
     )
 }

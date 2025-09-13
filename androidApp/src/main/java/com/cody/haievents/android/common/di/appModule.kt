@@ -7,6 +7,7 @@ import com.cody.haievents.android.screens.addEvent.eventDetails.EventDetailsView
 import com.cody.haievents.android.screens.allCategories.AllCategoriesViewModel
 import com.cody.haievents.android.screens.auth.forgetpassword.ForgetPasswordViewModel
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
+import com.cody.haievents.android.screens.auth.newpassword.NewPasswordViewModel
 import com.cody.haievents.android.screens.auth.otp.OTPViewModel
 import com.cody.haievents.android.screens.auth.register.RegisterViewModel
 import com.cody.haievents.android.screens.blogsDetail.BlogsDetailViewModel
@@ -41,5 +42,6 @@ val appModule = module {
     viewModel{ WebPageViewModel(get()) }
     viewModel{ ProfileViewModel(get()) }
     viewModel{ ForgetPasswordViewModel(get()) }
+    viewModel{ NewPasswordViewModel(get()) }
 
 }

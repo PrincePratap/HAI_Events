@@ -10,6 +10,7 @@ import com.cody.haievents.auth.domain.usecase.ForgetPasswordUseCase
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch
 
+
 class ForgetPasswordViewModel(
     private val useCase: ForgetPasswordUseCase
 ) : ViewModel() {
@@ -38,14 +39,16 @@ class ForgetPasswordViewModel(
                     Log.d(TAG, "Forget password successful, response=${result.data}")
                     uiState.copy(
                         isLoading = false,
-                        succeed = true
+                        succeed = true,
+                        token = result.data?.token ?: "",
+                        email = result.data?.email ?: ""
                     )
                 }
             }
         }
     }
 
-    fun updateEmail(input: String) {
+    fun updateEmail(input: String){
         Log.d(TAG, "Email input updated: $input")
         uiState = uiState.copy(email = input)
     }
@@ -58,6 +61,7 @@ class ForgetPasswordViewModel(
 
 data class ForgetPasswordUiState(
     var email: String = "",
+    var token: String = "",
     var isLoading: Boolean = false,
     var errorMessage: String? = null,
     var succeed: Boolean = false

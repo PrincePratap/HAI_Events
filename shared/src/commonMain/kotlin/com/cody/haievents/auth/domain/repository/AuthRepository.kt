@@ -19,6 +19,8 @@ import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
 import com.cody.haievents.auth.model.ForgetPasswordRequest
 import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.SetNewPasswordRequest
+import com.cody.haievents.auth.model.SetNewPasswordResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
 import com.cody.haievents.common.util.Result
 
@@ -34,5 +36,7 @@ internal interface AuthRepository {
     suspend fun getTermsConditions(type : Int): Result<TermsConditionsResponse>
     suspend fun forgetPassword(request: ForgetPasswordRequest): Result<ForgetPasswordResponse>
     suspend fun verifyForgetPasswordOtp(request: ForgetPasswordOtpTokenRequest):Result<ForgetPasswordOTPTokenResponse>
+    suspend fun resetPassword(request: SetNewPasswordRequest): Result<SetNewPasswordResponse>
+
 
 }
