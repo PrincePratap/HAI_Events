@@ -21,17 +21,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.theming.goldColor
+import com.cody.haievents.android.common.theming.lightGoldBorder
+import com.cody.haievents.android.common.theming.screenBackgroundColor
 
 // --- Main Screen Composable ---
 
 @Composable
 fun BankTransferDetailsScreen() {
-    // Colors derived from the image
-    val goldColor = Color(0xFFC7A441)
-    val lightGoldBorder = Color(0xFFD3B878)
-    val screenBackgroundColor = Color(0xFF1C1C1E)
 
-    // State for the form fields
     var accountHolderName by remember { mutableStateOf("") }
     var bankName by remember { mutableStateOf("") }
     var accountNumber by remember { mutableStateOf("") }
@@ -51,7 +49,6 @@ fun BankTransferDetailsScreen() {
                 .padding(24.dp)
         ) {
             // Stepper showing both steps are completed
-            EventCreationStepper(isSecondStepActive = true)
             Spacer(modifier = Modifier.height(32.dp))
 
             // Form sections
@@ -145,43 +142,7 @@ fun AddEventTopBar(backgroundColor: Color) {
     }
 }
 
-@Composable
-fun EventCreationStepper(isSecondStepActive: Boolean) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        Step(text = "Event\nDetails", isCompleted = true)
-        HorizontalDivider(modifier = Modifier.weight(1f).padding(horizontal = 8.dp), color = Color.DarkGray)
-        Step(text = "Bank Transfer\nDetails", isCompleted = isSecondStepActive)
-    }
-}
 
-@Composable
-fun Step(text: String, isCompleted: Boolean) {
-    val circleColor = if (isCompleted) Color.DarkGray else Color.LightGray
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            modifier = Modifier
-                .size(24.dp)
-                .clip(RoundedCornerShape(50))
-                .background(circleColor),
-            contentAlignment = Alignment.Center
-        ) {
-            if (isCompleted) {
-                Icon(
-                    imageVector = Icons.Default.Check,
-                    contentDescription = "Completed",
-                    tint = Color.White,
-                    modifier = Modifier.size(16.dp)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text, textAlign = TextAlign.Center, fontSize = 12.sp, lineHeight = 14.sp, color = Color.Black)
-    }
-}
 
 @Composable
 fun EventInputSection(label: String, content: @Composable () -> Unit) {

@@ -23,6 +23,7 @@ import io.ktor.http.HttpHeaders.ContentType
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.HttpResponse
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.utils.io.core.* // ByteReadPacket
@@ -80,13 +81,17 @@ internal class AuthService: KtorApi() {
 
     }.body()
 
-    suspend fun forgetPassword(request: ForgetPasswordRequest): ForgetPasswordResponse = client.post {
+    suspend fun forgetPassword(request: ForgetPasswordRequest): HttpResponse {
+        return client.post {
+            setBody(request)
+            endPoint(path = "/api/forgot-password")
+        }
+    }
+
+    suspend fun forgetPasswordOtp(request: ForgetPasswordOtpTokenRequest)
+    : HttpResponse = client.post {
         setBody(request)
-        endPoint(path = "/api/forgot-password")
-    }.body()
-    suspend fun forgetPasswordOtp(request: ForgetPasswordOtpTokenRequest): ForgetPasswordOTPTokenResponse = client.post {
-        setBody(request)
-        endPoint(path = "/api/register/verify-otp")
+        endPoint(path = "/api/verify-otp")
     }.body()
 
     suspend fun resetPassword(request: SetNewPasswordRequest): SetNewPasswordResponse = client.post {

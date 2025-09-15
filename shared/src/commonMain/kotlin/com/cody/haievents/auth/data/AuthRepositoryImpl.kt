@@ -20,6 +20,8 @@ import com.cody.haievents.common.data.local.toUserSettings
 import com.cody.haievents.common.util.DispatcherProvider
 import kotlinx.coroutines.withContext
 import com.cody.haievents.common.util.Result
+import io.ktor.client.call.body
+import io.ktor.client.statement.bodyAsText
 
 internal class AuthRepositoryImpl(
     private val dispatcher: DispatcherProvider,
@@ -134,24 +136,42 @@ internal class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun forgetPassword(request: ForgetPasswordRequest): Result<ForgetPasswordResponse> {
-        return withContext(dispatcher.io) {
+    override suspend fun forgetPassword(request: ForgetPasswordRequest): Result<ForgetPasswordResponse>{
+        return withContext(dispatcher.io){
             try {
                 val response = authService.forgetPassword(request)
-                Result.Success(response)
+                val statusCode = response.status.value
+
+                if (statusCode == 200) {
+                    Result.Success(response.body())
+                }else if (statusCode == 404) {
+                    Result.Error(message = "your email is not registered")
+                }
+                else {
+                    Result.Error(message = "Error $statusCode: ${response.bodyAsText()}")
+                }
             } catch (e: Exception) {
-                Result.Error(message = "Failed to forget password: ${e.message}")
+                Result.Error(message = "Network error: ${e.message}")
             }
         }
     }
+
 
     override suspend fun verifyForgetPasswordOtp(request: ForgetPasswordOtpTokenRequest): Result<ForgetPasswordOTPTokenResponse> {
         return withContext(dispatcher.io) {
             try {
                 val response = authService.forgetPasswordOtp(request)
-                Result.Success(response)
+                val statusCode = response.status.value
+                if (statusCode == 200) {
+                    Result.Success(response.body())
+                }else if (statusCode == 401) {
+                    Result.Error(message = "Invalid OTP")
+                }
+                else {
+                    Result.Error(message = "Error $statusCode: ${response.bodyAsText()}")
+                }
             } catch (e: Exception) {
-                Result.Error(message = "Failed to forget password otp: ${e.message}")
+                Result.Error(message = "Network error: ${e.message}")
             }
         }
     }

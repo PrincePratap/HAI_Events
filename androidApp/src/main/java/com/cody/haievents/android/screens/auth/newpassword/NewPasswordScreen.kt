@@ -33,11 +33,11 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.cody.haievents.android.common.components.inputField.PasswordTextField
 import com.cody.haievents.android.common.componets.AuthTopBar
 import com.cody.haievents.android.common.componets.CommonButton
 import com.cody.haievents.android.screens.auth.login.Gold
 import com.cody.haievents.android.screens.auth.login.LoginUiState
-
 
 
 @Composable
@@ -66,69 +66,24 @@ fun NewPasswordScreen(
                 subtitle = "Create a strong password to secure your account"
             )
 
-
-
-
-
-
-
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Password Field
-            OutlinedTextField(
+            PasswordTextField(
                 value = uiState.password,
                 onValueChange = onPasswordChange,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Enter your new password", color = Color.Gray) },
-                shape = RoundedCornerShape(12.dp),
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                trailingIcon = {
-                    val icon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                    val description = if (passwordVisible) "Hide password" else "Show password"
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = icon, contentDescription = description, tint = Color.Gray)
-                    }
-                },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Gold,
-                    unfocusedIndicatorColor = Gold.copy(alpha = 0.5f),
-                    cursorColor = Gold
-                )
+                placeholder = "Enter new password"
             )
-            Spacer(modifier = Modifier.height(48.dp))
 
+            Spacer(modifier = Modifier.height(20.dp))
 
-
-            OutlinedTextField(
+            PasswordTextField(
                 value = uiState.confirmPassword,
                 onValueChange = onConfirmPasswordChange,
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Enter your new confirm password", color = Color.Gray) },
-                shape = RoundedCornerShape(12.dp),
-                singleLine = true,
-                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                trailingIcon = {
-                    val icon = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-                    val description = if (passwordVisible) "Hide password" else "Show password"
-                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                        Icon(imageVector = icon, contentDescription = description, tint = Color.Gray)
-                    }
-                },
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
-                    focusedIndicatorColor = Gold,
-                    unfocusedIndicatorColor = Gold.copy(alpha = 0.5f),
-                    cursorColor = Gold
-                )
+                placeholder = "Enter confirm password"
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+
+
 
 
 
@@ -142,7 +97,11 @@ fun NewPasswordScreen(
                     .fillMaxWidth()
                     .height(50.dp),
                 text = (if (uiState.isLoading) {
-                    CircularProgressIndicator(color = Color.White, strokeWidth = 2.dp, modifier = Modifier.size(20.dp))
+                    CircularProgressIndicator(
+                        color = Color.White,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(20.dp)
+                    )
                 } else {
                     "Set New Password"
                 }).toString()
@@ -155,6 +114,7 @@ fun NewPasswordScreen(
         }
     }
 }
+
 @Preview(
     name = "NewPassword - Light",
     showBackground = true,

@@ -15,7 +15,6 @@ class EventDetailsUseCase {
         eventDate: String,
         eventTime: String,
         eventDescription: String,
-        ticketTypesList: List<TicketTypeRequest>
     ): Result<CreateUserEventRequest> {
 
         // -------- validations --------
@@ -33,35 +32,9 @@ class EventDetailsUseCase {
 
 
 
-        if (ticketTypesList.isEmpty()) return Result.Error(message ="Add at least one ticket type")
 
-        // Validate & sanitize tickets (no !!; require role; trim name)
-        val seen = mutableSetOf<String>()
-        val cleanedTickets = mutableListOf<TicketTypeRequest>()
 
-        ticketTypesList.forEachIndexed { idx, t ->
-            val row = idx + 1
-            val name = t.name?.trim().orEmpty()
-            val qty  = t.quantity ?: 0
-            val price = t.price ?: 0
-            val role = t.role ?: return Result.Error(message ="Ticket #$row: role is required")
 
-            if (name.isEmpty()) return Result.Error(message ="Ticket #$row: name cannot be empty")
-            if (qty <= 0) return Result.Error(message ="Ticket #$row: quantity must be greater than 0")
-            if (price < 0) return Result.Error(message ="Ticket #$row: price cannot be negative")
-
-            val key = "${role.name}:${name.lowercase()}"
-//            if (!seen.add(key)) {
-//                return Result.Error(message ="Duplicate ticket for role '${pretty(role.name)}' with name '$name'")
-//            }
-
-            cleanedTickets += TicketTypeRequest(
-                name = name,
-                price = price,
-                role = role,
-                quantity = qty
-            )
-        }
 
         // -------- build sanitized payload (step 1 only) --------
         val payload = CreateUserEventRequest(
@@ -70,8 +43,8 @@ class EventDetailsUseCase {
              organizerName = organiserName.trim(),
             email = contactEmail.trim(),
             location = eventLocation.trim(),
-            date = "",             // normalized to YYYY-MM-DD
-            time = "",             // "HH:mm" or "HH:mm - HH:mm"
+            date = eventDate,             // normalized to YYYY-MM-DD
+            time = eventTime,             // "HH:mm" or "HH:mm - HH:mm"
             accountHolder = null,              // filled in Bank step
             bankName = null,
             ifscCode = null,

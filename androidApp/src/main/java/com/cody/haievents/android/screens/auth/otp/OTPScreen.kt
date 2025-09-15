@@ -185,24 +185,7 @@ fun OtpInputFields(
     )
 }
 
-@Composable
-fun ExpiryTimerText(timer: String) {
-    val annotatedString = buildAnnotatedString {
-        withStyle(style = SpanStyle(color = Color.Gray, fontSize = 14.sp)) {
-            append("Code expires in: ")
-        }
-        withStyle(
-            style = SpanStyle(
-                color = goldColor,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 14.sp
-            )
-        ) {
-            append(timer)
-        }
-    }
-    Text(annotatedString)
-}
+
 
 @Composable
 fun ResendOtpText(isEnabled: Boolean, onClick: () -> Unit) {

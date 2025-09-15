@@ -32,7 +32,6 @@ fun ProfileScreen(
     onEditProfileClick: () -> Unit = {},
     onYourListedEventsClick: () -> Unit = {},
     onChangePasswordClick: () -> Unit = {},
-    onMembershipClick: () -> Unit = {},
     onNotificationsClick: () -> Unit = {},
     onHelpSupportClick: () -> Unit = {},
     onTermsClick: () -> Unit = {},
@@ -107,11 +106,7 @@ fun ProfileScreen(
                     text = "Change Password",
                     onClick = onChangePasswordClick
                 )
-                ProfileMenuItem(
-                    icon = Icons.Outlined.CardMembership,
-                    text = "Membership",
-                    onClick = onMembershipClick
-                )
+
                 ProfileMenuItem(
                     icon = Icons.Outlined.Notifications,
                     text = "Notification",
@@ -202,7 +197,6 @@ fun ProfileScreenPreview() {
         onEditProfileClick = {},
         onYourListedEventsClick = {},
         onChangePasswordClick = {},
-        onMembershipClick = {},
         onNotificationsClick = {},
         onHelpSupportClick = {},
         onTermsClick = {},

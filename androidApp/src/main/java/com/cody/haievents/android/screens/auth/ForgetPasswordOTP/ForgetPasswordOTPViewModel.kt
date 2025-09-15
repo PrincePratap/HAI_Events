@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cody.haievents.auth.domain.usecase.ForgetPasswordOtpUseCase
 import com.cody.haievents.auth.domain.usecase.OtpVerificationUseCase
+import com.cody.haievents.auth.model.ForgetPasswordOTPTokenResponse
 import com.cody.haievents.common.util.Result
 import kotlinx.coroutines.launch
 
@@ -14,13 +16,13 @@ import kotlinx.coroutines.launch
 
 
 class ForgetPasswordOTPViewModel(
-    private val useCase: OtpVerificationUseCase
+    private val useCase: ForgetPasswordOtpUseCase
 ) : ViewModel() {
 
     // 1. Consistent TAG for all logs in this class
     private val TAG = "OTPViewModel"
 
-    var uiState by mutableStateOf(OtpUiState())
+    var uiState by mutableStateOf(ForgetPasswordOTPUiState())
         private set
 
     // 2. Lifecycle Logging: Know when the ViewModel is created
@@ -73,6 +75,8 @@ class ForgetPasswordOTPViewModel(
             Log.i(TAG, "State transition: isLoading -> true")
             uiState = uiState.copy(isLoading = true, errorMessage = null) // Clear previous errors
 
+            Log.i(TAG, "otp ${uiState.otp} token $token")
+
             val otpVerificationResult = useCase(otp = uiState.otp, token = token)
 
             uiState = when (otpVerificationResult) {
@@ -90,7 +94,8 @@ class ForgetPasswordOTPViewModel(
                     Log.i(TAG, "State transition: isLoading -> false, succeed -> true.")
                     uiState.copy(
                         isLoading = false,
-                        succeed = true
+                        succeed = true,
+                        response = otpVerificationResult.data
                     )
                 }
             }
@@ -101,9 +106,10 @@ class ForgetPasswordOTPViewModel(
 
 }
 
-data class OtpUiState(
+data class ForgetPasswordOTPUiState(
     var otp: String = "",
     var isLoading: Boolean = false,
     var errorMessage: String? = null,
-    var succeed: Boolean = false
+    var succeed: Boolean = false,
+    var response : ForgetPasswordOTPTokenResponse? = null
 )

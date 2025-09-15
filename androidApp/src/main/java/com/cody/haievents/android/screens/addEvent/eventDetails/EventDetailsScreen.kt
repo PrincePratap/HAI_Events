@@ -1,5 +1,6 @@
 package com.cody.haievents.android.screens.addEvent.eventDetails
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.cody.haievents.Show.model.Role
 import com.cody.haievents.Show.model.TicketTypeRequest
 import com.cody.haievents.android.common.components.CommonTopBar
+import com.cody.haievents.android.common.componets.CategoryDropdown
 import com.cody.haievents.android.common.componets.CommonButton
 import com.cody.haievents.android.common.componets.EventPosterUploader
 import com.cody.haievents.android.common.componets.TicketDetailsSection
@@ -50,7 +52,6 @@ fun EventDetailsScreen(
     onChangeEventTime: (String) -> Unit = {},
     onChangeEventDescription: (String) -> Unit = {},
 ) {
-    // 🔹 Dynamic list of ticket rows
 
     Scaffold(
         topBar = {
@@ -68,8 +69,6 @@ fun EventDetailsScreen(
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
-            EventProgressIndicator()
             Spacer(modifier = Modifier.height(24.dp))
 
             EventForm(
@@ -98,48 +97,10 @@ fun EventDetailsScreen(
     }
 }
 
-@Composable
-fun EventProgressIndicator() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        Step(title = "Event\nDetails", isActive = true)
-        Divider(
-            modifier = Modifier.weight(1f),
-            color = Color.LightGray,
-            thickness = 1.dp
-        )
-        Step(title = "Bank Transfer\nDetails", isActive = false)
-    }
-}
 
-@Composable
-fun Step(title: String, isActive: Boolean) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(120.dp)
-    ) {
-        Text(
-            text = title,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            color = if (isActive) darkTextColor else lightTextColor,
-            textAlign = TextAlign.Center,
-            lineHeight = 16.sp
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Icon(
-            imageVector = Icons.Default.CheckCircle,
-            contentDescription = title,
-            tint = if (isActive) darkTextColor else Color.LightGray,
-            modifier = Modifier.size(28.dp)
-        )
-    }
-}
 
-@OptIn(ExperimentalMaterial3Api::class)
+
+
 @Composable
 fun EventForm(
     eventTitle: String, onEventTitleChange: (String) -> Unit,
@@ -149,9 +110,11 @@ fun EventForm(
     eventDate: String, onEventDateChange: (String) -> Unit,
     eventTime: String, onEventTimeChange: (String) -> Unit,
     eventDescription: String, onEventDescriptionChange: (String) -> Unit,
-
-
 ) {
+
+    var showDatePicker by remember { mutableStateOf(false) }
+    var showTimePicker by remember { mutableStateOf(false) }
+
     val textFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = goldColor,
         unfocusedBorderColor = lightGoldBorder,
@@ -194,17 +157,22 @@ fun EventForm(
             FormInput(
                 label = "Event Date",
                 value = eventDate,
-                onValueChange = onEventDateChange,
+                onValueChange = onEventDateChange, // disable typing
                 placeholder = "yyyy-mm-dd",
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showDatePicker = true },
                 colors = textFieldColors
             )
+
             FormInput(
                 label = "Event Time",
                 value = eventTime,
-                onValueChange = onEventTimeChange,
-                placeholder = "HH:mm or 6:30 PM",
-                modifier = Modifier.weight(1f),
+                onValueChange = onEventTimeChange, // disable typing
+                placeholder = "HH:mm",
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable { showTimePicker = true },
                 colors = textFieldColors
             )
         }
@@ -250,51 +218,7 @@ fun FormInput(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun CategoryDropdown(colors: TextFieldColors) {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedCategory by remember { mutableStateOf("") }
-    val categories = listOf("Music", "Sports", "Conference", "Workshop", "Art")
 
-    Column {
-        Text("Event Category", fontWeight = FontWeight.Bold, color = darkTextColor)
-        Spacer(modifier = Modifier.height(8.dp))
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = { expanded = !expanded }
-        ) {
-            OutlinedTextField(
-                value = selectedCategory,
-                onValueChange = {},
-                readOnly = true,
-                placeholder = { Text("-Select category-", color = lightTextColor) },
-                trailingIcon = {
-                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .menuAnchor(),
-                shape = RoundedCornerShape(12.dp),
-                colors = colors
-            )
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                categories.forEach { category ->
-                    DropdownMenuItem(
-                        text = { Text(category) },
-                        onClick = {
-                            selectedCategory = category
-                            expanded = false
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
 
 
 

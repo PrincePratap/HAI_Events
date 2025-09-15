@@ -10,13 +10,14 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import com.cody.haievents.android.screens.NavGraphs
+import com.cody.haievents.android.screens.destinations.HelpSupportDestination
 import com.cody.haievents.android.screens.destinations.LoginDestination
 import com.ramcosta.composedestinations.utils.startDestination
 
 
 @Destination
 @Composable
-fun  Profile(navigator: DestinationsNavigator) {
+fun Profile(navigator: DestinationsNavigator) {
 
 
     val viewModel: ProfileViewModel = koinViewModel()
@@ -37,11 +38,14 @@ fun  Profile(navigator: DestinationsNavigator) {
         onEditProfileClick = {
             navigator.navigate(EditProfileDestination.route)
         },
-        onTermsClick ={
-            navigator.navigate(WebPageDestination(type = 1 ))
+        onTermsClick = {
+            navigator.navigate(WebPageDestination(type = 1))
         },
-        onPrivacyClick ={
-            navigator.navigate(WebPageDestination(type = 0 ))
+        onPrivacyClick = {
+            navigator.navigate(WebPageDestination(type = 0))
+        },
+        onHelpSupportClick = {
+            navigator.navigate(HelpSupportDestination.route)
         },
         onLogoutClick = {
             viewModel.clearUserData()

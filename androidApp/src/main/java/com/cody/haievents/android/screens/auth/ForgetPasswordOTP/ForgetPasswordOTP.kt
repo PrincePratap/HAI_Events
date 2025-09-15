@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.cody.haievents.android.screens.auth.otp.OTPScreen
 import com.cody.haievents.android.screens.auth.otp.OTPViewModel
 import com.cody.haievents.android.screens.destinations.HomePageDestination
+import com.cody.haievents.android.screens.destinations.NewPasswordDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.koin.androidx.compose.koinViewModel
@@ -16,7 +17,7 @@ import org.koin.androidx.compose.koinViewModel
 
 
 // 1. Use a specific TAG for this route
-private const val TAG = "OTPRoute"
+private const val TAG = "ForgetPasswordOTP"
 
 @Destination
 @Composable
@@ -27,7 +28,7 @@ fun ForgetPasswordOTP(
     // 2. Log entry and parameters for debugging navigation
     Log.d(TAG, "Composable entered composition. Received token: ${!token.isNullOrEmpty()}")
 
-    val viewModel: OTPViewModel = koinViewModel()
+    val viewModel: ForgetPasswordOTPViewModel = koinViewModel()
     val uiState = viewModel.uiState
     val context = LocalContext.current
 
@@ -38,7 +39,7 @@ fun ForgetPasswordOTP(
         }
     }
 
-    OTPScreen(
+    ForgetPasswordOTPScreen(
         uiState = uiState,
         onOTpValueChanged = {
             // 4. Log UI event delegation to the ViewModel
@@ -59,7 +60,7 @@ fun ForgetPasswordOTP(
     LaunchedEffect(key1 = uiState.succeed, key2 = uiState.errorMessage) {
         if (uiState.succeed) {
             Log.i(TAG, "Side Effect: Success state observed. Navigating to home screen and clearing back stack.")
-            navController.navigate(HomePageDestination.route)
+            navController.navigate(NewPasswordDestination(uiState.response?.token?: "empty_token"))
             // Inform the ViewModel that the navigation has been handled to prevent re-triggering
             viewModel.onNavigationHandled()
             Log.d(TAG, "Side Effect: Navigation event consumed by calling onNavigationHandled().")

@@ -4,7 +4,9 @@ import com.cody.haievents.android.screens.Blogs.BlogsViewModel
 import com.cody.haievents.android.screens.GaneshTheater.GaneshTheaterViewModel
 import com.cody.haievents.android.screens.ShowDetailed.ShowDetailedViewModel
 import com.cody.haievents.android.screens.addEvent.eventDetails.EventDetailsViewModel
+import com.cody.haievents.android.screens.addEvent.eventImageAndTickets.EventImageAndTicketsViewModel
 import com.cody.haievents.android.screens.allCategories.AllCategoriesViewModel
+import com.cody.haievents.android.screens.auth.ForgetPasswordOTP.ForgetPasswordOTPViewModel
 import com.cody.haievents.android.screens.auth.forgetpassword.ForgetPasswordViewModel
 import com.cody.haievents.android.screens.auth.login.LoginViewModel
 import com.cody.haievents.android.screens.auth.newpassword.NewPasswordViewModel
@@ -33,7 +35,6 @@ val appModule = module {
     viewModel { SearchViewModel(get()) }
     viewModel{ EditProfileViewModel(get(),get()) }
     viewModel { EventDetailsViewModel(get())}
-
     viewModel{ GaneshTheaterViewModel(get(),get()) }
     viewModel{ AllCategoriesViewModel(get()) }
     viewModel{ CategoriesShowsViewModel(get()) }
@@ -43,5 +44,7 @@ val appModule = module {
     viewModel{ ProfileViewModel(get()) }
     viewModel{ ForgetPasswordViewModel(get()) }
     viewModel{ NewPasswordViewModel(get()) }
+    viewModel{ ForgetPasswordOTPViewModel(get()) }
+    viewModel{ EventImageAndTicketsViewModel(get(),get()) }
 
 }

@@ -20,6 +20,9 @@ val lightGoldBorder = Color(0xFFE0D0B1)
 val darkTextColor = Color.Black
 val lightTextColor = Color.Gray
 val darkBackgroundColor = Color(0xFF1C1C1E)
+// Colors derived from the image
+
+val screenBackgroundColor = Color(0xFF1C1C1E)
 
 
 
