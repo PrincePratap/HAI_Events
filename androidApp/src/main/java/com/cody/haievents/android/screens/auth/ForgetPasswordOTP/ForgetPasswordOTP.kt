@@ -6,9 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import com.cody.haievents.android.screens.auth.otp.OTPScreen
-import com.cody.haievents.android.screens.auth.otp.OTPViewModel
-import com.cody.haievents.android.screens.destinations.HomePageDestination
+
 import com.cody.haievents.android.screens.destinations.NewPasswordDestination
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -52,8 +50,12 @@ fun ForgetPasswordOTP(
         },
         onResendClicked = {
             Log.d(TAG, "UI Event: onResendClicked triggered. Delegating to ViewModel.")
-            // viewModel.resendOtp() // Assuming you will add this function
+            viewModel.resendOTP(token)
+        },
+        onBackClick= {
+            navController.navigateUp()
         }
+
     )
 
     // 5. Handle one-time side effects safely with enhanced logging

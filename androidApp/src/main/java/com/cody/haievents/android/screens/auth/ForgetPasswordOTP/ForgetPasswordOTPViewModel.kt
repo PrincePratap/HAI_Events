@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cody.haievents.auth.domain.usecase.ForgetPasswordOtpUseCase
+import com.cody.haievents.auth.domain.usecase.ForgetPasswordReSendOTPUseCase
 import com.cody.haievents.auth.domain.usecase.OtpVerificationUseCase
 import com.cody.haievents.auth.model.ForgetPasswordOTPTokenResponse
 import com.cody.haievents.common.util.Result
@@ -16,7 +17,9 @@ import kotlinx.coroutines.launch
 
 
 class ForgetPasswordOTPViewModel(
-    private val useCase: ForgetPasswordOtpUseCase
+    private val useCase: ForgetPasswordOtpUseCase,
+    private val reSendOTPUseCase: ForgetPasswordReSendOTPUseCase
+
 ) : ViewModel() {
 
     // 1. Consistent TAG for all logs in this class
@@ -96,6 +99,40 @@ class ForgetPasswordOTPViewModel(
                         isLoading = false,
                         succeed = true,
                         response = otpVerificationResult.data
+                    )
+                }
+            }
+            Log.d(TAG, "submitOTP finished. Final UI State: $uiState")
+        }
+    }
+    fun resendOTP(token: String) {
+        // 3. Descriptive Action Logging: Clear log for what is about to happen
+        Log.d(TAG, "submit OTP called. Verifying OTP: '${token}' with token.")
+
+
+
+        viewModelScope.launch {
+            Log.i(TAG, "State transition: isLoading -> true")
+            uiState = uiState.copy(isLoading = true, errorMessage = null) // Clear previous errors
+
+
+            val otpVerificationResult = reSendOTPUseCase( token = token)
+
+            uiState = when (otpVerificationResult) {
+                is Result.Error -> {
+                    Log.e(TAG, "OTP verification failed. Reason: ${otpVerificationResult.message}")
+                    Log.i(TAG, "State transition: isLoading -> false, updating error message.")
+                    uiState.copy(
+                        isLoading = false,
+                        errorMessage = otpVerificationResult.message
+                    )
+                }
+
+                is Result.Success -> {
+                    Log.d(TAG, "OTP verification successful!")
+                    Log.i(TAG, "State transition: isLoading -> false, succeed -> true.")
+                    uiState.copy(
+                        isLoading = false,
                     )
                 }
             }

@@ -10,13 +10,14 @@ import com.cody.haievents.Show.model.CreateUserEventRequest
 import com.cody.haievents.Show.model.CreateUserEventResponse
 import com.cody.haievents.Show.model.GaneshTheaterBookingRequest
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
+import com.cody.haievents.Show.model.MyTicketDetails
+import com.cody.haievents.Show.model.MyTicketListResponse
 import com.cody.haievents.Show.model.OrderResponse
 import com.cody.haievents.Show.model.SearchShowResponse
 import com.cody.haievents.Show.model.ShowDetailPageResponse
 import com.cody.haievents.Show.model.UploadEventImage
 
 import com.cody.haievents.common.util.Result
-
 
 
 internal interface ShowRepository {
@@ -27,13 +28,14 @@ internal interface ShowRepository {
     suspend fun createOrder(totalAmount: String): Result<OrderResponse>
     suspend fun addEvent(requestBody: CreateUserEventRequest): Result<CreateUserEventResponse>
     suspend fun getAllCategories(): Result<CategoryResponse>
-    suspend fun uploadEventImage(imageBytes: ByteArray, fileName: String) : Result<UploadEventImage>
+    suspend fun uploadEventImage(imageBytes: ByteArray, fileName: String): Result<UploadEventImage>
     suspend fun getGaneshTheater(): Result<GaneshTheaterGetSeatResponse>
     suspend fun ganeshTheaterBooking(request: GaneshTheaterBookingRequest): Result<GaneshTheaterGetSeatResponse>
     suspend fun getAllCategory(): Result<AllCategoryResponse>
-    suspend fun getCategoryItems(categoryID : Int): Result<CategoryItemsResponse>
-    suspend fun getBlogsItem(blogsId : Int): Result<BlogItemResponse>
-
+    suspend fun getCategoryItems(categoryID: Int): Result<CategoryItemsResponse>
+    suspend fun getBlogsItem(blogsId: Int): Result<BlogItemResponse>
+    suspend fun myTicketList(): Result<MyTicketListResponse>
+    suspend fun myTicketDetails(ticketId: Int): Result<MyTicketDetails>
 
 
 }

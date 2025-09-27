@@ -3,11 +3,6 @@ package com.cody.haievents.auth.data
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
-
-
-
-
 // Login Request
 @Serializable
 data class LoginRequest(

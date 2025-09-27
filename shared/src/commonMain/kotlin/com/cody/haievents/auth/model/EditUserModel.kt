@@ -18,27 +18,30 @@ data class EditUserProfileRequest(
 
 
 
+
+
 @Serializable
 data class ProfileUpdateResponse(
-    @SerialName("status") val status: Boolean,
-    @SerialName("message") val message: String,
-    @SerialName("data") val data: UserData
+    val status: Boolean? = null,
+    val message: String? = null,
+    val data: UserData? = null
 )
 
 @Serializable
 data class UserData(
-    @SerialName("id") val id: Int,
-    @SerialName("first_name") val firstName: String,
-    @SerialName("last_name") val lastName: String,
-    @SerialName("email") val email: String,
-    @SerialName("detail") val detail: UserDetail
+    val id: Int? = null,
+    @SerialName("first_name") val firstName: String? = null,
+    @SerialName("last_name")  val lastName: String? = null,
+    val email: String? = null,
+    val detail: UserDetail? = null,
+    val authorization: String? = null
 )
 
 @Serializable
 data class UserDetail(
-    @SerialName("dob") val dob: String,
-    @SerialName("telephone") val telephone: String,
-    @SerialName("image") val image: String,
-    @SerialName("address") val address: String,
-    @SerialName("zip") val zip: String
+    val dob: String? = null,        // "1999-08-15"
+    val telephone: String? = null,
+    val image: String? = null,
+    val address: String? = null,
+    val zip: String? = null
 )

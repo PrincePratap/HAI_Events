@@ -10,6 +10,8 @@ import com.cody.haievents.Show.model.CreateUserEventRequest
 import com.cody.haievents.Show.model.CreateUserEventResponse
 import com.cody.haievents.Show.model.GaneshTheaterBookingRequest
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
+import com.cody.haievents.Show.model.MyTicketDetails
+import com.cody.haievents.Show.model.MyTicketListResponse
 import com.cody.haievents.Show.model.OrderRequest
 import com.cody.haievents.Show.model.OrderResponse
 import com.cody.haievents.Show.model.SearchShowResponse
@@ -107,6 +109,18 @@ internal class ShowService: KtorApi() {
         endPoint(path = "/api/events-by-category")
     }.body()
 
+
+
+    suspend fun myTicketList(token: String): MyTicketListResponse = client.get {
+        endPoint(path = "/api/my-bookings")
+        setToken(token)
+    }.body()
+
+    suspend fun myTicketDetails(ticketId: Int, token : String): MyTicketDetails = client.get {
+        endPoint(path = "/api/booking")
+        parameter("id", ticketId)
+        setToken(token)
+    }.body()
 
 
 

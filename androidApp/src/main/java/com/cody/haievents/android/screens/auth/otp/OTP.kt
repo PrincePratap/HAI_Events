@@ -23,7 +23,7 @@ fun OTP(
     token: String = "",
 ) {
     // 2. Log entry and parameters for debugging navigation
-    Log.d(TAG, "Composable entered composition. Received token: ${!token.isNullOrEmpty()}")
+    Log.d(TAG, "Composable entered composition. Received token: ${token.isNotEmpty()}")
 
     val viewModel: OTPViewModel = koinViewModel()
     val uiState = viewModel.uiState
@@ -49,7 +49,10 @@ fun OTP(
         },
         onResendClicked = {
             Log.d(TAG, "UI Event: onResendClicked triggered. Delegating to ViewModel.")
-            // viewModel.resendOtp() // Assuming you will add this function
+             viewModel.resendOTP(token) // Assuming you will add this function
+        },
+        onBackClick = {
+            navController.navigateUp()
         }
     )
 

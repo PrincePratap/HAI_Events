@@ -45,15 +45,20 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 
 
+private val TopBarHeight = 64.dp // common toolbar height
+
 @Composable
 fun CommonTopBar(
     title: String = "Open Mic",
     onBackClick: () -> Unit = {},
     modifier: Modifier = Modifier,
+    showBackButton: Boolean = true, // true = show, false = GONE
 ) {
     Surface(
         color = GoldenYellow,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(TopBarHeight),
         shadowElevation = 4.dp
     ) {
         Row(
@@ -62,27 +67,30 @@ fun CommonTopBar(
                 .padding(horizontal = 8.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(onClick = onBackClick) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.White
-                )
+            if (showBackButton) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
+                }
             }
             Text(
                 text = title,
                 color = Color.White,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1,                               // <- only one line
-                overflow = TextOverflow.Ellipsis,           // <- show "..."
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier
-                    .padding(start = 8.dp)
+                    .padding(start = if (showBackButton) 8.dp else 0.dp)
                     .weight(1f)
             )
         }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable

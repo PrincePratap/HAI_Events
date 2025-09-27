@@ -34,7 +34,15 @@ fun CustomTextField(
 
     OutlinedTextField(
         value = value,
-        onValueChange = onValueChange,
+        onValueChange = { newText ->
+            val adjusted = if (keyboardOptions == KeyboardType.Phone) {
+                // allow digits only, max 10 chars
+                newText.filter { it.isDigit() }.take(10)
+            } else {
+                newText
+            }
+            onValueChange(adjusted)
+        },
         modifier = modifier
             .fillMaxWidth()
             .border(
@@ -61,9 +69,9 @@ fun CustomTextField(
         ),
         singleLine = true,
         placeholder = { Text(text = placeholder) }
-
     )
 }
+
 
 
 @Composable

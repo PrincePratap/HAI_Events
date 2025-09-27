@@ -13,8 +13,12 @@ import com.cody.haievents.auth.data.model.EditUserResponse
 import com.cody.haievents.auth.data.model.GetUserResponse
 import com.cody.haievents.auth.data.model.HomePageResponse
 import com.cody.haievents.common.data.remote.KtorApi
+import com.cody.haievents.phonepe.model.BuyTicketRequest
+import com.cody.haievents.phonepe.model.BuyTicketResponse
 import com.cody.haievents.phonepe.model.PaymentRequestGaneshTheatre
 import com.cody.haievents.phonepe.model.PaymentResponseGaneshTheatre
+import com.cody.haievents.phonepe.model.PhonePeTicketRequest
+import com.cody.haievents.phonepe.model.PhonePeTicketRequestResponse
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.post
@@ -28,5 +32,17 @@ internal class PhonePeService: KtorApi() {
         endPoint(path = "/api/phonepe/create-order-token")
         setBody(request)
     }.body()
+
+    suspend fun phonePeTicketPurchase(request: PhonePeTicketRequest): PhonePeTicketRequestResponse = client.post{
+        endPoint(path = "/api/phonepe/pay-simple")
+        setBody(request)
+    }.body()
+
+    suspend fun buyTicket(token: String,request: BuyTicketRequest): BuyTicketResponse = client.post{
+        endPoint(path = "/api/book-item")
+        setBody(request)
+        setToken(token)
+    }.body()
+
 
 }

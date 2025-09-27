@@ -9,9 +9,12 @@ import com.cody.haievents.auth.domain.repository.AuthRepository
 import com.cody.haievents.auth.model.EditUserProfileRequest
 import com.cody.haievents.auth.model.ForgetPasswordOTPTokenResponse
 import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
+import com.cody.haievents.auth.model.ForgetPasswordReSendOTPResponse
 import com.cody.haievents.auth.model.ForgetPasswordRequest
 import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.ReSendOTPRequest
+import com.cody.haievents.auth.model.ReSendOTPResponse
 import com.cody.haievents.auth.model.SetNewPasswordRequest
 import com.cody.haievents.auth.model.SetNewPasswordResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
@@ -29,16 +32,7 @@ internal class AuthRepositoryImpl(
     private val userPreferences: UserPreferences
 ) : AuthRepository {
 
-    override suspend fun registerUser(registerRequest: RegisterRequest): Result<RegisterResponse> {
-        return withContext(dispatcher.io) {
-            try {
-                val response = authService.register(registerRequest)
-                Result.Success(response)
-            } catch (e: Exception) {
-                Result.Error(message = "Failed to send OTP: ${e.message}")
-            }
-        }
-    }
+
 
     override suspend fun otpVerification(otpRequest: OtpVerificationRequest): Result<AuthResultData> {
         return withContext(dispatcher.io) {
@@ -106,6 +100,8 @@ internal class AuthRepositoryImpl(
             try {
                 val token = userPreferences.getUserData().token
                 val response = authService.getUser(token)
+                val authData = response.toAuthResultData()
+                userPreferences.setUserData(authData.toUserSettings())
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to get homepage: ${e.message}")
@@ -118,6 +114,11 @@ internal class AuthRepositoryImpl(
             try {
                 val token = userPreferences.getUserData().token
                 val response = authService.updateUser(token, request)
+
+                val authData = response.toAuthResultData()
+                userPreferences.setUserData(authData.toUserSettings())
+
+
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to update user : ${e.message}")
@@ -183,6 +184,63 @@ internal class AuthRepositoryImpl(
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to reset password: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun forgetPasswordReSendPassword(request: ReSendOTPRequest): Result<ForgetPasswordReSendOTPResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = authService.forgetPasswordReSendPassword(request)
+                val statusCode = response.status.value
+                if (statusCode == 200) {
+                    Result.Success(response.body())
+                }else if (statusCode == 401) {
+                    Result.Error(message = "Invalid OTP")
+                }
+                else {
+                    Result.Error(message = "Error $statusCode: ${response.bodyAsText()}")
+                }
+            } catch (e: Exception) {
+                Result.Error(message = "Network error: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun reSendPassword(request: ReSendOTPRequest): Result<ReSendOTPResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = authService.reSendPassword(request)
+                val statusCode = response.status.value
+                if (statusCode == 200) {
+                    Result.Success(response.body())
+                }else if (statusCode == 401) {
+                    Result.Error(message = "Invalid OTP")
+                }
+                else {
+                    Result.Error(message = "Error $statusCode: ${response.bodyAsText()}")
+                }
+            } catch (e: Exception) {
+                Result.Error(message = "Network error: ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun registerUser(registerRequest: RegisterRequest): Result<RegisterResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val response = authService.register(registerRequest)
+                val statusCode = response.status.value
+                if (statusCode == 200) {
+                    Result.Success(response.body())
+                }else if (statusCode == 422) {
+                    Result.Error(message = "Email or phone number already exists")
+                }
+                else {
+                    Result.Error(message = "Error $statusCode: ${response.bodyAsText()}")
+                }
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to register user: ${e.message}")
             }
         }
     }

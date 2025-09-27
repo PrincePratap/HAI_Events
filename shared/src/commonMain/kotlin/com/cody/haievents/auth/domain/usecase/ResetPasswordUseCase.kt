@@ -42,11 +42,7 @@ class ResetPasswordUseCase : KoinComponent {
             return Result.Error(message = "Password must be at least 8 characters long.")
         }
 
-        // Optional: add stronger checks if your backend enforces them
-        // val strongRegex = Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).{8,}$")
-        // if (!strongRegex.matches(password)) {
-        //     return Result.Error("Password must include upper, lower case letters and a number.")
-        // }
+
 
         return try {
             withContext(Dispatchers.IO) {

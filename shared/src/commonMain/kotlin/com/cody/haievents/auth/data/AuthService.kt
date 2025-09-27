@@ -11,6 +11,7 @@ import com.cody.haievents.auth.model.ForgetPasswordOtpTokenRequest
 import com.cody.haievents.auth.model.ForgetPasswordRequest
 import com.cody.haievents.auth.model.ForgetPasswordResponse
 import com.cody.haievents.auth.model.ProfileUpdateResponse
+import com.cody.haievents.auth.model.ReSendOTPRequest
 import com.cody.haievents.auth.model.SetNewPasswordRequest
 import com.cody.haievents.auth.model.SetNewPasswordResponse
 import com.cody.haievents.auth.model.TermsConditionsResponse
@@ -30,10 +31,7 @@ import io.ktor.utils.io.core.* // ByteReadPacket
 
 internal class AuthService: KtorApi() {
 
-    suspend fun register(request: RegisterRequest): RegisterResponse = client.post {
-        endPoint(path = "/api/register/send-otp")
-        setBody(request)
-    }.body()
+
 
     suspend fun otpVerification(request: OtpVerificationRequest): OTPSuccessResponse = client.post {
         endPoint(path = "/api/register/verify-otp")
@@ -69,11 +67,7 @@ internal class AuthService: KtorApi() {
     }.body()
 
 
-    suspend fun updateUser(token : String, request: EditUserProfileRequest): ProfileUpdateResponse = client.post {
-        endPoint(path = "/api/profile/update")
-        setBody(request)
-        setToken(token)
-    }.body()
+
 
     suspend fun getTermsConditions(type :Int): TermsConditionsResponse = client.get {
         endPoint(path = "/api/page")
@@ -97,6 +91,29 @@ internal class AuthService: KtorApi() {
     suspend fun resetPassword(request: SetNewPasswordRequest): SetNewPasswordResponse = client.post {
         setBody(request)
         endPoint(path = "/api/reset-password")
+    }.body()
+
+    suspend fun reSendPassword(request: ReSendOTPRequest)
+            : HttpResponse = client.post {
+        setBody(request)
+        endPoint(path = "/api/signup/resend-otp")
+    }.body()
+
+    suspend fun forgetPasswordReSendPassword(request: ReSendOTPRequest)
+            : HttpResponse = client.post {
+        setBody(request)
+        endPoint(path = "/api/resend-otp")
+    }.body()
+
+    suspend fun register(request: RegisterRequest): HttpResponse = client.post {
+        endPoint(path = "/api/register/send-otp")
+        setBody(request)
+    }.body()
+
+    suspend fun updateUser(token : String, request: EditUserProfileRequest): ProfileUpdateResponse = client.post {
+        endPoint(path = "/api/profile/update")
+        setBody(request)
+        setToken(token)
     }.body()
 
 

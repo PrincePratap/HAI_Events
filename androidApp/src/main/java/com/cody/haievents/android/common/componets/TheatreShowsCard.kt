@@ -1,7 +1,6 @@
 package com.cody.haievents.android.common.componets
 
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,7 +31,11 @@ import com.cody.haievents.auth.data.model.ItemData
 
 
 @Composable
-fun TheatreShowsCard(item: FeaturedCategory? = null, onItemClick: (Int) -> Unit = {}){
+fun TheatreShowsCard(
+    item: FeaturedCategory? = null,
+    onItemClick: (Int) -> Unit = {},
+    onViewAllClick : () -> Unit = {}
+) {
 
     Column(
         modifier = Modifier
@@ -40,7 +43,7 @@ fun TheatreShowsCard(item: FeaturedCategory? = null, onItemClick: (Int) -> Unit 
             .background(MaterialTheme.colorScheme.surface)
     ) {
         Column(modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)) {
-            item?.name?.let { TheatreShowsHeader(headerText = it) }
+            item?.name?.let { TheatreShowsHeader(headerText = it , onViewAllClick = onViewAllClick)  }
             Spacer(modifier = Modifier.height(16.dp))
         }
 
@@ -50,7 +53,9 @@ fun TheatreShowsCard(item: FeaturedCategory? = null, onItemClick: (Int) -> Unit 
         ) {
             if (item != null) {
                 items(item.items) { show ->
-                    show.data?.let { TheatreShowCard(show = it, onItemClick = {onItemClick(it)}) }
+                    show.data?.let {
+                        TheatreShowCard(show = it, onItemClick = { onItemClick(it) }, )
+                    }
                 }
             }
         }
@@ -58,7 +63,10 @@ fun TheatreShowsCard(item: FeaturedCategory? = null, onItemClick: (Int) -> Unit 
 }
 
 @Composable
-fun TheatreShowsHeader(headerText: String = ""){
+fun TheatreShowsHeader(
+    headerText: String = "",
+    onViewAllClick: () -> Unit = {}
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -84,7 +92,9 @@ fun TheatreShowsHeader(headerText: String = ""){
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.clickable {}
+            modifier = Modifier.clickable {
+                onViewAllClick()
+            }
         )
     }
 }
@@ -108,7 +118,7 @@ fun InfoItem(icon: ImageVector, text: String) {
     }
 }
 
-@Preview(showBackground = true ,)
+@Preview(showBackground = true)
 @Composable
 fun TheatreShowsScreenPreview() {
 

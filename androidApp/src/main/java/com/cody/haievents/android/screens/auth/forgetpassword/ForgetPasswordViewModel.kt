@@ -52,6 +52,9 @@ class ForgetPasswordViewModel(
         Log.d(TAG, "Email input updated: $input")
         uiState = uiState.copy(email = input)
     }
+    fun onNavigationHandled() {
+        uiState = uiState.copy(succeed = false)
+    }
 
     companion object {
         private const val TAG = "ForgetPasswordViewModel"

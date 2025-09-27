@@ -21,7 +21,7 @@ fun HomePageScreen(
     navigateToShowDetails: (Int) -> Unit,
     navigateToSearchScreen : () -> Unit = {},
     navigateToCategoryScreen: () -> Unit = {},
-    clickOnCategoryItem: (String) -> Unit = {}
+    clickOnCategoryItem: (Int) -> Unit = {}
 
 ) {
     // LazyColumn is used for displaying scrollable lists of items efficiently.
@@ -34,7 +34,7 @@ fun HomePageScreen(
         ) }
         item { EventCategoriesItems(
             onCategoryClick = { categoryId ->
-                clickOnCategoryItem(categoryId.toString())
+                clickOnCategoryItem(categoryId)
             },
             onSeeAllClick = {
                 navigateToCategoryScreen()
@@ -45,6 +45,9 @@ fun HomePageScreen(
             items(items = featuredList, key = { it.id!! }) { featuredShow ->
                 // This will now create a card for "Open Mic", "Theatre Shows", "Concert", etc.
                 TheatreShowsCard(
+                    onViewAllClick = {
+                        featuredShow.id?.let { clickOnCategoryItem(it) }
+                    },
                     item = featuredShow,
                     onItemClick = { movie ->
                         // The onItemClick lambda in TheatreShowsCard passes the specific movie that was clicked.

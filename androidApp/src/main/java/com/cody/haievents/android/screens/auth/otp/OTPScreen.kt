@@ -44,9 +44,14 @@ fun OTPScreen(
     onOTpValueChanged: (String) -> Unit = {},
     onContinueClicked: () -> Unit = {},
     onResendClicked: () -> Unit = {},
+    onBackClick: () -> Unit = {}
 ) {
 
-    val isResendEnabled = false
+
+    // --- Timer + Resend control state ---
+    var isTimerRunning by remember { mutableStateOf(true) }     // start immediately
+    var restartKey by remember { mutableIntStateOf(0) }         // bump to reset timer
+    val isResendEnabled = !isTimerRunning
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -59,18 +64,14 @@ fun OTPScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(vertical = 16.dp)
         ) {
-            IconButton(onClick = { /* Handle back navigation */ }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black
-                )
-            }
+
 
             AuthTopBar(
                 title = "Verify OTP",
-                subtitle = "Enter the 6-digit code sent to +91-8709879077",
-                withSpacer = false
+                subtitle = "Enter the 6-digit code sent to your email",
+                withSpacer = false,
+                showBackButton = true,
+                onBackClick = onBackClick
             )
 
 
@@ -91,7 +92,18 @@ fun OTPScreen(
                 )
                 Spacer(modifier = Modifier.height(10.dp))
 
-                ResendTimeFun()
+                if (isTimerRunning) {
+                    ResendTimeFun(
+                        isRunning = isTimerRunning,
+                        restartKey = restartKey,
+                        onFinished = {
+                            // Auto-enable resend when timer completes
+                            isTimerRunning = false
+                        }
+                    )
+                } else {
+                    // Optional: spacer or "You can resend the code now" text
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -122,7 +134,14 @@ fun OTPScreen(
                 // Resend OTP link
                 ResendOtpText(
                     isEnabled = isResendEnabled,
-                    onClick = {}
+                    onClick = {
+                        if (!isResendEnabled) return@ResendOtpText
+                        // 1) trigger your resend action
+                        onResendClicked()
+                        // 2) restart timer and disable the link
+                        isTimerRunning = true
+                        restartKey++   // causes ResendTimeFun to reset
+                    }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
             }

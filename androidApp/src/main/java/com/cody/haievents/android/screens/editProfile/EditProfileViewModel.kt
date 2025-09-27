@@ -53,10 +53,10 @@ class EditProfileViewModel(
                         uiState = uiState.copy(
                             firstName = user.firstName,
                             lastName = user.lastName,
-                            dob = user.detail.dob ?: "",
-                            telephone = user.detail.telephone ?: "",
-                            address = user.detail.address ?: "",
-                            zipCode = user.detail.zip ?: "",
+                            dob = user.detail?.dob ?: "",
+                            telephone = user.detail?.telephone ?: "",
+                            address = user.detail?.address ?: "",
+                            zipCode = user.detail?.zip ?: "",
                             isLoading = false,
                             errorMessage = null,
                             succeed = true
@@ -96,12 +96,12 @@ class EditProfileViewModel(
 
                     if (user != null) {
                         uiState = uiState.copy(
-                            firstName = user.firstName,
-                            lastName = user.lastName,
-                            dob = user.detail.dob ?: "",
-                            telephone = user.detail.telephone ?: "",
-                            address = user.detail.address ?: "",
-                            zipCode = user.detail.zip ?: "",
+                            firstName = user.firstName ?: "",
+                            lastName = user.lastName?: "",
+                            dob = user.detail?.dob ?: "",
+                            telephone = user.detail?.telephone ?: "",
+                            address = user.detail?.address ?: "",
+                            zipCode = user.detail?.zip ?: "",
                             isLoading = false,
                             errorMessage = null,
                             succeed = true

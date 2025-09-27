@@ -3,26 +3,29 @@ package com.cody.haievents.auth.data.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+
+
 @Serializable
 data class GetUserResponse(
-    @SerialName("status") val status: Boolean,
-    @SerialName("data") val data: GetUserData
+    val status: Boolean,
+    val data: AuthData? = null
 )
 
 @Serializable
-data class GetUserData(
-    @SerialName("id") val id: Int,
+data class AuthData(
+    val id: Int,
     @SerialName("first_name") val firstName: String,
-    @SerialName("last_name") val lastName: String,
-    @SerialName("email") val email: String,
-    @SerialName("detail") val detail: GetUserDetail
+    @SerialName("last_name")  val lastName: String,
+    val email: String,
+    val detail: AuthDetail? = null,
+    val authorization: String
 )
 
 @Serializable
-data class GetUserDetail(
-    @SerialName("dob") val dob: String? = null,
-    @SerialName("telephone") val telephone: String? = null,
-    @SerialName("image") val image: String? = null,
-    @SerialName("address") val address: String? = null,
-    @SerialName("zip") val zip: String? = null
+data class AuthDetail(
+    val dob: String? = null,        // "1999-08-15"
+    val telephone: String? = null,
+    val image: String? = null,
+    val address: String? = null,
+    val zip: String? = null
 )

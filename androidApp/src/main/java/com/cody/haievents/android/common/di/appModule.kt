@@ -16,6 +16,8 @@ import com.cody.haievents.android.screens.blogsDetail.BlogsDetailViewModel
 import com.cody.haievents.android.screens.categorieShows.CategoriesShowsViewModel
 import com.cody.haievents.android.screens.editProfile.EditProfileViewModel
 import com.cody.haievents.android.screens.homePage.HomePageViewModel
+import com.cody.haievents.android.screens.myTickets.MyTicketsViewModel
+import com.cody.haievents.android.screens.myTicketsDetails.MyTicketsDetailsViewModel
 import com.cody.haievents.android.screens.profile.ProfileViewModel
 import com.cody.haievents.android.screens.search.SearchViewModel
 import com.cody.haievents.android.screens.splash.SplashScreenViewModel
@@ -28,10 +30,10 @@ val appModule = module {
     viewModel { SplashScreenViewModel(get()) }
     viewModel { LoginViewModel(get()) }
     viewModel { RegisterViewModel(get()) }
-    viewModel {OTPViewModel(get())}
+    viewModel {OTPViewModel(get(),get())}
     viewModel {HomePageViewModel(get())}
     viewModel {ShowDetailedViewModel(get())}
-    viewModel { TicketViewModel(get(),get()) }
+    viewModel { TicketViewModel(get(),get(), get()) }
     viewModel { SearchViewModel(get()) }
     viewModel{ EditProfileViewModel(get(),get()) }
     viewModel { EventDetailsViewModel(get())}
@@ -44,7 +46,9 @@ val appModule = module {
     viewModel{ ProfileViewModel(get()) }
     viewModel{ ForgetPasswordViewModel(get()) }
     viewModel{ NewPasswordViewModel(get()) }
-    viewModel{ ForgetPasswordOTPViewModel(get()) }
+    viewModel{ ForgetPasswordOTPViewModel(get(),get()) }
     viewModel{ EventImageAndTicketsViewModel(get(),get()) }
+    viewModel{ MyTicketsViewModel(get()) }
+    viewModel{ MyTicketsDetailsViewModel(get()) }
 
 }

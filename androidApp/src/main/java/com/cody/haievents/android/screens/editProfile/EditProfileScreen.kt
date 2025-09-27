@@ -1,8 +1,10 @@
 package com.cody.haievents.android.screens.editProfile
 
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,10 +24,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cody.haievents.android.common.componets.LabeledDatePicker
 import com.cody.haievents.android.common.componets.LabeledTextField
 import com.cody.haievents.android.common.theming.goldColor
 import com.cody.haievents.android.common.theming.lightGrayColor
+import java.time.Clock
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditProfileScreen(
@@ -44,6 +49,7 @@ fun EditProfileScreen(
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
     val snackbarHostState = remember { SnackbarHostState() }
+    var dob by remember { mutableStateOf("") }
 
     // Image picker
     val imagePicker = rememberLauncherForActivityResult(
@@ -121,17 +127,18 @@ fun EditProfileScreen(
                     label = "Date of Birth",
                     value = uiState.dob,
                     onValueChange = onDobChange,
-                    placeholder = "dd-mm-yyyy",
+                    placeholder = "yyyy-mm-dd",
                     keyboardType = KeyboardType.Number
                 )
+
                 Spacer(modifier = Modifier.height(16.dp))
 
-                LabeledTextField(
-                    label = "Telephone No.",
-                    value = uiState.telephone,
-                    onValueChange = onTelephoneChange,
-                    keyboardType = KeyboardType.Phone
-                )
+//                LabeledTextField(
+//                    label = "Telephone No.",
+//                    value = uiState.telephone,
+//                    onValueChange = onTelephoneChange,
+//                    keyboardType = KeyboardType.Phone
+//                )
                 Spacer(modifier = Modifier.height(16.dp))
 
                 LabeledTextField(
@@ -149,47 +156,7 @@ fun EditProfileScreen(
                     placeholder = "e.g. 400001",
                     keyboardType = KeyboardType.Number
                 )
-                Spacer(modifier = Modifier.height(16.dp))
 
-                // --- Profile Image Uploader ---
-                Text(
-                    text = "Profile Image",
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black,
-                    modifier = Modifier.padding(bottom = 4.dp)
-                )
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .border(
-                            width = 1.dp,
-                            color = goldColor.copy(alpha = 0.7f),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .padding(horizontal = 12.dp),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Button(
-                            onClick = { imagePicker.launch("image/*") },
-                            shape = RoundedCornerShape(4.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = lightGrayColor
-                            ),
-                            elevation = ButtonDefaults.buttonElevation(0.dp)
-                        ) {
-                            Text("Choose File", color = Color.Black.copy(alpha = 0.8f))
-                        }
-                        Text(
-                            text = "No file chosen", // You can reflect chosen filename via uiState later
-                            color = Color.Gray
-                        )
-                    }
-                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -241,6 +208,7 @@ fun EditProfileScreen(
 
 /* ---------------------------- PREVIEW ---------------------------- */
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun EditProfileScreenPreview() {

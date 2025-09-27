@@ -7,7 +7,15 @@ import com.cody.haievents.Show.data.TicketType
 import com.cody.haievents.Show.model.OrderResponse
 import com.cody.haievents.Show.domain.usecase.TicketListUseCase
 import com.cody.haievents.Show.domain.usecase.createOrderUseCase
+import com.cody.haievents.android.screens.GaneshTheater.GaneshTheaterViewModel
+import com.cody.haievents.android.screens.GaneshTheater.GaneshTheaterViewModel.Companion
 import com.cody.haievents.common.util.Result
+import com.cody.haievents.phonepe.domain.usecase.BuyTicketUseCase
+import com.cody.haievents.phonepe.domain.usecase.TicketPurchaseUseCase
+import com.cody.haievents.phonepe.model.BuyTicketRequest
+import com.cody.haievents.phonepe.model.PhonePeTicketRequestResponse
+import com.cody.haievents.phonepe.model.Ticket
+import com.cody.haievents.phonepe.model.TicketLine
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +29,9 @@ import kotlinx.coroutines.channels.Channel
 
 class TicketViewModel(
     private val useCase: TicketListUseCase,
-    private val createOrderUseCase: createOrderUseCase
+    private val ticketPurchaseUseCase: TicketPurchaseUseCase,
+    private val buyTicketUseCase: BuyTicketUseCase
+
 ) : ViewModel() {
 
     companion object {
@@ -74,27 +84,139 @@ class TicketViewModel(
     }
 
     fun createOrder() {
-        Log.d(TAG, "create order called: $_stateFlow.value.totalPrice")
+        Log.d(TAG, "createOrder called: totalPrice=${_stateFlow.value.totalPrice}")
 
         viewModelScope.launch {
             _stateFlow.update { it.copy(isLoading = true, errorMessage = null) }
 
-            when (val res = createOrderUseCase(_stateFlow.value.totalPrice.toString())) {
-                is Result.Error -> {
-                    Log.d(TAG, "create order called: ${res.message}")
+            val ticketsForRequest = buildSelectedTicketsForRequest()
+            if (ticketsForRequest.isEmpty()) {
+                _stateFlow.update { it.copy(isLoading = false, errorMessage = "Please select at least one ticket") }
+                _events.send(UiEvent.ShowToast("Select at least one ticket"))
+                return@launch
+            }
 
+            val amount = _stateFlow.value.totalPrice
+            if (amount <= 0) {
+                _stateFlow.update { it.copy(isLoading = false, errorMessage = "Amount must be greater than 0") }
+                _events.send(UiEvent.ShowToast("Amount must be greater than 0"))
+                return@launch
+            }
+
+            when (val res = ticketPurchaseUseCase(
+                amount = amount,
+                tickets = ticketsForRequest
+            )) {
+                is Result.Error -> {
+                    Log.e(TAG, "Ticket purchase failed: ${res.message}")
                     _stateFlow.update { it.copy(isLoading = false, errorMessage = res.message) }
+                    _events.send(UiEvent.ShowToast(res.message ?: "Purchase failed"))
                 }
                 is Result.Success -> {
-                    Log.d(TAG, "create order called: ${res.data}")
+                    Log.i(TAG, "Ticket purchase success: ${res.data}")
+                    _stateFlow.update { it.copy(isLoading = false, succeed = true , createPhoneOrderResponse = res.data) }
 
-                    // Reset selections for new list
-                    _stateFlow.update { it.copy(isLoading = false, succeed = true) }
-                    _events.send(UiEvent.OrderCreated(res.data)) // pass along payload if needed
                 }
             }
         }
     }
+    // In TicketViewModel
+
+    fun buyTickets() { // renamed from buyTicketUseCase() to avoid name clash with property
+        Log.d(TAG, "buyTickets called")
+
+        viewModelScope.launch {
+            _stateFlow.update { it.copy(isLoading = true, errorMessage = null) }
+
+            val state = _stateFlow.value
+
+            // 1) Build lines from selection
+            val lines: List<TicketLine> =
+                state.ticketList.mapNotNull { tt ->
+                    val qty = state.selectedQuantities[tt.id] ?: 0
+                    if (qty <= 0) return@mapNotNull null
+
+                    val price = tt.price.toPriceDouble() // "100.00" -> 100.0
+                    TicketLine(
+                        ticketId = tt.id,
+                        price = price,
+                        quantity = qty
+                    )
+                }
+
+            if (lines.isEmpty()) {
+                _stateFlow.update { it.copy(isLoading = false, errorMessage = "Please select at least one ticket") }
+                _events.send(UiEvent.ShowToast("Select at least one ticket"))
+                return@launch
+            }
+
+            // 2) Derive item_id & item_type from first selected ticket type
+            val firstSelected: TicketType? = state.ticketList.firstOrNull { (state.selectedQuantities[it.id] ?: 0) > 0 }
+                ?: state.ticketList.firstOrNull()
+
+            if (firstSelected == null) {
+                _stateFlow.update { it.copy(isLoading = false, errorMessage = "No ticket types available") }
+                _events.send(UiEvent.ShowToast("No ticket types available"))
+                return@launch
+            }
+
+            val itemId = firstSelected.eventId
+
+
+
+            Log.d(TAG, "itemId  $itemId itemType  $lines")
+
+            when (val res = buyTicketUseCase(itemId = itemId ,tickets = lines )) {
+
+                is Result.Error -> {
+                    Log.e(TAG, "Buy tickets failed: ${res.message}")
+                    _stateFlow.update { it.copy(isLoading = false, errorMessage = res.message) }
+                    _events.send(UiEvent.ShowToast(res.message ?: "Booking failed"))
+                }
+                is Result.Success -> {
+                    Log.i(TAG, "Buy tickets success: ${res.data}")
+                    _stateFlow.update { it.copy(isLoading = false, succeed = true) }
+                    _events.send(UiEvent.ShowToast(res.data?.message ?: "Booking successful"))
+                    // Optionally navigate:
+                    // _events.send(UiEvent.NavigateToSuccess(paymentId = "BOOKED"))
+                }
+            }
+        }
+    }
+
+    /** Helpers **/
+    private fun String.toPriceDouble(): Double {
+        return try {
+            this.trim()
+                .removePrefix("₹")
+                .replace(",", "")
+                .toDouble()
+        } catch (_: Exception) {
+            0.0
+        }
+    }
+
+
+
+
+
+
+
+
+
+    private fun buildSelectedTicketsForRequest(): List<Ticket> {
+        val state = _stateFlow.value
+        return state.ticketList.mapNotNull { tt ->
+            val qty = state.selectedQuantities[tt.id] ?: 0
+            if (qty <= 0) return@mapNotNull null
+            Ticket(
+                ticketTypeId = tt.id,
+                quantity = qty,
+            )
+        }
+    }
+
+
 
     fun updateQuantity(ticketId: Int, newQuantity: Int) {
         _stateFlow.update { state ->
@@ -135,6 +257,10 @@ class TicketViewModel(
         Log.d(TAG, "ViewModel cleared")
     }
 
+    fun clearPaymentTrigger() {
+        Log.d(TAG, "clearPaymentTrigger: clearing paymentResponse trigger")
+        _stateFlow.update { it.copy(createPhoneOrderResponse = null) }
+    }
 
 
 }
@@ -152,6 +278,7 @@ data class TicketUiState(
     // derived
     val totalTickets: Int = 0,
     val totalPrice: Int = 0,
+    val createPhoneOrderResponse: PhonePeTicketRequestResponse? = null,
 )
 
 sealed class UiEvent {
@@ -173,3 +300,5 @@ private fun String.toRupeesInt(): Int {
         0
     }
 }
+
+

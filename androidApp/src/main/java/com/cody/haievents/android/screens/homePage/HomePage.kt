@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import com.cody.haievents.android.main.MainActivity
 import com.cody.haievents.android.screens.destinations.AllCategoriesDestination
+import com.cody.haievents.android.screens.destinations.CategoriesShowsDestination
 import com.cody.haievents.android.screens.destinations.SearchDestination
 import com.cody.haievents.android.screens.destinations.ShowDetailedDestination
 
@@ -52,7 +53,7 @@ fun HomePage(
             navigator.navigate(AllCategoriesDestination.route)
         },
         clickOnCategoryItem = {
-            // Implement click on category item
+           navigator.navigate(CategoriesShowsDestination(categoryItems = it))
         }
 
     )

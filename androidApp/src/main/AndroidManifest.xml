@@ -18,7 +18,8 @@
         android:icon="@drawable/hai_event_logo"
         android:roundIcon="@drawable/hai_event_logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"> <!-- PhonePe SDK requirements -->
+        android:theme="@style/AppTheme"
+        android:label="HAI">   <!-- 👈 app name -->
         <activity
             android:name=".main.MainActivity"
             android:exported="true">

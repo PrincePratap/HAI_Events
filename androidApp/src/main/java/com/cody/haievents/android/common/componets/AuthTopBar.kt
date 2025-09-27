@@ -23,6 +23,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 
 import androidx.compose.material3.Surface
 
@@ -45,45 +49,55 @@ fun AuthTopBar(
     modifier: Modifier = Modifier,
     title: String,
     subtitle: String,
-    withSpacer: Boolean = true
+    withSpacer: Boolean = true,
+    showBackButton: Boolean = false,         // <— toggle visibility (GONE when false)
+    onBackClick: () -> Unit = {}            // <— click handler
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().background(Color.White),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp) // Adds space between all items
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        if(withSpacer){
+        // Back button aligned to LEFT; removed entirely when showBackButton = false (GONE)
+        if (showBackButton) {
+            IconButton(
+                onClick = onBackClick,
+                modifier = Modifier.align(Alignment.Start) // left-align inside the Column
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.Black
+                )
+            }
+        }
+
+        if (withSpacer) {
             Spacer(modifier = Modifier.height(80.dp))
         }
-        // 1. Logo
+
         Image(
             painter = painterResource(id = R.drawable.img_small_logo),
             contentDescription = stringResource(R.string.content_desc_app_logo),
             modifier = Modifier.size(100.dp)
         )
 
-        // Add larger space after the logo
-        // Spacer(modifier = Modifier.height(16.dp)) // Arrangement.spacedBy handles this now
-
-        // 2. Header Text
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,
-            // Use colors from the theme for better dark/light mode support
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        // 3. Subtitle Text
         Text(
             text = subtitle,
             style = MaterialTheme.typography.bodyMedium,
-            // onSurfaceVariant is great for secondary text
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(8.dp))
-
     }
 }
 

@@ -1,6 +1,8 @@
 package com.cody.haievents.android.screens.profile
 
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import com.cody.haievents.android.screens.destinations.EditProfileDestination
 import com.cody.haievents.android.screens.destinations.EventDetailsDestination
@@ -13,6 +15,7 @@ import com.cody.haievents.android.screens.NavGraphs
 import com.cody.haievents.android.screens.destinations.HelpSupportDestination
 import com.cody.haievents.android.screens.destinations.LoginDestination
 import com.ramcosta.composedestinations.utils.startDestination
+private const val TAG = "ProfileRoute"
 
 
 @Destination
@@ -21,11 +24,23 @@ fun Profile(navigator: DestinationsNavigator) {
 
 
     val viewModel: ProfileViewModel = koinViewModel()
+
+    LaunchedEffect(Unit) {
+        Log.d(TAG, "Entered Profile screen with ViewModel=${viewModel::class.simpleName}")
+    }
+
     val uiState by viewModel.uiState.collectAsState()
+
+    // Log every time state changes
+    LaunchedEffect(uiState) {
+        Log.d(TAG, "uiState updated -> ${uiState::class.simpleName}: $uiState")
+    }
 
     val userName = (uiState as? ProfileUiState.Success)?.currentUser?.name ?: "Cody Rajput"
     val userEmail = (uiState as? ProfileUiState.Success)?.currentUser?.email ?: "Corporate Lawyer"
     val token = (uiState as? ProfileUiState.Success)?.currentUser?.token ?: ""
+    Log.d(TAG, "token ${token}")
+
 
 
 

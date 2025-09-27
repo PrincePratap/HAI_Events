@@ -33,7 +33,6 @@ private val goldColor = Color(0xFFC9A24C)
 //private val lightGoldColor = Color(0xFFE6C47C)
 private val screenBackground = Color(0xFFF7F7F7)
 private val disabledTextGray = Color(0xFFBDBDBD)
-//private val disabledButtonBackground = Color(0xFFE0E0E0)
 private val primaryTextColor = Color(0xFF333333)
 private val  dividerColor = Color.Black.copy(alpha = 0.08f)
 

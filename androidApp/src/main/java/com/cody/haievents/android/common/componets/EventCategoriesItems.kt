@@ -39,9 +39,9 @@ private data class EventCategory(
 ) {
     val categories = listOf(
         EventCategory(1,"Open Mic", Icons.Outlined.Mic),
-        EventCategory(2,"Stand-Up\nComedy", Icons.Outlined.SentimentVerySatisfied),
-        EventCategory(3,"Concerts", Icons.Outlined.LibraryMusic),
-        EventCategory(4,"Theatre", Icons.Outlined.TheaterComedy),
+        EventCategory(7,"Stand-Up\nComedy", Icons.Outlined.SentimentVerySatisfied),
+        EventCategory(6,"Concerts", Icons.Outlined.LibraryMusic),
+        EventCategory(2,"Theatre", Icons.Outlined.TheaterComedy),
         EventCategory(5,"See all", Icons.Filled.KeyboardArrowRight, isSeeAll = true)
     )
 

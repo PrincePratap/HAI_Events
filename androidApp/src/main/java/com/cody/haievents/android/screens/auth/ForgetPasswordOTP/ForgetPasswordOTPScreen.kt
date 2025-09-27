@@ -30,8 +30,11 @@ import com.cody.haievents.android.common.componets.ResendTimeFun
 import com.cody.haievents.android.common.theming.darkBackgroundColor
 import com.cody.haievents.android.common.theming.goldColor
 import com.cody.haievents.android.screens.auth.otp.OtpInputFields
-import com.cody.haievents.android.screens.auth.otp.OtpUiState
 import com.cody.haievents.android.screens.auth.otp.ResendOtpText
+import android.content.res.Configuration
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.runtime.*
+
 
 
 @Composable
@@ -40,9 +43,12 @@ fun ForgetPasswordOTPScreen(
     onOTpValueChanged: (String) -> Unit = {},
     onContinueClicked: () -> Unit = {},
     onResendClicked: () -> Unit = {},
+    onBackClick: () -> Unit = {}
 ) {
-
-    val isResendEnabled = false
+    // --- Timer + Resend control state ---
+    var isTimerRunning by remember { mutableStateOf(true) }     // start immediately
+    var restartKey by remember { mutableIntStateOf(0) }         // bump to reset timer
+    val isResendEnabled = !isTimerRunning                       // enabled only after timer ends
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -55,20 +61,15 @@ fun ForgetPasswordOTPScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(vertical = 16.dp)
         ) {
-            IconButton(onClick = { /* Handle back navigation */ }) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black
-                )
-            }
+
 
             AuthTopBar(
                 title = "Verify OTP",
-                subtitle = "Enter the 6-digit code sent to +91-8709879077",
-                withSpacer = false
+                subtitle = "Enter the 6-digit code sent to your email",
+                withSpacer = false,
+                showBackButton = true,
+                onBackClick = onBackClick
             )
-
 
             Column(
                 modifier = Modifier
@@ -78,28 +79,34 @@ fun ForgetPasswordOTPScreen(
             ) {
                 Spacer(modifier = Modifier.height(40.dp))
 
-
-
-
                 OtpInputFields(
                     otpValue = uiState.otp,
                     onOtpValueChanged = onOTpValueChanged
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
 
-                ResendTimeFun()
+                // Timer (shows while running; you can choose to hide it when finished)
+                if (isTimerRunning) {
+                    ResendTimeFun(
+                        isRunning = isTimerRunning,
+                        restartKey = restartKey,
+                        onFinished = {
+                            // Auto-enable resend when timer completes
+                            isTimerRunning = false
+                        }
+                    )
+                } else {
+                    // Optional: spacer or "You can resend the code now" text
+                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Expiry timer text
-//                ExpiryTimerText(timer = timerString)
-
                 Spacer(modifier = Modifier.height(32.dp))
 
-                // Continue Button
                 Button(
                     onClick = onContinueClicked,
-                    enabled = uiState.otp.length == 6, // Enable only when OTP is fully entered
+                    enabled = uiState.otp.length == 6,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(50.dp),
@@ -113,15 +120,78 @@ fun ForgetPasswordOTPScreen(
                         fontWeight = FontWeight.SemiBold
                     )
                 }
+
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // Resend OTP link
                 ResendOtpText(
                     isEnabled = isResendEnabled,
-                    onClick = {}
+                    onClick = {
+                        if (!isResendEnabled) return@ResendOtpText
+                        // 1) trigger your resend action
+                        onResendClicked()
+                        // 2) restart timer and disable the link
+                        isTimerRunning = true
+                        restartKey++   // causes ResendTimeFun to reset
+                    }
                 )
+
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }
     }
+}
+
+
+
+
+@Preview(
+    name = "ForgetPasswordOTP – Light / Empty",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+private fun Preview_ForgetPasswordOTPScreen_Empty() {
+    ForgetPasswordOTPScreen(
+        uiState = ForgetPasswordOTPUiState(
+            otp = "" // Button disabled
+        ),
+        onOTpValueChanged = {},
+        onContinueClicked = {},
+        onResendClicked = {}
+    )
+}
+
+@Preview(
+    name = "ForgetPasswordOTP – Light / Filled",
+    showBackground = true,
+    backgroundColor = 0xFFFFFFFF
+)
+@Composable
+private fun Preview_ForgetPasswordOTPScreen_Filled() {
+    ForgetPasswordOTPScreen(
+        uiState = ForgetPasswordOTPUiState(
+            otp = "123456" // Button enabled
+        ),
+        onOTpValueChanged = {},
+        onContinueClicked = {},
+        onResendClicked = {}
+    )
+}
+
+@Preview(
+    name = "ForgetPasswordOTP – Dark",
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true,
+    backgroundColor = 0xFF000000
+)
+@Composable
+private fun Preview_ForgetPasswordOTPScreen_Dark() {
+    ForgetPasswordOTPScreen(
+        uiState = ForgetPasswordOTPUiState(
+            otp = "12" // Partial OTP
+        ),
+        onOTpValueChanged = {},
+        onContinueClicked = {},
+        onResendClicked = {}
+    )
 }

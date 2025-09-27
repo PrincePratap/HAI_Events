@@ -29,10 +29,7 @@ class UpdateUserUseCase : KoinComponent {
         }
 
         // --- Validate DOB (YYYY-MM-DD) ---
-        val dobRegex = Regex("""^\d{4}-\d{2}-\d{2}$""")
-        if (!dobRegex.matches(dob.trim())) {
-            return Result.Error(message="Invalid date of birth. Use format YYYY-MM-DD.")
-        }
+
 
         // --- Validate address ---
         if (address.isBlank()) {
@@ -45,14 +42,7 @@ class UpdateUserUseCase : KoinComponent {
             return Result.Error(message="Invalid ZIP code. It should be 6 digits.")
         }
 
-        // --- Validate image URL/path ---
-//        if (image.isBlank()) {
-//            return Result.Error(message="Profile image cannot be empty.")
-//        }
-//        val urlRegex = Regex("""^(https?://.*)|(uploads/.*)$""")
-//        if (!urlRegex.matches(image.trim())) {
-//            return Result.Error(message="Invalid image format. Must be a valid URL or upload path.")
-//        }
+
 
         // --- Build request ---
         val request = EditUserProfileRequest(

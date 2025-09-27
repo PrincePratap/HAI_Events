@@ -326,7 +326,7 @@ private fun InfoChip(
 
 /** Collapsible long text with "Read more / Read less" */
 @Composable
-private fun ExpandableText(
+ fun ExpandableText(
     text: String,
     collapsedLines: Int = 3
 ) {

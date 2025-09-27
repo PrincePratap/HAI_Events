@@ -12,7 +12,8 @@
 
 
 
-    <string name="ps_full_name">Enter full Name</string>
+    <string name="ps_full_first_name">Enter first Name</string>
+    <string name="ps_full_last_name">Enter last Name</string>
     <string name="ps_email_address">Enter email Address</string>
     <string name="ps_phone_number">Enter your phone Number</string>
     <string name="ps_password">Enter your password</string>

@@ -15,6 +15,8 @@ import com.cody.haievents.Show.model.BlogItemResponse
 import com.cody.haievents.Show.model.CategoryItemsResponse
 import com.cody.haievents.Show.model.GaneshTheaterBookingRequest
 import com.cody.haievents.Show.model.GaneshTheaterGetSeatResponse
+import com.cody.haievents.Show.model.MyTicketDetails
+import com.cody.haievents.Show.model.MyTicketListResponse
 import com.cody.haievents.auth.data.AuthService
 import com.cody.haievents.auth.domain.repository.AuthRepository
 import com.cody.haievents.common.data.local.UserPreferences
@@ -163,6 +165,32 @@ internal class ShowRepositoryImpl(
                 Result.Success(response)
             } catch (e: Exception) {
                 Result.Error(message = "Failed to get blog ${blogsId}  ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun myTicketList(): Result<MyTicketListResponse> {
+        return withContext(dispatcher.io) {
+            try {
+                val token = userPreferences.getUserData().token
+
+                val response = showService.myTicketList(token)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to get my ticket list  ${e.message}")
+            }
+        }
+    }
+
+    override suspend fun myTicketDetails(ticketId: Int): Result<MyTicketDetails> {
+        return withContext(dispatcher.io) {
+            try {
+                val token = userPreferences.getUserData().token
+
+                val response = showService.myTicketDetails(ticketId,token)
+                Result.Success(response)
+            } catch (e: Exception) {
+                Result.Error(message = "Failed to ticket details  ${e.message}")
             }
         }
     }

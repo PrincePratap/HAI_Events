@@ -32,6 +32,9 @@ fun ForgetPassword(
         },
         onRegisterClick = {
             navigator.navigate(RegisterDestination.route)
+        },
+        onBackClick = {
+            navigator.navigateUp()
         }
 
     )
@@ -44,5 +47,7 @@ fun ForgetPassword(
     if (uiState.succeed) {
         Log.d("LoginComposable", "Login success — navigating to next screen")
         navigator.navigate(ForgetPasswordOTPDestination(token = uiState.token))
+        viewModel.onNavigationHandled()
+
     }
 }

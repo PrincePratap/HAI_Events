@@ -96,16 +96,16 @@ fun ProfileScreen(
                     text = "Edit Profile",
                     onClick = onEditProfileClick
                 )
-                ProfileMenuItem(
-                    icon = Icons.Outlined.Mic,
-                    text = "Your Listed Events",
-                    onClick = onYourListedEventsClick
-                )
-                ProfileMenuItem(
-                    icon = Icons.Outlined.Lock,
-                    text = "Change Password",
-                    onClick = onChangePasswordClick
-                )
+//                ProfileMenuItem(
+//                    icon = Icons.Outlined.Mic,
+//                    text = "Your Listed Events",
+//                    onClick = onYourListedEventsClick
+//                )
+//                ProfileMenuItem(
+//                    icon = Icons.Outlined.Lock,
+//                    text = "Change Password",
+//                    onClick = onChangePasswordClick
+//                )
 
                 ProfileMenuItem(
                     icon = Icons.Outlined.Notifications,
